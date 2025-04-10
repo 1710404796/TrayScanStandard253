@@ -1,0 +1,66 @@
+<Page x:Class="TrayScanStandard.ViewModel.CZPallet.WCSLogView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:TrayScanStandard.ViewModel.CZPallet"
+      d:DataContext="{d:DesignInstance Type=local:WCSLogView}"
+      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+      mc:Ignorable="d"
+      Loaded="MesLogView_OnLoaded"
+      Title="MesLog">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Button Content="{x:Static lang:Resources.Query}" Command="{Binding ViewModel.SearchCommand}"/>
+            <DatePicker 
+                
+                SelectedDate="{Binding ViewModel.StartTime}"
+                        
+                        Margin="10,0,0,0"></DatePicker>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
+                       Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+Text="{x:Static lang:Resources.To}"
+                       ></TextBlock>
+            <DatePicker SelectedDate="{Binding ViewModel.EndTime}" Margin="10,0,0,0"></DatePicker>
+            <ComboBox 
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Width="200"
+                ItemsSource="{Binding ViewModel.Apinames}" SelectedItem="{Binding ViewModel.SelectName}"></ComboBox>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" 
+                  ScrollViewer.CanContentScroll="False"
+                  CanUserAddRows="False"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding ViewModel.WcsLogs}"
+                  SelectedItem="{Binding ViewModel.SelectLog}"
+        >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static lang:Resources.RequestInterface}" Binding="{Binding ApiName}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.RequestTime}" Binding="{Binding RequestTime}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.ResponseTime}" Binding="{Binding ResponseTime}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.RequestData}"  Binding="{Binding Request}" Width="300" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="Height" Value="auto"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.ResponseData}" Binding="{Binding Response}" Width="300" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="Height" Value="auto"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

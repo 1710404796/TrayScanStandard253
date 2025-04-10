@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LinxUniverse.Utils;
+using TrayScanStandard.Attritubes;
+using TrayScanStandard.Models;
+
+namespace TrayScanStandard
+{
+    public static class MainStorage
+    {
+        public static SaveManager<WcsSaves> SaveManager = new();
+        public static WcsSaves Saves => SaveManager.SaveFile;
+
+        public static bool IsWcsEnable { get; set; }
+
+        public static PowerEnum[] PowerEnums => Enum.GetValues<PowerEnum>().ToArray();
+        public static RoleEnum[] RoleEnums => Enum.GetValues<RoleEnum>().SkipLast(1).ToArray();
+        public static void Init()
+        {
+            SaveManager.Load();
+        }
+    }
+}

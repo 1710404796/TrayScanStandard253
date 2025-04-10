@@ -1,0 +1,173 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using LinxUniverse.Utils;
+using TrayScanStandard.Attritubes;
+using TrayScanStandard.Data.Models;
+using TrayScanStandard.Models.CZPallet;
+
+namespace TrayScanStandard.Models
+{
+    public class WcsSaves() : SaveBase("TrayScanStandard")
+    {
+        public string IP
+        {
+            get; set;
+        } = "127.0.0.1";
+
+        public string Port
+        {
+            get; set;
+        } = "50005";
+        public Visibility BackGroundEnable
+        {
+            get;
+            set;
+        }
+
+        public XYLStage? Stage { get; set; } = new();
+        public bool TwoOk { get; set; } = false;
+        //public PLCCpuType PLCCpuType { get; set; } = PLCCpuType.小端;
+
+        /// <summary>
+        /// 日志删除天数
+        /// </summary>
+        public int LogDeleteDay { get; set; } = 30;
+
+
+        /// <summary>
+        /// 托盘条码规则
+        /// </summary>
+        public List<PalletTypeRule> PalletTypeRules { get; set; } = [];
+        public bool TestMode { get; set; }
+        public Dictionary<PowerEnum, Dictionary<RoleEnum, bool>> PowerTable { get; set; } = [];
+
+        public ApiEnableTable ApiEnableTable { get; set; } = new();
+
+        //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
+
+        /// <summary>
+        /// 语言
+        /// </summary>
+        public int Lang { get; set; }
+        public OKNGCnt OKNGCnt { get; set; } = new();
+
+        /// <summary>
+        /// 工位设置 // 防止有多工位的
+        /// </summary>
+        public StageSetting StageSetting { get; set; } = new();
+    }
+
+
+    public class ApiEnableTable
+    {
+        /// <summary>
+        /// 托盘物料等级校验/获取
+        /// </summary>
+        public bool CheckPalletMaterialEnable
+        {
+            get; set;
+        } = true;
+
+        /// <summary>
+        /// 拆组盘开始使能
+        /// </summary>
+        public bool GrabActionInsertEnable
+        {
+            get; set;
+        } = true;
+
+        /// <summary>
+        /// 拆组盘结束使能
+        /// </summary>
+        public bool GrabActionRemoveEnable
+        {
+            get; set;
+        } = true;
+        /// <summary>
+        /// 申请电芯使能
+        /// </summary>
+        public bool ApplyMaterialEnable
+        {
+            get; set;
+        } = true;
+        /// <summary>
+        /// 托盘到达使能
+        /// </summary>
+        public bool PalletArrivedEnable { get; set; }
+        /// <summary>
+        /// 托盘离开使能
+        /// </summary>
+        public bool PalletOutEnable { get; set; }
+        /// <summary>
+        /// 入料校验使能
+        /// </summary>
+        public bool CheckMaterialEnable { get; set; }
+
+        /// <summary>
+        /// 组盘完成上传FMS使能
+        /// </summary>
+        public bool UploadFmsDataEnable { get; set; }
+        /// <summary>
+        /// 抓取数据上传MES使能
+        /// </summary>
+        public bool UploadMesDataEnable { get; set; }
+        /// <summary>
+        /// 高温进站使能
+        /// </summary>
+        public bool HighTempEnable { get; set; }
+        /// <summary>
+        /// 化成进站使能
+        /// </summary>
+        public bool HCInStationEnable { get; set; }
+        /// <summary>
+        /// 分选挡位查询接口
+        /// </summary>
+        public bool FXQueryEnable { get; set; }
+        public bool GrabDataUploadEnable { get; set; }
+    }
+
+    public class StageSetting
+    {
+        /// <summary>
+        /// 设备号
+        /// </summary>
+        public string DeviceCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 系统号
+        /// </summary>
+        public string SystemCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 仓库号
+        /// </summary>
+        public string HouseCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 位置号
+        /// </summary>
+        public string LocationCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 库位号
+        /// </summary>
+        public string SeatId { get; set; } = string.Empty;
+        /// <summary>
+        /// 工序号
+        /// </summary>
+        public string ProcessCode { get; set; } = string.Empty;
+        /// <summary>
+        /// FMS地址
+        /// </summary>
+        public string FMSAddress { get; set; } = string.Empty;
+        /// <summary>
+        /// APP名称
+        /// </summary>
+        public string AppName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 等待假电池时间
+        /// </summary>
+        public double WaitFakeTime { get; set; }
+    }
+}

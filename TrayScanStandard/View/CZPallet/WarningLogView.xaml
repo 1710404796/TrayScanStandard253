@@ -1,0 +1,40 @@
+<Page x:Class="TrayScanStandard.ViewModel.CZPallet.WarningLogView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:TrayScanStandard.ViewModel.CZPallet"
+      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+      Loaded="WarningLogView_OnLoaded"
+      d:DataContext="{d:DesignInstance Type=local:WarningLogView}"
+      mc:Ignorable="d"
+      Title="WarningLog" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Button Content="{x:Static lang:Resources.Query}" Command="{Binding ViewModel.SearchCommand}"/>
+            <DatePicker SelectedDate="{Binding ViewModel.StartTime}" Margin="10,0,0,0"></DatePicker>
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
+                Text="{x:Static lang:Resources.To}"
+                Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+     ></TextBlock>
+            <DatePicker SelectedDate="{Binding ViewModel.EndTime}" Margin="10,0,0,0"></DatePicker>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" 
+           CanUserAddRows="False"
+           AutoGenerateColumns="False"
+           ItemsSource="{Binding ViewModel.MesLogs}"
+ >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static lang:Resources.AlarmType}" Binding="{Binding WarningType}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.AlarmTime}" Binding="{Binding WarningTime}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static lang:Resources.AlarmInformation}" Binding="{Binding Message}" ></DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

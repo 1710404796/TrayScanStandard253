@@ -1,0 +1,3 @@
+[submodule "lxuv"]
+	path = lxuv
+	url = https://github.com/ssccinng/LinxUniverse.NET

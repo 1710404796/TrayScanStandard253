@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="TrayScanStandard/TrayScanStandard.csproj" />
+  <Project Path="lxuv/LinxUniverse.Auth/LinxUniverse.Auth.csproj" />
+  <Project Path="lxuv/LinxUniverse.DB/LinxUniverse.DB.csproj" />
+  <Project Path="lxuv/LinxUniverse.DI/LinxUniverse.DI.csproj" />
+  <Project Path="lxuv/LinxUniverse.FP/LinxUniverse.FP.csproj" />
+  <Project Path="lxuv/LinxUniverse.Logger/LinxUniverse.Logger.csproj" />
+  <Project Path="lxuv/LinxUniverse.Mediator/LinxUniverse.Mediator.csproj" />
+  <Project Path="lxuv/LinxUniverse.Utils/LinxUniverse.Utils.csproj" />
+</Solution>
