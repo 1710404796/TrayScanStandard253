@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using LinxUniverse.Auth;
 using MediatR;
-using Microsoft.IdentityModel.Logging;
+//using Microsoft.IdentityModel.Logging;
 using TrayScanStandard.Mediator.Commands;
 
 //using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;

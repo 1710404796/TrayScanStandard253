@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.IdentityModel.Logging;
+//using Microsoft.IdentityModel.Logging;
 using TrayScanStandard.Attritubes;
 using XCZZJC2024.Utils;
 

@@ -126,7 +126,7 @@ namespace TrayScanStandard
 
                          services.AddDbContext<LinxUserDBContext<LinxUser>, LinxContext>(option =>
                          {
-                             option.UseSqlServer(context.Configuration.GetConnectionString("LinxContextConnection"));
+                             option.UseSqlite(context.Configuration.GetConnectionString("LinxContextConnection"));
                          }, ServiceLifetime.Transient, ServiceLifetime.Transient);
 
 

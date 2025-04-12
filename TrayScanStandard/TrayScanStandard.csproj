@@ -27,21 +27,15 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
 		<PackageReference Include="Humanizer.Core.zh-CN" Version="2.14.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
 
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+
+
+		<!--<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />-->
 		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
 		<PackageReference Include="Quartz" Version="3.8.0" />
 		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.0" />
 		<PackageReference Include="Serilog" Version="3.1.1" />
-		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.RichTextBox.Wpf" Version="1.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -58,6 +52,8 @@
 	  <ProjectReference Include="..\lxuv\LinxUniverse.FP\LinxUniverse.FP.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Mediator\LinxUniverse.Mediator.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Utils\LinxUniverse.Utils.csproj" />
+	  <ProjectReference Include="..\lxuv\MugenCamera\MugenCamera.csproj" />
+	  <ProjectReference Include="..\lxuv\MugenCodeDetecter\MugenCodeDetecter.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
