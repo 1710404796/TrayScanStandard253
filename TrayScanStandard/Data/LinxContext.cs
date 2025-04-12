@@ -11,7 +11,8 @@ namespace TrayScanStandard.Data
 {
     public class LinxContext : LinxUserDBContext<LinxUser>
     {
-        private const string connectString = @"Server=(localdb)\MSSQLLocalDB;Database=LXDB_TrayScanStandard;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true;Connect Timeout=500";
+        //private const string connectString = @"Server=(localdb)\MSSQLLocalDB;Database=LXDB_TrayScanStandard;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true;Connect Timeout=500";
+        private const string connectString = @"Data Source=LXDB_TrayScanStandardsl.db";
 
 
         public LinxContext(DbContextOptions<LinxContext> options) : base(options)
@@ -30,6 +31,7 @@ namespace TrayScanStandard.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer(connectString); // 这句在迁移时启用可消除迁移时的报错
+            //optionsBuilder.UseSqlite(connectString); // 这句在迁移时启用可消除迁移时的报错
             base.OnConfiguring(optionsBuilder);
 
         }
