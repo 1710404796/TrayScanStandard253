@@ -170,4 +170,29 @@ namespace TrayScanStandard.Models
         /// </summary>
         public double WaitFakeTime { get; set; }
     }
+
+    public class BcrInfo
+    {
+        public string Key { get; set; } = string.Empty;
+
+        public List<BarCodeRegionInfo> Regions { get; set; } = [];
+        public List<int> Exposure { get; set; } = [.. MainStorage.DefaultExp];
+
+        public float Gamma { get; set; } = 1.0f;
+        public float Gain { get; set; } = 1f;
+
+        public string DeviceCode { get; set; } = "ccd";
+    }
+
+
+    public class BarCodeRegionInfo
+    {
+        public int Top { get; set; } = 100;
+        public int Left { get; set; } = 100;
+        public int Width { get; set; } = 600;
+        public int Height { get; set; } = 600;
+
+        public int ChannelIdx { get; set; } = 0;
+
+    }
 }
