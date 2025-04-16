@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using TrayScanStandard;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
+using TrayScanStandard.Mediator.Commands;
 
 
 namespace TrayScanStandard.View

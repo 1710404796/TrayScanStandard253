@@ -1,0 +1,127 @@
+﻿<Window x:Class="TrayScanStandard.View.BcrSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrayScanStandard.View"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+        mc:Ignorable="d"         
+        WindowStartupLocation="CenterScreen"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="{x:Static lang:Resources.BCRSetting}" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock FontSize="24" Text="{x:Static lang:Resources.CodeReaderConfiguration}"/>
+            <StackPanel 
+                VerticalAlignment="Center"
+                Margin="0,50,0,0"
+                HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <TextBlock
+                    Width="160"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Text="{x:Static lang:Resources.SerialNumber}"
+                    >:</TextBlock>
+                <ui:AutoSuggestBox
+                    Name="CamKey"
+Width="250"
+                    >
+
+                </ui:AutoSuggestBox>
+
+            </StackPanel>
+            <StackPanel 
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    Width="160"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+Text="{x:Static lang:Resources.Exposure}"
+                >:</TextBlock>
+                <TextBox 
+                    Width="250"
+                    Height="150"
+                    Name="ExpPattern"
+                      TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                    >
+
+                </TextBox>
+            </StackPanel>
+            <StackPanel 
+     Margin="0,15,0,0"
+     HorizontalAlignment="Center"
+     Orientation="Horizontal">
+                <TextBlock
+         Width="160"
+         VerticalAlignment="Center"
+         FontSize="20"
+         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+Text="{x:Static lang:Resources.Gamma}"
+     >:</TextBlock>
+                <TextBox 
+         Width="250"
+         Name="gammaPattern"
+           TextWrapping="Wrap"
+          AcceptsReturn="True"
+         >
+
+                </TextBox>
+                
+                
+            </StackPanel>
+
+            <StackPanel 
+     Margin="0,15,0,0"
+     HorizontalAlignment="Center"
+     Orientation="Horizontal">
+                <TextBlock
+         Width="160"
+         VerticalAlignment="Center"
+         FontSize="20"
+         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+Text="增益"
+     >:</TextBlock>
+                <TextBox 
+         Width="250"
+         Name="gainPattern"
+           TextWrapping="Wrap"
+          AcceptsReturn="True"
+         >
+
+                </TextBox>
+
+
+            </StackPanel>
+            <StackPanel 
+Margin="0,15,0,0"
+HorizontalAlignment="Center"
+Orientation="Horizontal">
+                <TextBlock
+    Width="160"
+    VerticalAlignment="Center"
+    FontSize="20"
+    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+Text="{x:Static lang:Resources.DeviceNumber}"
+>:</TextBlock>
+                <TextBox 
+    Width="250"
+    Name="deviceCode"
+      TextWrapping="Wrap"
+     AcceptsReturn="True"
+    >
+
+                </TextBox>
+            </StackPanel>
+            <Button Width="100" Margin="0,15,0,0" 
+                    Content="{x:Static lang:Resources.Save}"
+                    Click="ButtonBase_OnClick" HorizontalAlignment="Center"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

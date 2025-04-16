@@ -1,0 +1,59 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using TrayScanStandard.Attritubes;
+using TrayScanStandard.Mediator.Queries;
+using TrayScanStandard.View.CZPallet;
+using TrayScanStandard.ViewModel;
+
+namespace TrayScanStandard.View
+{
+    /// <summary>
+    /// BcrBorder.xaml 的交互逻辑
+    /// </summary>
+    public partial class BcrBorder : UserControl
+    {
+        public BcrBorder(BcrBorderViewModel bcrBorderViewModel)
+        {
+            DataContext = this;
+            ViewModel = bcrBorderViewModel;
+
+            InitializeComponent();
+            camview.Child = new Image2DView(bcrBorderViewModel.Image2DViewModel, true);
+        }
+
+        public BcrBorderViewModel ViewModel { get; }
+
+        /// <summary>
+        /// 设置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            if ( new BcrSettingWindow(ViewModel.BcrInfo).ShowDialog()??false) MainStorage.SaveManager.Save();
+
+        }
+        /// <summary>
+        /// 重连
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+        }
+    }
+}
