@@ -109,6 +109,9 @@ namespace TrayScanStandard
 
                          services.AddTransient<WCSLogViewModel>();
                          services.AddTransient<WCSLogView>();
+                         
+                         services.AddTransient<LightManagerView>();
+                         services.AddTransient<LightManagerViewModel>();
 
                          //services.AddSingleton<YWStageViewViewModels>();
                          services.AddTransient<YWStageView>();

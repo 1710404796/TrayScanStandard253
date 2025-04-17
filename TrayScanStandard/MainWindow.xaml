@@ -111,18 +111,29 @@ Source="Images/linx.png" HorizontalAlignment="Center"></Image>
         <StackPanel Grid.Row="1" Visibility="Visible">
 
             <RadioButton 
+Style="{StaticResource MenuRadioButtonStyle}" 
+Cursor="Hand"
+IsChecked="True"
+>
+                工作面板
+            </RadioButton>
+
+
+            <RadioButton 
         Style="{StaticResource MenuRadioButtonStyle}" 
         Cursor="Hand"
         IsChecked="True"
         >
-                页面1
+                相机管理界面
             </RadioButton>
 
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
+                x:Name="LightBtn"
+                Click="LightBtn_Click"
 >
-                页面2
+                光源管理界面
             </RadioButton>
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 

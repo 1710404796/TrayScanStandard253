@@ -191,5 +191,11 @@ namespace TrayScanStandard
             NageTo<YWStageView>();
 
         }
+
+        private void LightBtn_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<LightManagerView>();
+
+        }
     }
 }

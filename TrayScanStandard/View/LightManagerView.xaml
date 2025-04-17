@@ -1,0 +1,147 @@
+﻿<Page x:Class="TrayScanStandard.View.LightManagerView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:TrayScanStandard.View"
+      xmlns:vm="clr-namespace:TrayScanStandard.ViewModel"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance Type=local:LightManagerView}"
+      d:DesignHeight="550" d:DesignWidth="800"
+      Title="光源管理器">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>        <!-- 标题 -->
+        <Border Grid.Row="0" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" CornerRadius="5" Padding="10">
+            <TextBlock Text="光源管理配置" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+        </Border>        <!-- 表格 -->
+        <Border Grid.Row="1" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1" Margin="0,15,0,0" CornerRadius="3">
+            <DataGrid ItemsSource="{Binding ViewModel.LightInfos}"
+                    SelectedItem="{Binding ViewModel.SelectedLightInfo}"
+                    AutoGenerateColumns="False" 
+                    CanUserAddRows="False"
+                    IsReadOnly="True" 
+                    SelectionMode="Single"
+                    Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                    BorderThickness="0"
+                    GridLinesVisibility="All"
+                    HeadersVisibility="Column">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Setter Property="Padding" Value="10,5"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="COM 端口" Binding="{Binding Com}" Width="*"/>
+                    <DataGridTextColumn Header="光源值 (逗号分隔)" Binding="{Binding ValuesString}" Width="2*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>        <!-- 错误信息 -->
+        <TextBlock Grid.Row="2" 
+                 Text="{Binding ErrorMessage}" 
+                 Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}" 
+                 Margin="0,10,0,0" 
+                 FontSize="12"
+                 TextWrapping="Wrap">
+            <TextBlock.Visibility>
+                <Binding Path="ErrorMessage">
+                    <Binding.Converter>
+                        <BooleanToVisibilityConverter />
+                    </Binding.Converter>
+                </Binding>
+            </TextBlock.Visibility>
+         </TextBlock>
+
+        <!-- 添加光源区域 -->
+        <GroupBox Grid.Row="3" Header="添加新光源" Margin="0,10,0,0" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Text="COM 端口:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Grid.Column="1" Text="{Binding ViewModel.NewComPort, UpdateSourceTrigger=PropertyChanged}" Padding="5,3" Margin="0,0,15,0"/>
+                
+                <TextBlock Grid.Column="2" Text="光源值 (逗号分隔):" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Grid.Column="3" Text="{Binding ViewModel.NewValuesString, UpdateSourceTrigger=PropertyChanged}" Padding="5,3" Margin="0,0,15,0"/>
+                  <Button Grid.Column="4" 
+                        Content="添加" 
+                        Command="{Binding ViewModel.AddLightCommand}" 
+                        Padding="15,5" 
+                        Background="{DynamicResource SystemControlHighlightAccentBrush}" 
+                        Foreground="{DynamicResource SystemControlHighlightAltChromeWhiteBrush}" 
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+        <!-- 编辑光源区域 -->
+        <GroupBox Grid.Row="4" Header="编辑选中光源" Margin="0,10,0,0" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Text="COM 端口:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Grid.Column="1" Text="{Binding ViewModel.EditComPort, UpdateSourceTrigger=PropertyChanged}" Padding="5,3" Margin="0,0,15,0"/>
+                
+                <TextBlock Grid.Column="2" Text="光源值 (逗号分隔):" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Grid.Column="3" Text="{Binding ViewModel.EditValuesString, UpdateSourceTrigger=PropertyChanged}" Padding="5,3" Margin="0,0,15,0"/>
+                  <Button Grid.Column="4" 
+                        Content="保存" 
+                        Command="{Binding ViewModel.EditLightCommand}" 
+                        Padding="15,5" 
+                        Background="{DynamicResource SystemControlHighlightAccentBrush}" 
+                        Foreground="{DynamicResource SystemControlHighlightAltChromeWhiteBrush}" 
+                        BorderThickness="0"
+                        Margin="0,0,10,0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                
+                <Button Grid.Column="5" 
+                        Content="删除" 
+                        Command="{Binding ViewModel.DeleteLightCommand}" 
+                        Padding="15,5" 
+                        Background="{DynamicResource SystemControlErrorTextForegroundBrush}" 
+                        Foreground="{DynamicResource SystemControlHighlightAltChromeWhiteBrush}" 
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Page>

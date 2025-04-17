@@ -60,9 +60,10 @@ namespace TrayScanStandard.Models
         /// </summary>
         public StageSetting StageSetting { get; set; } = new();
         public int SelectBatteryId { get; set; } = 0;
+        public LightInfo[] LightInfos { get; set; } = [];
     }
 
-
+    public record LightInfo(string Com, int[] Values);
     public class ApiEnableTable
     {
         /// <summary>
