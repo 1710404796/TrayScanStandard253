@@ -100,7 +100,7 @@ namespace TrayScanStandard.ViewModel
             {
                 LightInfos.Remove(SelectedLightInfo);
                 ErrorMessage = string.Empty;
-                // SaveChanges(); // Called by CollectionChanged handler
+                SaveChanges(); // Called by CollectionChanged handler
             }
         }
         
