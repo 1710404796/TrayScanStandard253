@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Camera.Fs.Common;
+using LanguageExt;
+using LinxUniverse.Utils;
+using MugenCamera;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using LinxUniverse.Utils;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Models.CZPallet;
@@ -47,6 +50,10 @@ namespace TrayScanStandard.Models
 
         public ApiEnableTable ApiEnableTable { get; set; } = new();
 
+        public CameraSetting[] ConnectAddresses { get; set; } = Enumerable.Range(0,32).Select(s => new CameraSetting()).ToArray();
+
+        public int CameraCnt { get; set; } = 1;
+
         //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
 
         /// <summary>
@@ -64,6 +71,20 @@ namespace TrayScanStandard.Models
     }
 
     public record LightInfo(string Com, int[] Values);
+    public record CameraSetting(
+
+        )
+    {
+        public CameraAddress CameraAddresses { get; set; } = new HKAddress(new Key(""));
+        public int[] Exposure { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();
+        public int[] ExposureBackup { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();
+        //public static CameraSetting CreateDefault() =>
+        //    new CameraSetting(
+        //        new HKAddress(new Key("")),
+        //        Enumerable.Range(0, 3).Select(s => 100).ToArray(),
+        //        Enumerable.Range(0, 3).Select(s => 100).ToArray()
+        //    );
+    }
     public class ApiEnableTable
     {
         /// <summary>
@@ -177,7 +198,6 @@ namespace TrayScanStandard.Models
     {
         public string Key { get; set; } = string.Empty;
 
-        public List<BarCodeRegionInfo> Regions { get; set; } = [];
         public List<int> Exposure { get; set; } = [.. MainStorage.DefaultExp];
 
         public float Gamma { get; set; } = 1.0f;

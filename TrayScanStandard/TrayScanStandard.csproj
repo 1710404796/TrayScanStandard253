@@ -60,6 +60,11 @@
 	  <ProjectReference Include="..\lxuv\MugenCamera\MugenCamera.csproj" />
 	  <ProjectReference Include="..\lxuv\MugenCodeDetecter\MugenCodeDetecter.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="MvCameraControl.Net">
+	    <HintPath>..\lxuv\HKCamera.Fs.NET\MvCameraControl.Net.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Resource Include="Images\beier.png">

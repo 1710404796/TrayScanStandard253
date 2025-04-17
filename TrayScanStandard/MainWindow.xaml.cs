@@ -197,5 +197,11 @@ namespace TrayScanStandard
             NageTo<LightManagerView>();
 
         }
+
+        private void CameraList_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<AllBcrListView>();
+
+        }
     }
 }
