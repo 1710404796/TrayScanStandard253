@@ -11,7 +11,7 @@ using TrayScanStandard.Data;
 namespace TrayScanStandard.Migrations
 {
     [DbContext(typeof(LinxContext))]
-    [Migration("20250412090045_Init")]
+    [Migration("20250417062619_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -63,6 +63,31 @@ namespace TrayScanStandard.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("LinxUserRoles");
+                });
+
+            modelBuilder.Entity("TrayScanStandard.Data.Models.BatteryTypeInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Column")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Regions")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BatteryTypeInfos");
                 });
 
             modelBuilder.Entity("TrayScanStandard.Data.Models.OKNGCnt", b =>

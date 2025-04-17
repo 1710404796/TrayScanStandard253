@@ -1,5 +1,4 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 using System.Windows.Input;
@@ -15,7 +14,7 @@ namespace TrayScanStandard.View
     {
 
 
-
+        public Canvas BorderCanvas => borderCanvas;
         public ImageSource Source
         {
             get { return (ImageSource)GetValue(SourceProperty); }
@@ -34,6 +33,8 @@ namespace TrayScanStandard.View
         public ResizeAbleImage()
         {
             InitializeComponent();
+            GTran.ScaleX = 0.5;
+            GTran.ScaleY = 0.5;
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -49,6 +50,7 @@ namespace TrayScanStandard.View
                 {
                     GTran.ScaleX /= 1.05;
                     GTran.ScaleY /= 1.05;
+
                 }
             }
         }

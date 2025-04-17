@@ -32,11 +32,11 @@ namespace TrayScanStandard.View
         public readonly IMediator mediator;
         public BcrSettingWindow(BcrInfo setting)
         {
-            var cc = App.GetService<CodeReaderService>();
+            //var cc = App.GetService<CodeReaderService>();
             mediator=App.GetService<IMediator>();
             Setting = setting;
             InitializeComponent();
-            CamKey.ItemsSource = cc.CamCodes;
+            //CamKey.ItemsSource = cc.CamCodes;
             CamKey.Text = Setting.Key;
             gammaPattern.Text = Setting.Gamma.ToString();
             gainPattern.Text = Setting.Gain.ToString();
@@ -50,23 +50,23 @@ namespace TrayScanStandard.View
             try
             {
                 string logmessage = $"序列号{Setting.Key}修改为{CamKey.Text}";
-                await mediator.Send(new OperatorLogCommand(logmessage));
+                await mediator.Send(new OperationLogCommand(logmessage));
                 Setting.Key = CamKey.Text;
 
                 string logmessage1 = $"曝光{Setting.Exposure}修改为{ExpPattern.Text}";
-                await mediator.Send(new OperatorLogCommand(logmessage1));
+                await mediator.Send(new OperationLogCommand(logmessage1));
                 Setting.Exposure = ExpPattern.Text.Trim().Split("\n").Select(int.Parse).ToList();
 
                 string logmessage2 = $"伽马{Setting.Gamma}修改为{float.Parse(gammaPattern.Text.Trim())}";
-                await mediator.Send(new OperatorLogCommand(logmessage2));
+                await mediator.Send(new OperationLogCommand(logmessage2));
                 Setting.Gamma = float.Parse(gammaPattern.Text.Trim());
 
                 string logmessage3 = $"增益{Setting.DeviceCode}修改为{deviceCode.Text}";
-                await mediator.Send(new OperatorLogCommand(logmessage3));
+                await mediator.Send(new OperationLogCommand(logmessage3));
                 Setting.DeviceCode = deviceCode.Text;
 
                 string logmessage4 = $"设备编号{Setting.Gain}修改为{float.Parse(gainPattern.Text.Trim())}";
-                await mediator.Send(new OperatorLogCommand(logmessage4));
+                await mediator.Send(new OperationLogCommand(logmessage4));
                 Setting.Gain = float.Parse(gainPattern.Text.Trim());
 
                 DialogResult = true;

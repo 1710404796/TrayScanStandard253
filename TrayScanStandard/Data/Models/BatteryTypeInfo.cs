@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TrayScanStandard.Models;
 
 namespace TrayScanStandard.Data.Models
 {
@@ -22,5 +23,7 @@ namespace TrayScanStandard.Data.Models
         ///  列数
         /// </summary>
         public int Column { get; set; }
+
+        public List<List<BarCodeRegionInfo>> Regions { get; set; } = Enumerable.Range(1, 12).Select(s => new List<BarCodeRegionInfo>()).ToList();// 要默认12个
     }
 }

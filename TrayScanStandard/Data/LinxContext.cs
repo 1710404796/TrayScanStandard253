@@ -1,18 +1,21 @@
-﻿ using System;
+﻿using LinxUniverse.Auth;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using LinxUniverse.Auth;
-using Microsoft.EntityFrameworkCore;
 using TrayScanStandard.Data.Models;
+using TrayScanStandard.Models;
 
 namespace TrayScanStandard.Data
 {
     public class LinxContext : LinxUserDBContext<LinxUser>
     {
         //private const string connectString = @"Server=(localdb)\MSSQLLocalDB;Database=LXDB_TrayScanStandard;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true;Connect Timeout=500";
-        private const string connectString = @"Data Source=LXDB_TrayScanStandardsl.db";
+        private const string connectString = @"Data Source=LXDB_TrayScanStandards.db";
 
 
         public LinxContext(DbContextOptions<LinxContext> options) : base(options)
@@ -48,7 +51,16 @@ namespace TrayScanStandard.Data
                       onNav.ToJson();
 
                   });
+            modelBuilder.Entity<BatteryTypeInfo>().Property(e => e.Regions)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                    v => string.IsNullOrEmpty(v) ? new() : JsonSerializer.Deserialize<List<List<BarCodeRegionInfo>>>(v, (JsonSerializerOptions)null),
+                    new ValueComparer<List<List<BarCodeRegionInfo>>>(
+                        (c1, c2) => false,
+                        c => c.GetHashCode(),
+                        c => c)
 
+                    );
 
             base.OnModelCreating(modelBuilder);
 
@@ -69,6 +81,7 @@ namespace TrayScanStandard.Data
         /// 托盘日志
         /// </summary>
         public DbSet<PalletLog> PalletLogs { get; set; }
+        public DbSet<BatteryTypeInfo> BatteryTypeInfos { get; set; }
 
     }
 }

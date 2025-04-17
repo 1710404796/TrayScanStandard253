@@ -50,10 +50,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Apis\" />
-	  <Folder Include="Migrations\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Auth\LinxUniverse.Auth.csproj" />
+	  <ProjectReference Include="..\lxuv\LinxUniverse.CST\LinxUniverse.CST.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.FP\LinxUniverse.FP.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Mediator\LinxUniverse.Mediator.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Utils\LinxUniverse.Utils.csproj" />

@@ -59,6 +59,7 @@ namespace TrayScanStandard.Models
         /// 工位设置 // 防止有多工位的
         /// </summary>
         public StageSetting StageSetting { get; set; } = new();
+        public int SelectBatteryId { get; set; } = 0;
     }
 
 

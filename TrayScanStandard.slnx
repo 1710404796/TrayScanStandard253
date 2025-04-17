@@ -4,6 +4,7 @@
   <Project Path="lxuv/LinxUniverse.Algo.Common/LinxUniverse.Algo.Common.csproj" />
   <Project Path="lxuv/LinxUniverse.Auth/LinxUniverse.Auth.csproj" />
   <Project Path="lxuv/LinxUniverse.Common/LinxUniverse.Common.fsproj" />
+  <Project Path="lxuv/LinxUniverse.CST/LinxUniverse.CST.csproj" />
   <Project Path="lxuv/LinxUniverse.DB/LinxUniverse.DB.csproj" />
   <Project Path="lxuv/LinxUniverse.DI/LinxUniverse.DI.csproj" />
   <Project Path="lxuv/LinxUniverse.FP/LinxUniverse.FP.csproj" />

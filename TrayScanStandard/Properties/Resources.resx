@@ -120,6 +120,9 @@
   <data name="SoftwareTitle" xml:space="preserve">
     <value>机械手上位机</value>
   </data>
+  <data name="SoftwareTitle2" xml:space="preserve">
+    <value>机械手上位机</value>
+  </data>
   <data name="SoftwareTitle1" xml:space="preserve">
     <value>机械手上位机</value>
   </data>
@@ -133,7 +136,7 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>登出</value>
-    <comment>qingko</comment>
+    <comment>登出</comment>
   </data>
   <data name="WorkstationStatus" xml:space="preserve">
     <value>工位状态</value>
@@ -335,7 +338,7 @@
     <value>清空</value>
   </data>
   <data name="TrayNumber" xml:space="preserve">
-    <value>托盘编号</value>
+    <value>托盘号</value>
   </data>
   <data name="Stop" xml:space="preserve">
     <value>停止</value>
@@ -395,7 +398,7 @@
     <value>正在执行</value>
   </data>
   <data name="RequestData" xml:space="preserve">
-    <value>请求数据:</value>
+    <value>请求数据</value>
   </data>
   <data name="ResponseData" xml:space="preserve">
     <value>回复数据</value>
@@ -404,25 +407,28 @@
     <value>写入报警日志失败</value>
   </data>
   <data name="ErrorOccurredWhileWritingAlarm" xml:space="preserve">
-    <value>写入报警发生错误:</value>
+    <value>写入报警发生错误</value>
   </data>
   <data name="ErrorAccessingInterfaceResultIsNull" xml:space="preserve">
     <value>访问接口出错, 结果为null</value>
   </data>
+  <data name="CompareCellBarcodeWithLocalData" xml:space="preserve">
+    <value>电芯条码与本地对比</value>
+  </data>
   <data name="Local" xml:space="preserve">
-    <value>本地:</value>
+    <value>本地</value>
   </data>
   <data name="Incoming" xml:space="preserve">
     <value>传入</value>
   </data>
-  <data name="ClearAllWorkstationsdata" xml:space="preserve">
-    <value>清空所有工位数据</value>
+  <data name="ClearAllWorkstations" xml:space="preserve">
+    <value>清空所有工位</value>
   </data>
   <data name="RequestInterface" xml:space="preserve">
-    <value>请求接口:</value>
+    <value>请求接口</value>
   </data>
   <data name="RequestTime" xml:space="preserve">
-    <value>请求时间:</value>
+    <value>请求时间</value>
   </data>
   <data name="ResponseTime" xml:space="preserve">
     <value>响应时间</value>
@@ -562,134 +568,329 @@
   <data name="WaitingTimeFake" xml:space="preserve">
     <value>等待假电芯盘时间（s）</value>
   </data>
+  <data name="AddUserInformation" xml:space="preserve">
+    <value>新增用户信息</value>
+    <comment>新增用户信息</comment>
+  </data>
+	<data name="I currently do not have this permission" xml:space="preserve">
+    <value>当前没有此权限</value>
+  </data>
+	<data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+	<data name="ApplyForFakeBatteries" xml:space="preserve">
+    <value>申请假点芯</value>
+  </data>
+	<data name="Check" xml:space="preserve">
+    <value>勾选</value>
+  </data>
+	<data name="DisassemblyLog" xml:space="preserve">
+    <value>拆盘日志</value>
+  </data>
+	<data name="DeriveCVS" xml:space="preserve">
+    <value>导出为CVS</value>
+  </data>
+	<data name="SaveAndReset" xml:space="preserve">
+    <value>保存并重置</value>
+  </data>
+	<data name="WCSStatus" xml:space="preserve">
+    <value>WCS运行状态</value>
+  </data>
+	<data name="FakeCoreRule" xml:space="preserve">
+    <value>假点芯规则</value>
+  </data>
+	<data name="OrdinaryPointCoreRule" xml:space="preserve">
+    <value>普通电芯规则</value>
+  </data>
+	<data name="Online" xml:space="preserve">
+    <value>在线</value>
+  </data>
+	<data name="Offline" xml:space="preserve">
+    <value>离线</value>
+  </data>
+	<data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
+    <value>当前没有权限访问此页面!</value>
+  </data>
+	<data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
+    <value>没有此地址</value>
+  </data>
+	<data name="CellBarcodeAndlocalComparison" xml:space="preserve">
+    <value>电芯条码与本地对比!</value>
+  </data>
+	<data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
+    <value>本程序一次只能运行一个实例!</value>
+  </data>
+	<data name="GroupTime" xml:space="preserve">
+    <value>组盘时间</value>
+  </data>
+	<data name="NumberOfBatteries" xml:space="preserve">
+    <value>电池数量</value>
+  </data>
+	<data name="BatteryBarcode" xml:space="preserve">
+    <value>电池条码</value>
+  </data>
+	<data name="ThereisMaterial" xml:space="preserve">
+    <value>有料</value>
+  </data>
+	<data name="ItemNumber" xml:space="preserve">
+    <value>料号:</value>
+  </data>
+	<data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
+    <value>没有找到指定ID的用户</value>
+  </data>
+	<data name="PrepareToObtainTheTray" xml:space="preserve">
+    <value>准备获取托盘</value>
+  </data>
+	<data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
+    <value>上报拆组盘接口</value>
+  </data>
+	<data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
+    <value>跳过一抓抓取为空</value>
+  </data>
+	<data name="clampingJaw" xml:space="preserve">
+    <value>夹爪:</value>
+  </data>
+	<data name="logOn" xml:space="preserve">
+    <value>登录</value>
+  </data>
+	<data name="UnknownBatteryCellGrade" xml:space="preserve">
+    <value>未知的电芯等级</value>
+  </data>
+	<data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
+    <value>组盘日志发生错误:</value>
+  </data>
+	<data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
+    <value>校验条码返回不一致!</value>
+  </data>
+	<data name="PleaseCheckTheLogs" xml:space="preserve">
+    <value>请检查日志</value>
+  </data>
+	<data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
+    <value>调度设备状态异常</value>
+  </data>
+	<data name="AttemptToObtainTable" xml:space="preserve">
+    <value>尝试获取table</value>
+  </data>
+	<data name="OpcTableNotSet" xml:space="preserve">
+    <value>OpcTable未设定</value>
+  </data>
+	<data name="PLCTaskServiceNotConnected" xml:space="preserve">
+    <value>PLCTaskService未连接</value>
+  </data>
+	<data name="ReadDB500" xml:space="preserve">
+    <value>读取DB500</value>
+  </data>
+	<data name="OpenReading" xml:space="preserve">
+    <value>开读</value>
+  </data>
+	<data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
+    <value>扫码枪不存在</value>
+  </data>
+	<data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
+    <value>处理请求发生错误:</value>
+  </data>
+	<data name="TrayNotObtained" xml:space="preserve">
+    <value>未获取到托盘</value>
+  </data>
+	<data name="PLCDataVerification" xml:space="preserve">
+    <value>PLC数据校验</value>
+  </data>
+	<data name="WCSReturnsDataVerification" xml:space="preserve">
+    <value>WCS返回数据校验</value>
+  </data>
+	<data name="RequestStatus" xml:space="preserve">
+    <value>请求状态:</value>
+  </data>
+	<data name="TheUsernameCannotBeEmpty" xml:space="preserve">
+    <value>用户名不能为空</value>
+  </data>
+	<data name="RFCannotBeEmpty" xml:space="preserve">
+    <value>RF不能为空</value>
+  </data>
+	<data name="AddedSuccessfully" xml:space="preserve">
+    <value>添加成功</value>
+  </data>
+	<data name="DeleteSuccessfully" xml:space="preserve">
+    <value>删除成功</value>
+  </data>
+	<data name="AddRuleName" xml:space="preserve">
+    <value>添加规则名称</value>
+  </data>
+	<data name="ComparedToRegularExpressions" xml:space="preserve">
+    <value>与正则表达式</value>
+  </data>
+	<data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
+    <value>真的要放弃吗？</value>
+  </data>
+	<data name="AbandoningConfirmation" xml:space="preserve">
+    <value>放弃确认</value>
+  </data>
+	<data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
+    <value>是否要开始人工绑定盘流程</value>
+  </data>
+	<data name="GroupConfirmation" xml:space="preserve">
+    <value>组盘确认</value>
+  </data>
+	<data name="ConfirmToClearThis" xml:space="preserve">
+    <value>确认要清除此</value>
+  </data>
+	<data name="DoYouRemember" xml:space="preserve">
+    <value>记忆吗?</value>
+  </data>
+	<data name="WriteConfirmation" xml:space="preserve">
+    <value>写入确认</value>
+  </data>
+	<data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>确认要强制写入条码吗?</value>
+  </data>
+	<data name="PLCMonitoringProblem" xml:space="preserve">
+    <value>PLC监听出现问题</value>
+  </data>
+	<data name="Error" xml:space="preserve">
+    <value>错误:</value>
+  </data>
+	<data name="String1" xml:space="preserve">
+    <value />
+  </data>
+	<data name="AddUserInformation" xml:space="preserve">
+    <value>AddUserInformation</value>
+    <comment>新增用户信息</comment>
+  </data>
+	<data name="PermissionsSetting" xml:space="preserve">
+    <value>权限设置</value>
+    <comment>权限设置</comment>
+  </data>
+  <data name="PermissionsSetting" xml:space="preserve">
+    <value>权限设定</value>
+    <comment>权限设定</comment>
+  </data>
   <data name="I currently do not have this permission" xml:space="preserve">
     <value>当前没有此权限</value>
   </data>
-  <data name="Add" xml:space="preserve">
-    <value>添加</value>
-  </data>
-  <data name="ApplyForFakeBatteries" xml:space="preserve">
-    <value>申请假点芯</value>
-  </data>
-  <data name="Check" xml:space="preserve">
-    <value>勾选</value>
-  </data>
-  <data name="DisassemblyLog" xml:space="preserve">
-    <value>拆盘日志</value>
-  </data>
-  <data name="DeriveCVS" xml:space="preserve">
-    <value>导出为CVS</value>
-  </data>
-  <data name="SaveAndReset" xml:space="preserve">
-    <value>保存并重置</value>
-  </data>
-  <data name="WCSStatus" xml:space="preserve">
-    <value>WCS运行状态</value>
-  </data>
-  <data name="FakeCoreRule" xml:space="preserve">
-    <value>假点芯规则</value>
-  </data>
-  <data name="OrdinaryPointCoreRule" xml:space="preserve">
-    <value>普通电芯规则</value>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>登录失败</value>
   </data>
   <data name="Online" xml:space="preserve">
     <value>在线</value>
+    <comment>在线</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>离线</value>
+    <comment>离线</comment>
   </data>
-  <data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
-    <value>当前没有权限访问此页面!</value>
+  <data name="ScannerInterface" xml:space="preserve">
+    <value>扫码器界面</value>
   </data>
-  <data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
-    <value>没有此地址</value>
+  <data name="Disconnect" xml:space="preserve">
+    <value>掉线</value>
   </data>
-  <data name="CellBarcodeAndlocalComparison" xml:space="preserve">
-    <value>电芯条码与本地对比!</value>
+  <data name="ShootAll" xml:space="preserve">
+    <value>全部拍摄</value>
   </data>
-  <data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
-    <value>本程序一次只能运行一个实例!</value>
+  <data name="Reconnect" xml:space="preserve">
+    <value>重连</value>
   </data>
-  <data name="GroupTime" xml:space="preserve">
-    <value>组盘时间</value>
+  <data name="SetUp" xml:space="preserve">
+    <value>设置</value>
   </data>
-  <data name="NumberOfBatteries" xml:space="preserve">
-    <value>电池数量</value>
+  <data name="CodeReaderConfiguration" xml:space="preserve">
+    <value>读码器配置</value>
   </data>
-  <data name="BatteryBarcode" xml:space="preserve">
-    <value>电池条码</value>
+  <data name="SerialNumber" xml:space="preserve">
+    <value>序列号</value>
   </data>
-  <data name="ThereisMaterial" xml:space="preserve">
-    <value>有料</value>
+  <data name="Exposure" xml:space="preserve">
+    <value>曝光</value>
   </data>
-  <data name="ItemNumber" xml:space="preserve">
-    <value>料号:</value>
+  <data name="Gamma" xml:space="preserve">
+    <value>伽马</value>
   </data>
-  <data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
-    <value>没有找到指定ID的用户</value>
+  <data name="ManagementOfBatteryCellTypes" xml:space="preserve">
+    <value>电芯种类管理</value>
   </data>
-  <data name="PrepareToObtainTheTray" xml:space="preserve">
-    <value>准备获取托盘</value>
+  <data name="AddBattery" xml:space="preserve">
+    <value>添加电池</value>
   </data>
-  <data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
-    <value>上报拆组盘接口</value>
+  <data name="RemoveBattery" xml:space="preserve">
+    <value>删除电池</value>
   </data>
-  <data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
-    <value>跳过一抓抓取为空</value>
+  <data name="SaveBattery" xml:space="preserve">
+    <value>保存电池</value>
   </data>
-  <data name="clampingJaw" xml:space="preserve">
-    <value>夹爪:</value>
+  <data name="BatteryType" xml:space="preserve">
+    <value>电池类型</value>
   </data>
-  <data name="logOn" xml:space="preserve">
-    <value>登录</value>
+  <data name="WCSLog" xml:space="preserve">
+    <value>WCS日志</value>
   </data>
-  <data name="UnknownBatteryCellGrade" xml:space="preserve">
-    <value>未知的电芯等级</value>
+  <data name="PLCIP Address" xml:space="preserve">
+    <value>PLCIP地址</value>
   </data>
-  <data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
-    <value>组盘日志发生错误:</value>
+  <data name="NumberOfScanners" xml:space="preserve">
+    <value>扫码器个数</value>
   </data>
-  <data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
-    <value>校验条码返回不一致!</value>
+  <data name="PermissionConfiguration" xml:space="preserve">
+    <value>权限配置</value>
   </data>
-  <data name="PleaseCheckTheLogs" xml:space="preserve">
-    <value>请检查日志</value>
+  <data name="System Administrator" xml:space="preserve">
+    <value>系统管理员</value>
   </data>
-  <data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
-    <value>调度设备状态异常</value>
+  <data name="WorkstationConfiguration" xml:space="preserve">
+    <value>工位配置</value>
   </data>
-  <data name="AttemptToObtainTable" xml:space="preserve">
-    <value>尝试获取table</value>
+  <data name="IncomingPullStrap" xml:space="preserve">
+    <value>来料拉带</value>
   </data>
-  <data name="OpcTableNotSet" xml:space="preserve">
-    <value>OpcTable未设定</value>
+  <data name="FeedingPullBelt" xml:space="preserve">
+    <value>去料拉带</value>
   </data>
-  <data name="PLCTaskServiceNotConnected" xml:space="preserve">
-    <value>PLCTaskService未连接</value>
+  <data name="RobotClaws" xml:space="preserve">
+    <value>机器人夹爪</value>
   </data>
-  <data name="ReadDB500" xml:space="preserve">
-    <value>读取DB500</value>
+  <data name="OKMatchingPlatform" xml:space="preserve">
+    <value>OK配对平台</value>
   </data>
-  <data name="OpenReading" xml:space="preserve">
-    <value>开读</value>
+  <data name="REWORKPairingPlatform" xml:space="preserve">
+    <value>REWORK配对平台</value>
   </data>
-  <data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
-    <value>扫码枪不存在</value>
+  <data name="NGPullStrap" xml:space="preserve">
+    <value>NG拉带</value>
   </data>
-  <data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
-    <value>处理请求发生错误:</value>
+  <data name="InProcess" xml:space="preserve">
+    <value>正在检测中</value>
   </data>
-  <data name="TrayNotObtained" xml:space="preserve">
-    <value>未获取到托盘</value>
+  <data name="Capture" xml:space="preserve">
+    <value>拍摄</value>
   </data>
-  <data name="PLCDataVerification" xml:space="preserve">
-    <value>PLC数据校验</value>
+  <data name="SetParameters" xml:space="preserve">
+    <value>设置参数</value>
   </data>
-  <data name="WCSReturnsDataVerification" xml:space="preserve">
-    <value>WCS返回数据校验</value>
+  <data name="AddSelectionBox" xml:space="preserve">
+    <value>添加选定框</value>
   </data>
-  <data name="RequestStatus" xml:space="preserve">
-    <value>请求状态:</value>
+  <data name="DeleteTheSelectedBox" xml:space="preserve">
+    <value>删除该选定框</value>
+  </data>
+  <data name="ScanCodeGunSettings" xml:space="preserve">
+    <value>扫码枪设置</value>
+  </data>
+  <data name="OKMatchingPlatform2" xml:space="preserve">
+    <value>OK配对平台2</value>
+  </data>
+  <data name="E99PullStrap" xml:space="preserve">
+    <value>E99拉带</value>
+  </data>
+  <data name="TrayFormula" xml:space="preserve">
+    <value>托盘配方</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>已连接</value>
+  </data>
+  <data name="AreYouSureYouWantToGiveUp" xml:space="preserve">
+    <value>确定要放弃吗?</value>
+  </data>
+  <data name="AbandoningDetermination" xml:space="preserve">
+    <value>放弃确认</value>
   </data>
   <data name="TheUsernameCannotBeEmpty" xml:space="preserve">
     <value>用户名不能为空</value>
@@ -697,57 +898,85 @@
   <data name="RFCannotBeEmpty" xml:space="preserve">
     <value>RF不能为空</value>
   </data>
-  <data name="AddedSuccessfully" xml:space="preserve">
-    <value>添加成功</value>
+  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>确认要强制写入条码吗?</value>
   </data>
-  <data name="DeleteSuccessfully" xml:space="preserve">
-    <value>删除成功</value>
-  </data>
-  <data name="AddRuleName" xml:space="preserve">
-    <value>添加规则名称</value>
-  </data>
-  <data name="ComparedToRegularExpressions" xml:space="preserve">
-    <value>与正则表达式</value>
-  </data>
-  <data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
-    <value>真的要放弃吗？</value>
-  </data>
-  <data name="AbandoningConfirmation" xml:space="preserve">
-    <value>放弃确认</value>
-  </data>
-  <data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
-    <value>是否要开始人工绑定盘流程</value>
-  </data>
-  <data name="GroupConfirmation" xml:space="preserve">
-    <value>组盘确认</value>
+  <data name="WriteConfirmation" xml:space="preserve">
+    <value>写入确认</value>
   </data>
   <data name="ConfirmToClearThis" xml:space="preserve">
     <value>确认要清除此</value>
   </data>
   <data name="DoYouRemember" xml:space="preserve">
-    <value>记忆吗?</value>
+    <value>记忆吗？</value>
   </data>
-  <data name="WriteConfirmation" xml:space="preserve">
-    <value>写入确认</value>
+  <data name="PleaseSelectTheTrayToDelete" xml:space="preserve">
+    <value>请选择要删除的托盘</value>
   </data>
-  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
-    <value>确认要强制写入条码吗?</value>
+  <data name="ManuallyStartDetection" xml:space="preserve">
+    <value>手动启动检测</value>
   </data>
-  <data name="PLCMonitoringProblem" xml:space="preserve">
-    <value>PLC监听出现问题</value>
+  <data name="ManualShutdownDetection" xml:space="preserve">
+    <value>手动关停检测</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>错误:</value>
+  <data name="EnterExposureParameters" xml:space="preserve">
+    <value>输入曝光参数</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="ClearDebuggingData" xml:space="preserve">
+    <value>清除调试数据</value>
   </data>
-  <data name="AddUserInformation" xml:space="preserve">
-    <value>AddUserInformation</value>
-    <comment>新增用户信息</comment>
+  <data name="NumberOfSuccessfulAttempts" xml:space="preserve">
+    <value>成功次数</value>
   </data>
-  <data name="PermissionsSetting" xml:space="preserve">
-    <value>权限设置</value>
-    <comment>权限设置</comment>
+  <data name="TotalNumberOfTimes" xml:space="preserve">
+    <value>总次数</value>
+  </data>
+  <data name="SuccessRate" xml:space="preserve">
+    <value>成功率</value>
+  </data>
+  <data name="DebuggingQRCodeScanning" xml:space="preserve">
+    <value>调试扫码</value>
+  </data>
+  <data name="StopDebugging" xml:space="preserve">
+    <value>停止调试</value>
+  </data>
+  <data name="LoadTemporaryStorageConfiguration" xml:space="preserve">
+    <value>加载暂存配置</value>
+  </data>
+  <data name="LoadNodeConfiguration" xml:space="preserve">
+    <value>加载节点配置</value>
+  </data>
+  <data name="SaveCurrentConfigurationAsNodeConfiguration" xml:space="preserve">
+    <value>保存当前配置为节点配置</value>
+  </data>
+  <data name="CameraNotConnected" xml:space="preserve">
+    <value>相机未连接</value>
+  </data>
+  <data name="NoBatterySelected" xml:space="preserve">
+    <value>未选择电池</value>
+  </data>
+  <data name="SelectBattery" xml:space="preserve">
+    <value>选择电池</value>
+  </data>
+  <data name="StartDetection" xml:space="preserve">
+    <value>开始检测</value>
+  </data>
+  <data name="TestingCompleted" xml:space="preserve">
+    <value>检测完成</value>
+  </data>
+  <data name="ThereAreChannelNumbersWithDifferentBarcodes" xml:space="preserve">
+    <value>存在通道号拥有不同的条码</value>
+  </data>
+  <data name="InTheory_ThisSituationShouldNotOccur" xml:space="preserve">
+    <value>理论上，不应该出现这种情况</value>
+  </data>
+  <data name="MergeResultCompleted" xml:space="preserve">
+    <value>合并结果完成</value>
+  </data>
+  <data name="SameBarcodeExists" xml:space="preserve">
+    <value>存在相同的条码</value>
+  </data>
+  <data name="Fail" xml:space="preserve">
+    <value>失败</value>
   </data>
 </root>

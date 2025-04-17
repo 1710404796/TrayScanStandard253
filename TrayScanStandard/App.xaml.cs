@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using LinxUniverse.Auth;
+using LinxUniverse.CST;
 using LinxUniverse.DI;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
@@ -122,7 +123,7 @@ namespace TrayScanStandard
                          services.AddTransient<StationSettingView>();
 
 
-
+                         services.AddCstService();
 
                          services.AddDbContext<LinxUserDBContext<LinxUser>, LinxContext>(option =>
                          {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using TrayScanStandard.Models;
 
-namespace XCCCD2024.ViewModel
+namespace TrayScanStandard.ViewModel
 {
     public partial class BcrBorderViewModel: ObservableRecipient
     {

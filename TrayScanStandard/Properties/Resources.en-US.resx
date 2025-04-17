@@ -120,6 +120,9 @@
   <data name="SoftwareTitle" xml:space="preserve">
     <value>Robot Arm HMI</value>
   </data>
+  <data name="SoftwareTitle2" xml:space="preserve">
+    <value>Robot Arm HMI</value>
+  </data>
   <data name="SoftwareTitle1" xml:space="preserve">
     <value>Robot Arm HMI</value>
   </data>
@@ -391,7 +394,7 @@
     <value>Executing</value>
   </data>
   <data name="RequestData" xml:space="preserve">
-    <value>Request Data:</value>
+    <value>Request Data</value>
   </data>
   <data name="ResponseData" xml:space="preserve">
     <value>Response Data</value>
@@ -400,25 +403,28 @@
     <value>Failed to Write Alarm Log</value>
   </data>
   <data name="ErrorOccurredWhileWritingAlarm" xml:space="preserve">
-    <value>Error Occurred While Writing Alarm:</value>
+    <value>Error Occurred While Writing Alarm</value>
   </data>
   <data name="ErrorAccessingInterfaceResultIsNull" xml:space="preserve">
     <value>Error Accessing Interface; Result is Null</value>
   </data>
+  <data name="CompareCellBarcodeWithLocalData" xml:space="preserve">
+    <value>Compare Cell Barcode with Local Data</value>
+  </data>
   <data name="Local" xml:space="preserve">
-    <value>Local:</value>
+    <value>Local</value>
   </data>
   <data name="Incoming" xml:space="preserve">
     <value>Incoming</value>
   </data>
-  <data name="ClearAllWorkstationsdata" xml:space="preserve">
-    <value>Clear All Workstations data</value>
+  <data name="ClearAllWorkstations" xml:space="preserve">
+    <value>Clear All Workstations</value>
   </data>
   <data name="RequestInterface" xml:space="preserve">
-    <value>Request Interface:</value>
+    <value>Request Interface</value>
   </data>
   <data name="RequestTime" xml:space="preserve">
-    <value>Request Time:</value>
+    <value>Request Time</value>
   </data>
   <data name="ResponseTime" xml:space="preserve">
     <value>Response Time</value>
@@ -558,35 +564,200 @@
   <data name="WaitingTimeFake" xml:space="preserve">
     <value>Waiting Time for Fake Cell Tray (s)</value>
   </data>
+  <data name="AddUserInformation" xml:space="preserve">
+    <value>AddUserInformation</value>
+  </data>
+	<data name="I currently do not have this permission" xml:space="preserve">
+    <value>I currently do not have this permission</value>
+  </data>
+	<data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+	<data name="ApplyForFakeBatteries" xml:space="preserve">
+    <value>Apply for fake batteries</value>
+  </data>
+	<data name="Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+	<data name="DisassemblyLog" xml:space="preserve">
+    <value>DisassemblyLog</value>
+  </data>
+	<data name="DeriveCVS" xml:space="preserve">
+    <value>DeriveCVS</value>
+  </data>
+	<data name="SaveAndReset" xml:space="preserve">
+    <value>Save and Reset</value>
+  </data>
+	<data name="WCSStatus" xml:space="preserve">
+    <value>WCS Status</value>
+  </data>
+	<data name="FakeCoreRule" xml:space="preserve">
+    <value>Fake core rule</value>
+  </data>
+	<data name="OrdinaryPointCoreRule" xml:space="preserve">
+    <value>Ordinary point core rule</value>
+  </data>
+	<data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+	<data name="Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+	<data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
+    <value>I currently do not have permission to access this page!</value>
+  </data>
+	<data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
+    <value>There is no such address available</value>
+  </data>
+	<data name="CellBarcodeAndlocalComparison" xml:space="preserve">
+    <value>CellBarcodeAndlocalComparison!</value>
+  </data>
+	<data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
+    <value>This program can only run one instance at a time!</value>
+  </data>
+	<data name="GroupTime" xml:space="preserve">
+    <value>Group time</value>
+  </data>
+	<data name="NumberOfBatteries" xml:space="preserve">
+    <value>Number of batteries</value>
+  </data>
+	<data name="BatteryBarcode" xml:space="preserve">
+    <value>Battery barcode</value>
+  </data>
+	<data name="ThereisMaterial" xml:space="preserve">
+    <value>ThereisMaterial</value>
+  </data>
+	<data name="ItemNumber" xml:space="preserve">
+    <value>Item number:</value>
+  </data>
+	<data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
+    <value>No user with the specified ID was found</value>
+  </data>
+	<data name="PrepareToObtainTheTray" xml:space="preserve">
+    <value>Prepare to obtain the tray</value>
+  </data>
+	<data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
+    <value>Report the disassembly disk interface</value>
+  </data>
+	<data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
+    <value>Skip one grab and leave it empty</value>
+  </data>
+	<data name="clampingJaw" xml:space="preserve">
+    <value>Clamping jaw:</value>
+  </data>
+	<data name="logOn" xml:space="preserve">
+    <value>log on</value>
+  </data>
+	<data name="UnknownBatteryCellGrade" xml:space="preserve">
+    <value>Unknown battery cell grade</value>
+  </data>
+	<data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
+    <value>An error occurred in the group disk log:</value>
+  </data>
+	<data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
+    <value>Inconsistent barcode verification returned!</value>
+  </data>
+	<data name="PleaseCheckTheLogs" xml:space="preserve">
+    <value>Please check the logs</value>
+  </data>
+	<data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
+    <value>Abnormal status of scheduling equipment</value>
+  </data>
+	<data name="AttemptToObtainTable" xml:space="preserve">
+    <value>Attempt to obtain table</value>
+  </data>
+	<data name="OpcTableNotSet" xml:space="preserve">
+    <value>OpcTable not set</value>
+  </data>
+	<data name="PLCTaskServiceNotConnected" xml:space="preserve">
+    <value>PLCTaskService not connected</value>
+  </data>
+	<data name="ReadDB500" xml:space="preserve">
+    <value>Read DB500</value>
+  </data>
+	<data name="OpenReading" xml:space="preserve">
+    <value>Open Reading</value>
+  </data>
+	<data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
+    <value>The barcode scanner does not exist</value>
+  </data>
+	<data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
+    <value>An error occurred while processing the request:</value>
+  </data>
+	<data name="TrayNotObtained" xml:space="preserve">
+    <value>Tray not obtained</value>
+  </data>
+	<data name="PLCDataVerification" xml:space="preserve">
+    <value>PLC data verification</value>
+  </data>
+	<data name="WCSReturnsDataVerification" xml:space="preserve">
+    <value>WCS returns data verification</value>
+  </data>
+	<data name="RequestStatus" xml:space="preserve">
+    <value>Request status:</value>
+  </data>
+	<data name="TheUsernameCannotBeEmpty" xml:space="preserve">
+    <value>The username cannot be empty</value>
+  </data>
+	<data name="RFCannotBeEmpty" xml:space="preserve">
+    <value>RF cannot be empty</value>
+  </data>
+	<data name="AddedSuccessfully" xml:space="preserve">
+    <value>Added successfully</value>
+  </data>
+	<data name="DeleteSuccessfully" xml:space="preserve">
+    <value>Delete successfully</value>
+  </data>
+	<data name="AddRuleName" xml:space="preserve">
+    <value>Add rule name</value>
+  </data>
+	<data name="ComparedToRegularExpressions" xml:space="preserve">
+    <value>Compared to regular expressions</value>
+  </data>
+	<data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
+    <value>Do you really have to give up?</value>
+  </data>
+	<data name="AbandoningConfirmation" xml:space="preserve">
+    <value>Abandoning confirmation</value>
+  </data>
+	<data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
+    <value>Do you want to start the manual disk binding process</value>
+  </data>
+	<data name="GroupConfirmation" xml:space="preserve">
+    <value>Group confirmation</value>
+  </data>
+	<data name="ConfirmToClearThis" xml:space="preserve">
+    <value>Confirm to clear this</value>
+  </data>
+	<data name="DoYouRemember" xml:space="preserve">
+    <value>Do you remember?</value>
+  </data>
+	<data name="WriteConfirmation" xml:space="preserve">
+    <value>Write confirmation</value>
+  </data>
+	<data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>Are you sure to force barcode writing?</value>
+  </data>
+	<data name="PLCMonitoringProblem" xml:space="preserve">
+    <value>PLC monitoring problem</value>
+  </data>
+	<data name="Error" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+	<data name="AddUserInformation" xml:space="preserve">
+    <value>AddUserInformation</value>
+  </data>
+	<data name="PermissionsSetting" xml:space="preserve">
+    <value>PermissionsSetting</value>
+  </data>
+  <data name="PermissionsSetting" xml:space="preserve">
+    <value>Permissions Setting</value>
+  </data>
   <data name="I currently do not have this permission" xml:space="preserve">
     <value>I currently do not have this permission</value>
   </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="ApplyForFakeBatteries" xml:space="preserve">
-    <value>Apply for fake batteries</value>
-  </data>
-  <data name="Check" xml:space="preserve">
-    <value>Check</value>
-  </data>
-  <data name="DisassemblyLog" xml:space="preserve">
-    <value>DisassemblyLog</value>
-  </data>
-  <data name="DeriveCVS" xml:space="preserve">
-    <value>DeriveCVS</value>
-  </data>
-  <data name="SaveAndReset" xml:space="preserve">
-    <value>Save and Reset</value>
-  </data>
-  <data name="WCSStatus" xml:space="preserve">
-    <value>WCS Status</value>
-  </data>
-  <data name="FakeCoreRule" xml:space="preserve">
-    <value>Fake core rule</value>
-  </data>
-  <data name="OrdinaryPointCoreRule" xml:space="preserve">
-    <value>Ordinary point core rule</value>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>LoginFailed</value>
   </data>
   <data name="Online" xml:space="preserve">
     <value>Online</value>
@@ -594,151 +765,205 @@
   <data name="Offline" xml:space="preserve">
     <value>Offline</value>
   </data>
-  <data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
-    <value>I currently do not have permission to access this page!</value>
+  <data name="ScannerInterface" xml:space="preserve">
+    <value>ScannerInterface</value>
   </data>
-  <data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
-    <value>There is no such address available</value>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
   </data>
-  <data name="CellBarcodeAndlocalComparison" xml:space="preserve">
-    <value>CellBarcodeAndlocalComparison!</value>
+  <data name="ShootAll" xml:space="preserve">
+    <value>ShootAll</value>
   </data>
-  <data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
-    <value>This program can only run one instance at a time!</value>
+  <data name="Reconnect" xml:space="preserve">
+    <value>Reconnect</value>
   </data>
-  <data name="GroupTime" xml:space="preserve">
-    <value>Group time</value>
+  <data name="SetUp" xml:space="preserve">
+    <value>SetUp</value>
   </data>
-  <data name="NumberOfBatteries" xml:space="preserve">
-    <value>Number of batteries</value>
+  <data name="CodeReaderConfiguration" xml:space="preserve">
+    <value>CodeReaderConfiguration</value>
   </data>
-  <data name="BatteryBarcode" xml:space="preserve">
-    <value>Battery barcode</value>
+  <data name="SerialNumber" xml:space="preserve">
+    <value>Serial Number</value>
   </data>
-  <data name="ThereisMaterial" xml:space="preserve">
-    <value>ThereisMaterial</value>
+  <data name="Exposure" xml:space="preserve">
+    <value>Exposure</value>
   </data>
-  <data name="ItemNumber" xml:space="preserve">
-    <value>Item number:</value>
+  <data name="Gamma" xml:space="preserve">
+    <value>Gamma</value>
   </data>
-  <data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
-    <value>No user with the specified ID was found</value>
+  <data name="ManagementOfBatteryCellTypes" xml:space="preserve">
+    <value>Management Of Battery Cell Types</value>
   </data>
-  <data name="PrepareToObtainTheTray" xml:space="preserve">
-    <value>Prepare to obtain the tray</value>
+  <data name="AddBattery" xml:space="preserve">
+    <value>Add Battery</value>
   </data>
-  <data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
-    <value>Report the disassembly disk interface</value>
+  <data name="RemoveBattery" xml:space="preserve">
+    <value>Remove Battery</value>
   </data>
-  <data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
-    <value>Skip one grab and leave it empty</value>
+  <data name="SaveBattery" xml:space="preserve">
+    <value>Save Battery</value>
   </data>
-  <data name="clampingJaw" xml:space="preserve">
-    <value>Clamping jaw:</value>
+  <data name="BatteryType" xml:space="preserve">
+    <value>Battery Type</value>
   </data>
-  <data name="logOn" xml:space="preserve">
-    <value>log on</value>
+  <data name="WCSLog" xml:space="preserve">
+    <value>WCS Log</value>
   </data>
-  <data name="UnknownBatteryCellGrade" xml:space="preserve">
-    <value>Unknown battery cell grade</value>
+  <data name="PLCIP Address" xml:space="preserve">
+    <value>PLCIP Address</value>
   </data>
-  <data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
-    <value>An error occurred in the group disk log:</value>
+  <data name="NumberOfScanners" xml:space="preserve">
+    <value>Number Of Scanners</value>
   </data>
-  <data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
-    <value>Inconsistent barcode verification returned!</value>
+  <data name="PermissionConfiguration" xml:space="preserve">
+    <value>Permission Configuration</value>
   </data>
-  <data name="PleaseCheckTheLogs" xml:space="preserve">
-    <value>Please check the logs</value>
+  <data name="System Administrator" xml:space="preserve">
+    <value>System Administrator</value>
   </data>
-  <data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
-    <value>Abnormal status of scheduling equipment</value>
+  <data name="WorkstationConfiguration" xml:space="preserve">
+    <value>Workstation Configuration</value>
   </data>
-  <data name="AttemptToObtainTable" xml:space="preserve">
-    <value>Attempt to obtain table</value>
+  <data name="IncomingPullStrap" xml:space="preserve">
+    <value>Incoming Pull Strap</value>
   </data>
-  <data name="OpcTableNotSet" xml:space="preserve">
-    <value>OpcTable not set</value>
+  <data name="FeedingPullBelt" xml:space="preserve">
+    <value>Feeding Pull Belt</value>
   </data>
-  <data name="PLCTaskServiceNotConnected" xml:space="preserve">
-    <value>PLCTaskService not connected</value>
+  <data name="RobotClaws" xml:space="preserve">
+    <value>Robot Claws</value>
   </data>
-  <data name="ReadDB500" xml:space="preserve">
-    <value>Read DB500</value>
+  <data name="OKMatchingPlatform" xml:space="preserve">
+    <value>OKMatchingPlatform</value>
   </data>
-  <data name="OpenReading" xml:space="preserve">
-    <value>Open Reading</value>
+  <data name="REWORKPairingPlatform" xml:space="preserve">
+    <value>REWORK Pairing Platform</value>
   </data>
-  <data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
-    <value>The barcode scanner does not exist</value>
+  <data name="NGPullStrap" xml:space="preserve">
+    <value>NG Pull Strap</value>
   </data>
-  <data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
-    <value>An error occurred while processing the request:</value>
+  <data name="InProcess" xml:space="preserve">
+    <value>InProcess</value>
   </data>
-  <data name="TrayNotObtained" xml:space="preserve">
-    <value>Tray not obtained</value>
+  <data name="Capture" xml:space="preserve">
+    <value>Capture</value>
   </data>
-  <data name="PLCDataVerification" xml:space="preserve">
-    <value>PLC data verification</value>
+  <data name="SetParameters" xml:space="preserve">
+    <value>Set Parameters</value>
   </data>
-  <data name="WCSReturnsDataVerification" xml:space="preserve">
-    <value>WCS returns data verification</value>
+  <data name="AddSelectionBox" xml:space="preserve">
+    <value>AddSelectionBox</value>
   </data>
-  <data name="RequestStatus" xml:space="preserve">
-    <value>Request status:</value>
+  <data name="DeleteTheSelectedBox" xml:space="preserve">
+    <value>DeleteTheSelectedBox</value>
+  </data>
+  <data name="ScanCodeGunSettings" xml:space="preserve">
+    <value>Scan code gun settings</value>
+  </data>
+  <data name="OKMatchingPlatform2" xml:space="preserve">
+    <value>OKMatchingPlatform2</value>
+  </data>
+  <data name="E99PullStrap" xml:space="preserve">
+    <value>E99PullStrap</value>
+  </data>
+  <data name="TrayFormula" xml:space="preserve">
+    <value>TrayFormula</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="AreYouSureYouWantToGiveUp" xml:space="preserve">
+    <value>AreYouSureYouWantToGiveUp?</value>
+  </data>
+  <data name="AbandoningDetermination" xml:space="preserve">
+    <value>AbandoningDetermination</value>
   </data>
   <data name="TheUsernameCannotBeEmpty" xml:space="preserve">
-    <value>The username cannot be empty</value>
+    <value>TheUsernameCannotBeEmpty</value>
   </data>
   <data name="RFCannotBeEmpty" xml:space="preserve">
-    <value>RF cannot be empty</value>
+    <value>RFCannotBeEmpty</value>
   </data>
-  <data name="AddedSuccessfully" xml:space="preserve">
-    <value>Added successfully</value>
+  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>AreYouSureToForceBarcodeWriting?</value>
   </data>
-  <data name="DeleteSuccessfully" xml:space="preserve">
-    <value>Delete successfully</value>
-  </data>
-  <data name="AddRuleName" xml:space="preserve">
-    <value>Add rule name</value>
-  </data>
-  <data name="ComparedToRegularExpressions" xml:space="preserve">
-    <value>Compared to regular expressions</value>
-  </data>
-  <data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
-    <value>Do you really have to give up?</value>
-  </data>
-  <data name="AbandoningConfirmation" xml:space="preserve">
-    <value>Abandoning confirmation</value>
-  </data>
-  <data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
-    <value>Do you want to start the manual disk binding process</value>
-  </data>
-  <data name="GroupConfirmation" xml:space="preserve">
-    <value>Group confirmation</value>
+  <data name="WriteConfirmation" xml:space="preserve">
+    <value>Write confirmation</value>
   </data>
   <data name="ConfirmToClearThis" xml:space="preserve">
     <value>Confirm to clear this</value>
   </data>
   <data name="DoYouRemember" xml:space="preserve">
-    <value>Do you remember?</value>
+    <value>Do you remember</value>
   </data>
-  <data name="WriteConfirmation" xml:space="preserve">
-    <value>Write confirmation</value>
+  <data name="PleaseSelectTheTrayToDelete" xml:space="preserve">
+    <value>Please select the tray to delete</value>
   </data>
-  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
-    <value>Are you sure to force barcode writing?</value>
+  <data name="ManuallyStartDetection" xml:space="preserve">
+    <value>Manually start detection</value>
   </data>
-  <data name="PLCMonitoringProblem" xml:space="preserve">
-    <value>PLC monitoring problem</value>
+  <data name="ManualShutdownDetection" xml:space="preserve">
+    <value>Manual shutdown detection</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error:</value>
+  <data name="EnterExposureParameters" xml:space="preserve">
+    <value>Enter exposure parameters</value>
   </data>
-  <data name="AddUserInformation" xml:space="preserve">
-    <value>AddUserInformation</value>
+  <data name="ClearDebuggingData" xml:space="preserve">
+    <value>Clear debugging data</value>
   </data>
-  <data name="PermissionsSetting" xml:space="preserve">
-    <value>PermissionsSetting</value>
+  <data name="NumberOfSuccessfulAttempts" xml:space="preserve">
+    <value>Number of successful attempts</value>
+  </data>
+  <data name="TotalNumberOfTimes" xml:space="preserve">
+    <value>Total number of times</value>
+  </data>
+  <data name="SuccessRate" xml:space="preserve">
+    <value>Success rate</value>
+  </data>
+  <data name="DebuggingQRCodeScanning" xml:space="preserve">
+    <value>Debugging QR code scanning</value>
+  </data>
+  <data name="StopDebugging" xml:space="preserve">
+    <value>Stop Debugging</value>
+  </data>
+  <data name="LoadTemporaryStorageConfiguration" xml:space="preserve">
+    <value>Load temporary storage configuration</value>
+  </data>
+  <data name="LoadNodeConfiguration" xml:space="preserve">
+    <value>Load node configuration</value>
+  </data>
+  <data name="SaveCurrentConfigurationAsNodeConfiguration" xml:space="preserve">
+    <value>Save current configuration as node configuration</value>
+  </data>
+  <data name="CameraNotConnected" xml:space="preserve">
+    <value>Camera not connected</value>
+  </data>
+  <data name="NoBatterySelected" xml:space="preserve">
+    <value>No battery selected</value>
+  </data>
+  <data name="SelectBattery" xml:space="preserve">
+    <value>Select battery</value>
+  </data>
+  <data name="StartDetection" xml:space="preserve">
+    <value>Start detection</value>
+  </data>
+  <data name="TestingCompleted" xml:space="preserve">
+    <value>Testing completed</value>
+  </data>
+  <data name="ThereAreChannelNumbersWithDifferentBarcodes" xml:space="preserve">
+    <value>There are channel numbers with different barcodes</value>
+  </data>
+  <data name="InTheory_ThisSituationShouldNotOccur" xml:space="preserve">
+    <value>In theory, this situation should not occur</value>
+  </data>
+  <data name="MergeResultCompleted" xml:space="preserve">
+    <value>Merge result completed</value>
+  </data>
+  <data name="SameBarcodeExists" xml:space="preserve">
+    <value>Same barcode exists</value>
+  </data>
+  <data name="Fail" xml:space="preserve">
+    <value>Fail</value>
   </data>
 </root>

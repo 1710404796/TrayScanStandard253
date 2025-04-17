@@ -12,6 +12,22 @@ namespace TrayScanStandard.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "BatteryTypeInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TypeName = table.Column<string>(type: "TEXT", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
+                    Column = table.Column<int>(type: "INTEGER", nullable: false),
+                    Regions = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BatteryTypeInfos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LinxRoles",
                 columns: table => new
                 {
@@ -119,6 +135,9 @@ namespace TrayScanStandard.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BatteryTypeInfos");
+
             migrationBuilder.DropTable(
                 name: "LinxRoles");
 

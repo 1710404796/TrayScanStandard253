@@ -62,6 +62,31 @@ namespace TrayScanStandard.Migrations
                     b.ToTable("LinxUserRoles");
                 });
 
+            modelBuilder.Entity("TrayScanStandard.Data.Models.BatteryTypeInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Column")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Regions")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BatteryTypeInfos");
+                });
+
             modelBuilder.Entity("TrayScanStandard.Data.Models.OKNGCnt", b =>
                 {
                     b.Property<int>("Id")
