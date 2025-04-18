@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Models;
 using TrayScanStandard.Service;
+using Camera.Fs.Common;
+using MugenCamera;
 
 namespace TrayScanStandard.View
 {
@@ -23,60 +25,139 @@ namespace TrayScanStandard.View
     /// </summary>
     public partial class BcrSettingWindow : Window
     {
-        //public BcrSettingWindow()
-        //{
-        //    InitializeComponent();
-        //}
-
         public CameraSetting Setting { get; set; }
         public readonly IMediator mediator;
+        
         public BcrSettingWindow(CameraSetting setting)
         {
-            //var cc = App.GetService<CodeReaderService>();
-            mediator=App.GetService<IMediator>();
+            mediator = App.GetService<IMediator>();
             Setting = setting;
             InitializeComponent();
-            //CamKey.ItemsSource = cc.CamCodes;
-            //CamKey.Text = Setting.Key;
-            //gammaPattern.Text = Setting.Gamma.ToString();
-            //gainPattern.Text = Setting.Gain.ToString();
+            
+            // Initialize camera type
+            InitializeCameraTypeSelection();
+            
+            // Initialize connection settings
+            InitializeConnectionSettings();
+            
+            // Initialize exposure values
             ExpPattern.Text = string.Join("\n", Setting.Exposure);
-
-            //deviceCode.Text = Setting.DeviceCode;
         }
-
+        
+        /// <summary>
+        /// Initialize the camera type dropdown based on the current setting
+        /// </summary>
+        private void InitializeCameraTypeSelection()
+        {
+            // Default to HikVision if it's the current type
+            if (Setting.CameraAddresses is HKAddress)
+            {
+                CameraTypeCombo.SelectedIndex = 0; // HikVision
+            }
+            // Add more camera types initialization as needed
+        }
+        
+        /// <summary>
+        /// Initialize the connection type and value based on the current setting
+        /// </summary>
+        private void InitializeConnectionSettings()
+        {
+            if (Setting.CameraAddresses is HKAddress hkAddress)
+            {
+                if (hkAddress.ConnectAddress is Camera.Fs.Common.Key key)
+                {
+                    ConnectionTypeCombo.SelectedIndex = 0; // Key
+                    ConnectionValueBox.Text = key.Value;
+                }
+                else if (hkAddress.ConnectAddress is Camera.Fs.Common.IPAddress ipAddress)
+                {
+                    ConnectionTypeCombo.SelectedIndex = 1; // IP
+                    ConnectionValueBox.Text = ipAddress.Value;
+                }
+                else if (hkAddress.ConnectAddress is Camera.Fs.Common.Serial serial)
+                {
+                    ConnectionTypeCombo.SelectedIndex = 2; // Serial
+                    ConnectionValueBox.Text = serial.Value;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Handle camera type selection change
+        /// </summary>
+        private void CameraType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Currently we only support HikVision, but this can be expanded in the future
+        }
+        
+        /// <summary>
+        /// Handle connection type selection change
+        /// </summary>
+        private void ConnectionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // You can add specific logic based on connection type if needed
+            // For example, showing different UI elements or validation rules
+        }
+        
+        /// <summary>
+        /// Save button click handler - save all settings
+        /// </summary>
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                //string logmessage = $"序列号{Setting.Key}修改为{CamKey.Text}";
-                //await mediator.Send(new OperationLogCommand(logmessage));
-                //Setting.Key = CamKey.Text;
-
-                string logmessage1 = $"曝光{Setting.Exposure}修改为{ExpPattern.Text}";
-                await mediator.Send(new OperationLogCommand(logmessage1));
+                // Handle exposure settings
+                string exposureLogMessage = $"曝光{string.Join(",", Setting.Exposure)}修改为{ExpPattern.Text}";
+                await mediator.Send(new OperationLogCommand(exposureLogMessage));
                 Setting.Exposure = ExpPattern.Text.Trim().Split("\n").Select(int.Parse).ToArray();
-
-                //string logmessage2 = $"伽马{Setting.Gamma}修改为{float.Parse(gammaPattern.Text.Trim())}";
-                //await mediator.Send(new OperationLogCommand(logmessage2));
-                //Setting.Gamma = float.Parse(gammaPattern.Text.Trim());
-
-                //string logmessage3 = $"增益{Setting.DeviceCode}修改为{deviceCode.Text}";
-                //await mediator.Send(new OperationLogCommand(logmessage3));
-                //Setting.DeviceCode = deviceCode.Text;
-
-                //string logmessage4 = $"设备编号{Setting.Gain}修改为{float.Parse(gainPattern.Text.Trim())}";
-                //await mediator.Send(new OperationLogCommand(logmessage4));
-                //Setting.Gain = float.Parse(gainPattern.Text.Trim());
+                
+                // Handle camera type and connection value changes
+                UpdateCameraAddresses();
 
                 DialogResult = true;
                 Close();
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
-                MessageBox.Show("有不合法数值，修改失败!");
+                MessageBox.Show($"有不合法数值，修改失败! 错误信息: {ex.Message}");
             }
-          
+        }
+        
+        /// <summary>
+        /// Update the camera address settings based on UI selections
+        /// </summary>
+        private void UpdateCameraAddresses()
+        {
+            // Get the connection value from the UI
+            string connectionValue = ConnectionValueBox.Text;
+            
+            // Create the appropriate connection address type based on the selected type
+            ConnectAddress connectAddress;
+            switch (ConnectionTypeCombo.SelectedIndex)
+            {
+                case 0: // Key
+                    connectAddress = new Camera.Fs.Common.Key(connectionValue);
+                    break;
+                case 1: // IP
+                    connectAddress = new Camera.Fs.Common.IPAddress(connectionValue);
+                    break;
+                case 2: // Serial
+                    connectAddress = new Camera.Fs.Common.Serial(connectionValue);
+                    break;
+                default:
+                    connectAddress = new Camera.Fs.Common.Key(connectionValue);
+                    break;
+            }
+            
+            // Set the camera address based on camera type selection
+            switch (CameraTypeCombo.SelectedIndex)
+            {
+                case 0: // HikVision
+                default:
+                    Setting.CameraAddresses = new HKAddress(connectAddress);
+                    break;
+                // Add more camera types as needed
+            }
         }
     }
 }

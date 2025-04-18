@@ -9,30 +9,79 @@
         mc:Ignorable="d"         
         WindowStartupLocation="CenterScreen"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="扫码器设置" Height="450" Width="800">
+        Title="相机设置" Height="640" Width="800">
     <Grid>
         <StackPanel Margin="10">
             <TextBlock FontSize="24" Text="{x:Static lang:Resources.CodeReaderConfiguration}"/>
+            
+            <!-- Camera Type Selection -->
             <StackPanel 
                 VerticalAlignment="Center"
-                Margin="0,50,0,0"
+                Margin="0,30,0,0"
                 HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                Orientation="Horizontal">
                 <TextBlock
                     Width="160"
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="{x:Static lang:Resources.SerialNumber}"
+                    Text="相机类型"
+                    >:</TextBlock>
+                <ComboBox
+                    Name="CameraTypeCombo"
+                    Width="250"
+                    SelectionChanged="CameraType_SelectionChanged"
+                    >
+                    <ComboBoxItem Content="HikVision"/>
+                    <!-- Add other camera types here -->
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- Connection Type -->
+            <StackPanel 
+                VerticalAlignment="Center"
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    Width="160"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Text="连接方式"
+                    >:</TextBlock>
+                <ComboBox
+                    Name="ConnectionTypeCombo"
+                    Width="250"
+                    SelectionChanged="ConnectionType_SelectionChanged"
+                    >
+                    <ComboBoxItem Content="Key"/>
+                    <ComboBoxItem Content="IP"/>
+                    <ComboBoxItem Content="Serial"/>
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- Connection Value -->
+            <StackPanel 
+                VerticalAlignment="Center"
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    Width="160"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Text="连接值"
                     >:</TextBlock>
                 <ui:AutoSuggestBox
-                    Name="CamKey"
-Width="250"
+                    Name="ConnectionValueBox"
+                    Width="250"
                     >
-
                 </ui:AutoSuggestBox>
-
             </StackPanel>
+            
+            <!-- Exposure -->
             <StackPanel 
                 Margin="0,15,0,0"
                 HorizontalAlignment="Center"
@@ -42,86 +91,24 @@ Width="250"
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-Text="{x:Static lang:Resources.Exposure}"
+                    Text="{x:Static lang:Resources.Exposure}"
                 >:</TextBlock>
                 <TextBox 
                     Width="250"
                     Height="150"
                     Name="ExpPattern"
-                      TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                    >
-
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True">
                 </TextBox>
             </StackPanel>
-            <StackPanel 
-     Margin="0,15,0,0"
-     HorizontalAlignment="Center"
-     Orientation="Horizontal">
-                <TextBlock
-         Width="160"
-         VerticalAlignment="Center"
-         FontSize="20"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-Text="{x:Static lang:Resources.Gamma}"
-     >:</TextBlock>
-                <TextBox 
-         Width="250"
-         Name="gammaPattern"
-           TextWrapping="Wrap"
-          AcceptsReturn="True"
-         >
-
-                </TextBox>
-                
-                
-            </StackPanel>
-
-            <StackPanel 
-     Margin="0,15,0,0"
-     HorizontalAlignment="Center"
-     Orientation="Horizontal">
-                <TextBlock
-         Width="160"
-         VerticalAlignment="Center"
-         FontSize="20"
-         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-Text="增益"
-     >:</TextBlock>
-                <TextBox 
-         Width="250"
-         Name="gainPattern"
-           TextWrapping="Wrap"
-          AcceptsReturn="True"
-         >
-
-                </TextBox>
-
-
-            </StackPanel>
-            <StackPanel 
-Margin="0,15,0,0"
-HorizontalAlignment="Center"
-Orientation="Horizontal">
-                <TextBlock
-    Width="160"
-    VerticalAlignment="Center"
-    FontSize="20"
-    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-Text="{x:Static lang:Resources.DeviceNumber}"
->:</TextBlock>
-                <TextBox 
-    Width="250"
-    Name="deviceCode"
-      TextWrapping="Wrap"
-     AcceptsReturn="True"
-    >
-
-                </TextBox>
-            </StackPanel>
-            <Button Width="100" Margin="0,15,0,0" 
+            
+            <!-- Save Button -->
+            <Button Width="100" 
+                    Margin="0,15,0,0" 
                     Content="{x:Static lang:Resources.Save}"
-                    Click="ButtonBase_OnClick" HorizontalAlignment="Center"></Button>
+                    Click="ButtonBase_OnClick" 
+                    HorizontalAlignment="Center">
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
