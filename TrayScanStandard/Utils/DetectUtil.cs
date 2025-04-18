@@ -14,13 +14,21 @@ namespace TrayScanStandard.Utils
         // 还需要一个光源的中间件
 
         public static Either<string, TResult> UseLight<TResult>
-            (LightCST lightCST, int[] lightValue, Func<Either<string, TResult>> func)
+            ( Func<Either<string, TResult>> func)
         {
-            lightValue.Iter((i, s) => lightCST.SetLight(i, s));
+            var lightInfos = MainStorage.Saves.LightInfos.Zip(MainStorage.CST);
+            lightInfos.Iter(s =>
+            {
+                s.Item1.Values.Iter((i, v) =>
+                {
+                    s.Item2.SetLight(i, v);
+                });
+            });
+            //lightValue.Iter((i, s) => lightCST.SetLight(i, s));
 
             var result = func();
             // Ensure the light is turned off after the action
-            lightValue.Iter((i, s) => lightCST.SetLight(i, 0));
+            MainStorage.CST.Iter((i, s) => s.SetLight(i, 0));
             return result;
 
         }
@@ -39,11 +47,11 @@ namespace TrayScanStandard.Utils
         }
 
 
-        public static Either<string, ImageData> CaptureOne(MugenCamera.MugenCamera mugenCamera)
+        public static Either<string, ImageData> CaptureOne(this MugenCamera.MugenCamera mugenCamera)
         {
             // Define the specific action: Software Trigger then Capture
 
-            return UseLight(null, [255, 255, 255, 255], 
+            return UseLight(
                 () => UseCamera(mugenCamera, 
                     cam =>
                     cam.SoftwareTrigger() // Assuming SoftwareTrigger returns Either<string, MugenCamera>

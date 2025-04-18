@@ -46,7 +46,7 @@ BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
                     <ComboBox Width="123.6" 
                           SelectedIndex="{Binding ViewModel.SelectIdx}"
                           ItemsSource="{Binding ViewModel.BatteryInfos}"
-                DisplayMemberPath="Name" 
+                DisplayMemberPath="TypeName" 
                           
                           SelectionChanged="ComboBox_SelectionChanged"
                           

@@ -140,6 +140,8 @@ namespace TrayScanStandard.ViewModel
         [RelayCommand]
         public void Capture()
         {
+
+
             //if (SelectBattery == null)
             //{
             //    MessageBox.Show("未选择托盘类型");

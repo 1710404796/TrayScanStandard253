@@ -1,9 +1,12 @@
 ﻿
-using System.Data;
+using Humanizer;
 using LinxUniverse.Auth;
+using LinxUniverse.CST;
 using LinxUniverse.Utils;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using RPDelectPallet.Meditor.Queries;
+using System.Data;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
@@ -55,7 +58,13 @@ namespace TrayScanStandard.Mediator.Handlers
             // 例如：相机、光源、CST等
 
             // 也需要注册一些任务等
-
+            MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
+                async s =>
+                {
+                    var com = s.Com.DehumanizeTo<SerialPortType>();
+                    var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
+                    return await mediator.Send(new GetLightQuery(g));
+                }).TraverseSerial(s => s!);
             //messageboxmanager
             //MainStorage.Cst[0] =
             //    await mediator.Send(new CreateCSTLightCommand(Com: SerialPortType.COM1));

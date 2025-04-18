@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace TrayScanStandard.Mediator.Commands
 {
+    public record CaptureInfo(MugenCamera.MugenCamera Camera, int[] Exps);
     // 要有单相机拍照的最好
-    public record CamCaptureCommand: IRequest<ImageData>;
+    public record CamCaptureCommand(CaptureInfo[] CaptureInfos) : IRequest<ImageData[]>;
 }
