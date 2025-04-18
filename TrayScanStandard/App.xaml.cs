@@ -1,8 +1,5 @@
 ﻿global using LanguageExt;
 global using static LanguageExt.Prelude;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.DI;
@@ -16,9 +13,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using TrayScanStandard.Data;
 using TrayScanStandard.Jobs;
 using TrayScanStandard.Mediator.Behaviors;
+using TrayScanStandard.Service;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
@@ -64,11 +65,11 @@ namespace TrayScanStandard
                 return;
             }
             MainStorage.Init();
-            if (MainStorage.Saves.Stage == null)
-            {
-                MainStorage.Saves.Stage = new();
-                MainStorage.SaveManager.Save();
-            }
+            //if (MainStorage.Saves.Stage == null)
+            //{
+            //    MainStorage.Saves.Stage = new();
+            //    MainStorage.SaveManager.Save();
+            //}
             //DB.Database.Migrate();
             Host = Microsoft.Extensions.Hosting.Host.
                      CreateDefaultBuilder().
@@ -123,6 +124,8 @@ namespace TrayScanStandard
 
                          services.AddSingleton<RichTextBox>();
                          services.AddSingleton<CacheService>();
+
+                         services.AddSingleton<ScanCameraService>();
 
                          services.AddTransient<StationSettingView>();
 

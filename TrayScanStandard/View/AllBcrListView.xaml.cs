@@ -19,6 +19,7 @@ using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Service;
 using TrayScanStandard.ViewModel;
 
 
@@ -31,7 +32,7 @@ namespace TrayScanStandard.View
     public partial class AllBcrListView : Page
     {
         List<BcrBorder> _borderList = [];
-        //public CodeReaderService CRService { get; }
+        public ScanCameraService CRService { get; }
 
         private readonly IMediator meditor;
         private readonly ILogger<AllBcrListView> logger;
@@ -44,7 +45,7 @@ namespace TrayScanStandard.View
         public AllBcrListView()
         {
             DataContext = this;
-            //CRService = App.GetService<CodeReaderService>();   
+            CRService = App.GetService<ScanCameraService>();   
             meditor = App.GetService<IMediator>();
             logger = App.GetService<ILogger<AllBcrListView>>();
             linxContext = App.GetService<LinxContext>();
@@ -56,17 +57,17 @@ namespace TrayScanStandard.View
             UpdateRatio();
 
             int idx = 0;
-            //foreach (var item in CRService.BcrBorderViewModels)
-            //{
-            //    int i = idx;
-            //    var bborder = new BcrBorder(item) { Width = 320, Height = 320, Margin = new Thickness(5) };
+            foreach (var item in CRService.BcrBorderViewModels)
+            {
+                int i = idx;
+                var bborder = new BcrBorder(item) { Width = 320, Height = 320, Margin = new Thickness(5) };
 
-            //    BcrPanel.Children.Add(bborder);
-            //    bborder.MouseDoubleClick += (o, s) => Bborder_MouseDoubleClick(i);
-            //    _borderList.Add(bborder);
+                BcrPanel.Children.Add(bborder);
+                bborder.MouseDoubleClick += (o, s) => Bborder_MouseDoubleClick(i);
+                _borderList.Add(bborder);
 
-            //    idx++;
-            //}
+                idx++;
+            }
         }
 
         private void UpdateRatio()

@@ -19,11 +19,11 @@ namespace TrayScanStandard.ViewModel
         public Brush BorderBrush => IsConnect ? Brushes.Green : Brushes.Red;
         public string ConnectText => IsConnect ? Properties.Resources.Connected : Properties.Resources.Disconnect;
 
-        public required CameraSetting BcrInfo { get; set; }
+        public CameraSetting BcrInfo => Image2DViewModel.BcrInfo;
 
         public int CameraIdx => Image2DViewModel?.CameraIdx ?? 0;
 
-        public Image2DViewModel? Image2DViewModel { get; set; } //?
+        public required Image2DViewModel Image2DViewModel { get; set; } //?
 
 
 

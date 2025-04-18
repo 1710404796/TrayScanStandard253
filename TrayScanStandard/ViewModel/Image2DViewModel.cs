@@ -46,7 +46,7 @@ namespace TrayScanStandard.ViewModel
 
         public int CameraIdx { get; set; } = 0;
 
-        public BcrInfo? BcrInfo
+        public CameraSetting BcrInfo
         {
             get; set;
         }

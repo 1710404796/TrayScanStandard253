@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Service;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -15,7 +16,11 @@ namespace TrayScanStandard.Mediator.Handlers
     /// <param name="mediator"></param>
     /// <param name="logger"></param>
     /// <param name="role"></param>
-    public class InitMeCommandHandler(IMediator mediator, ILogger<InitMeCommandHandler> logger, RoleManager<LinxRole, LinxUser> role)
+    public class InitMeCommandHandler(IMediator mediator,
+        ILogger<InitMeCommandHandler> logger, 
+        RoleManager<LinxRole, LinxUser> role
+        , ScanCameraService scanCameraService
+        )
         : IRequestHandler<InitMeCommand>
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
@@ -44,7 +49,7 @@ namespace TrayScanStandard.Mediator.Handlers
 
                 await role.CreateAsync(new LinxRole { RoleName = item });
             }
-
+            scanCameraService.Init();
             // 通常这里要初始化一些硬件设备
 
             // 例如：相机、光源、CST等
