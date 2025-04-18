@@ -102,6 +102,27 @@
                 </TextBox>
             </StackPanel>
             
+            <!-- Backup Exposure -->
+            <StackPanel 
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    Width="160"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Text="备用曝光"
+                >:</TextBlock>
+                <TextBox 
+                    Width="250"
+                    Height="150"
+                    Name="ExpBackupPattern"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True">
+                </TextBox>
+            </StackPanel>
+            
             <!-- Save Button -->
             <Button Width="100" 
                     Margin="0,15,0,0" 

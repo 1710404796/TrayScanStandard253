@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿// filepath: d:\wcsrepo\TrayScanStandard\TrayScanStandard\TrayScanStandard\View\BcrSettingWindow.xaml.cs
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,9 @@ namespace TrayScanStandard.View
             
             // Initialize exposure values
             ExpPattern.Text = string.Join("\n", Setting.Exposure);
+            
+            // Initialize backup exposure values
+            ExpBackupPattern.Text = string.Join("\n", Setting.ExposureBackup);
         }
         
         /// <summary>
@@ -106,10 +110,15 @@ namespace TrayScanStandard.View
         {
             try
             {
-                // Handle exposure settings
+                // Handle main exposure settings
                 string exposureLogMessage = $"曝光{string.Join(",", Setting.Exposure)}修改为{ExpPattern.Text}";
                 await mediator.Send(new OperationLogCommand(exposureLogMessage));
-                Setting.Exposure = ExpPattern.Text.Trim().Split("\n").Select(int.Parse).ToArray();
+                Setting.Exposure = ExpPattern.Text.Trim().Split('\n').Select(int.Parse).ToArray();
+                
+                // Handle backup exposure settings
+                string backupExposureLogMessage = $"备用曝光{string.Join(",", Setting.ExposureBackup)}修改为{ExpBackupPattern.Text}";
+                await mediator.Send(new OperationLogCommand(backupExposureLogMessage));
+                Setting.ExposureBackup = ExpBackupPattern.Text.Trim().Split('\n').Select(int.Parse).ToArray();
                 
                 // Handle camera type and connection value changes
                 UpdateCameraAddresses();
