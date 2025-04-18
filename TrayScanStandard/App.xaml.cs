@@ -107,6 +107,8 @@ namespace TrayScanStandard
                          services.AddSingleton<UserManagerViewModel>();
                          services.AddTransient<UserManagerView>();
 
+                         services.AddSingleton<BatteryManagerViewModel>();
+                         services.AddTransient<BatteryManager>();
 
                          services.AddTransient<WCSLogViewModel>();
                          services.AddTransient<WCSLogView>();

@@ -203,5 +203,11 @@ namespace TrayScanStandard
             NageTo<AllBcrListView>();
 
         }
+
+        private void BatteryManager_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<BatteryManager>();
+
+        }
     }
 }

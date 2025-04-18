@@ -140,10 +140,11 @@ Cursor="Hand"
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
-                x:Name="StationView"
-                Click="StationView_Click"
+                x:Name="BatteryManager"
+                Click="BatteryManager_Click"
+                 Content="{x:Static lang:Resources.ManagementOfBatteryCellTypes}"
 >
-                工位状态
+
             </RadioButton>
 
             <RadioButton 

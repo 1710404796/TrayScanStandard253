@@ -77,7 +77,7 @@ namespace TrayScanStandard.View
 
         private void Bborder_MouseDoubleClick(int idx)
         {
-            //MainWindow.NageTo(new Image2DView(CRService.Image2DViewModels[idx]) );
+            MainWindow.NageTo(new Image2DView(CRService.Image2DViewModels[idx]) );
             //MessageBox.Show("双击");
         }
 
