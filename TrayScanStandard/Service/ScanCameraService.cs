@@ -1,4 +1,5 @@
 ﻿using HKCamera.Fs.NET.Controls;
+using LanguageExt;
 using LinxUniverse.DI;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,12 @@ namespace TrayScanStandard.Service
                 c => c.ToOption()
                 )];
 
-            Image2DViewModels = [.. settings.Map((i, s) => new Image2DViewModel() { BcrInfo = s, CameraIdx = i + 1 })];
+            Image2DViewModels = [.. settings.Map((i, s) => new Image2DViewModel() {
+                CameraSetting = s,
+                CameraIdx = i + 1,
+                Service = this
+
+            })];
 
             BcrBorderViewModels =
                 [.. Image2DViewModels.Map(s => new BcrBorderViewModel() { Image2DViewModel = s })];
@@ -44,6 +50,8 @@ namespace TrayScanStandard.Service
 
             //MugenCameras = cameras.Match
         }
+
+        public Option< MugenCamera.MugenCamera> GetMugen(int idx) => MugenCameras[idx - 1];
 
         private static Either<string, MugenCamera.MugenCamera> InitCamera(TrayScanStandard.Models.CameraSetting s)
         {

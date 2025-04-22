@@ -19,6 +19,9 @@ using System.Windows.Media;
 using TrayScanStandard.Models;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Data;
+using MediatR;
+using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Service;
 
 
 namespace TrayScanStandard.ViewModel
@@ -46,7 +49,7 @@ namespace TrayScanStandard.ViewModel
 
         public int CameraIdx { get; set; } = 0;
 
-        public CameraSetting BcrInfo
+        public CameraSetting CameraSetting
         {
             get; set;
         }
@@ -63,12 +66,14 @@ namespace TrayScanStandard.ViewModel
         //{
         //    get; set;
         //}
-
+        public required
+            ScanCameraService
+            Service { get; init; }
 
 
         public Image2DViewModel()
         {
-
+            _mediator = App.GetService<IMediator>();
         }
         public LinxContext LinxContext;
         public void RefreshBatteryInfos()
@@ -99,6 +104,7 @@ namespace TrayScanStandard.ViewModel
             get; set;
         }
         public BatteryTypeInfo SelectBattery { get;  set; }
+        public IMediator _mediator { get; }
 
         [RelayCommand]
         public async void DebugCapture()
@@ -138,9 +144,29 @@ namespace TrayScanStandard.ViewModel
 
         
         [RelayCommand]
-        public void Capture()
+        public async Task Capture()
         {
+            var data = await _mediator.Send(new CamCaptureCommand(
+                [
+                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
+                ]
+                ));
 
+
+            data.Match(
+                Right: r =>
+                {
+                    var img = r.First().First().Data; // 对结果要验证一下 加个验证器
+                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.jpg";
+                    File.WriteAllBytes(name, img);
+                    ResultImg = FilenameHelper.AppPath + "/" + name;
+                },
+                Left: l =>
+                {
+
+                }
+
+                );
 
             //if (SelectBattery == null)
             //{

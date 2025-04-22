@@ -51,11 +51,11 @@ namespace TrayScanStandard.Utils
         {
             // Define the specific action: Software Trigger then Capture
 
-            return UseLight(
-                () => UseCamera(mugenCamera, 
+            return 
+                UseCamera(mugenCamera, 
                     cam =>
                     cam.SoftwareTrigger() // Assuming SoftwareTrigger returns Either<string, MugenCamera>
-                       .Bind(s => s.Capture(TimeSpan.FromSeconds(3)))));
+                       .Bind(s => s.Capture(TimeSpan.FromSeconds(3))));
             // Use the helper method to execute the action within a session
             //return ;
         }
@@ -70,9 +70,15 @@ namespace TrayScanStandard.Utils
         //}
         public static Either<string, IEnumerable<ImageData>> Capture(MugenCamera.MugenCamera[] mugenCameras)
         {
-            return mugenCameras
-                .Map(CaptureOne)
-                .Traverse(s => s);
+            return UseLight(
+                () =>
+                {
+                    var results = mugenCameras
+                        .AsParallel()
+                        .Select(cam => cam.CaptureOne())
+                        .Traverse(s => s);
+                    return results;
+                });
             // 让所有相机拍个照
         }
 

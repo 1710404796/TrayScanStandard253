@@ -91,10 +91,10 @@ namespace TrayScanStandard.View
 
         private void SetCam_Click(object sender, RoutedEventArgs e)
         {
-            if ( ViewModel.BcrInfo is not null)
+            if ( ViewModel.CameraSetting is not null)
             {
                 //new BcrSettingWindow(ViewModel.BcrInfo).ShowDialog();
-            if ( new BcrSettingWindow(ViewModel.BcrInfo).ShowDialog()??false) MainStorage.SaveManager.Save();
+            if ( new BcrSettingWindow(ViewModel.CameraSetting).ShowDialog()??false) MainStorage.SaveManager.Save();
 
             }
         }
@@ -356,6 +356,11 @@ namespace TrayScanStandard.View
         {
             //MainStorage.Saves.ScanRatios[ViewModel.CameraIdx - 1].OkCnt = MainStorage.Saves.ScanRatios[ViewModel.CameraIdx - 1].ScanCnt = 0;
             //ViewModel.UpdateRatio();
+        }
+
+        private void Capture_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

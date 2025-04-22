@@ -72,7 +72,7 @@ Text="{Binding ViewModel.DebugExpoure}"
                         Margin="0,19.02,0,0"
                 x:Name="Capture"
                 Content="{x:Static lang:Resources.Capture}"
-                Command="{Binding ViewModel.CaptureCommand}"
+                Command="{Binding ViewModel.CaptureCommand}" Click="Capture_Click_1"
                 ></Button>
                     <!--<TextBlock Margin="10,0,0,0" Text="{Binding ViewMode.RatioText}"  FontSize="24"/>-->
                     <Button 
