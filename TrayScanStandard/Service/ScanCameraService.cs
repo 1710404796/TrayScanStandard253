@@ -29,7 +29,7 @@ namespace TrayScanStandard.Service
                 settings
                 .Map(s =>
                     InitCamera(s)
-                )
+                ).ToArray()
                 // Traverse to ensure all cameras are connected
                 ;
             MugenCameras = [.. cameras.Map(
@@ -61,7 +61,12 @@ namespace TrayScanStandard.Service
                                 {
                                     TriggerMode = MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON,
                                     TriggerSource = MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE
-                                }));
+                                }))
+                                .Bind(s => s.SetControl(new
+                                {
+                                    GevHeartbeatTimeout = (long?)5000
+                                }))
+                                ;
         }
         async void Listen()
         {
