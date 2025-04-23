@@ -58,10 +58,11 @@ namespace TrayScanStandard.Mediator.Handlers
             // 例如：相机、光源、CST等
 
             // 也需要注册一些任务等
+            var dd = SerialPortType.COM1.Humanize();
             MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
                 async s =>
                 {
-                    var com = s.Com.DehumanizeTo<SerialPortType>();
+                    Enum.TryParse<SerialPortType>(s.Com, out var com);
                     var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);

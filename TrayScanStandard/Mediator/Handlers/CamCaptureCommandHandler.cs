@@ -17,7 +17,7 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, IEnumerable<ImageData[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
         {
-            var a = DetectUtil.UseLight( 
+            return DetectUtil.UseLight( 
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
                     .Traverse(s => s)
@@ -27,8 +27,10 @@ namespace TrayScanStandard.Mediator.Handlers
                         {
                             var aa = s.Exps.Map(e =>
                             {
-                                s.Camera.SetControl(new AcquisitionControl { ExposureTime = (uint?)e });
-                                return s.Camera.CaptureOne();
+                                return s.Camera
+                                .SetControl(new AcquisitionControl { ExposureTime = e })
+                                .Bind(DetectUtil.CaptureOne);
+                                //return s.Camera.CaptureOne();
 
                             })
                             // 这段为无视拍照的错误
@@ -39,8 +41,8 @@ namespace TrayScanStandard.Mediator.Handlers
                         })
                     .Traverse(s => s)
                     )
-                );
-            return a.Apply(Task.FromResult);
+                ).Apply(Task.FromResult);
+            //return a.Apply(Task.FromResult);
 
         }
     }
