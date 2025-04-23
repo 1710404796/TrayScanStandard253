@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,10 @@ namespace TrayScanStandard.ViewModel
 
         [ObservableProperty]
         private ObservableCollection<LightInfoViewModel> _lightInfos;        
+
+        [ObservableProperty]
+        private ObservableCollection<string> _availableComPorts = new ObservableCollection<string>();
+        
         [ObservableProperty]
         private string _newComPort = string.Empty;
 
@@ -45,9 +50,34 @@ namespace TrayScanStandard.ViewModel
             LightInfos = new ObservableCollection<LightInfoViewModel>(
                 _wcsSaves.LightInfos.Select(li => new LightInfoViewModel(li))
             );
-            // Listen for changes in the collection to update WcsSaves
-            //_lightInfos.CollectionChanged += (s, e) => SaveChanges();
+            // Initialize available COM ports
+            RefreshAvailableComPorts();
         }        [RelayCommand]
+        private void RefreshAvailableComPorts()
+        {
+            try
+            {
+                // Get all available COM ports from the system
+                var ports = System.IO.Ports.SerialPort.GetPortNames();
+                
+                // Clear the existing collection and add the new ports
+                AvailableComPorts.Clear();
+                
+                // Add all found ports to the collection
+                foreach (var port in ports.OrderBy(p => p))
+                {
+                    AvailableComPorts.Add(port);
+                }
+                
+                ErrorMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"获取COM端口列表失败: {ex.Message}";
+            }
+        }
+
+        [RelayCommand]
         private void AddLight()
         {
             if (string.IsNullOrWhiteSpace(NewComPort) || string.IsNullOrWhiteSpace(NewValuesString))
