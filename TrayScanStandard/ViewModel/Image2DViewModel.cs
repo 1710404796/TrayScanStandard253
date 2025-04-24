@@ -104,6 +104,7 @@ namespace TrayScanStandard.ViewModel
         private string _ratioText = string.Empty;
 
         public void Update() => ColorUpdate?.Invoke();
+        public void UpdateResult() => ResultUpdate?.Invoke();
 
         public CancellationTokenSource Cts
         {
@@ -166,8 +167,12 @@ namespace TrayScanStandard.ViewModel
                 },
                 Left: l =>
                 {
+
                 }
                 );
+            // 理论上 一定会有结果
+            TempResult = data.ToOption().Map(s => s.First());
+            UpdateResult();
         }
         byte[] tempImg = [];
 

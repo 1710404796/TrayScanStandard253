@@ -62,10 +62,39 @@ namespace TrayScanStandard.View
 
         private void ViewModel_ResultUpdate()
         {
-            
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var item in resultRects)
+                {
+                    img2d.ResultCanvas.Children.Remove(item);
+                }
+                ViewModel.TempResult.IfSome(s =>
+                {
+                    s.Codes.Iter(
+                        c =>
+                        {
+                            var border = new Border()
+                            {
+                                Width = c.Rect.Rect.Width,
+                                Height = c.Rect.Rect.Height,
+                                LayoutTransform = new RotateTransform(c.Rect.Angle),
+                                BorderBrush = Brushes.Aqua,
+                                BorderThickness = new Thickness(2),
+                                Margin = new Thickness(c.Rect.Rect.X, c.Rect.Rect.Y, 0 , 0),
+                            };
+                            img2d.BorderCanvas.Children.Add(border);
+                            resultRects.Add(border);
+                        }
+                        );
+                 
+                });
+
+
+            });
         }
 
         List<TextBlock> codes = [];
+        List<Border> resultRects = [];
         private void ViewModel_ColorUpdate()
         {
             Dispatcher.Invoke(() =>
