@@ -18,7 +18,8 @@ namespace TrayScanStandard.Mediator.Handlers
                 MainStorage.Algo.Bind(s => s.DetectCodes(p))
 
 
-            ).Traverse(s => s).Map(s => s.ToImmutableArray());
+            ).Traverse(s => s)
+            .Map(s => s.ToImmutableArray());
             return Task.FromResult(data);
         }
     }

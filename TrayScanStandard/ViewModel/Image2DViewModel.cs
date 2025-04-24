@@ -42,7 +42,10 @@ namespace TrayScanStandard.ViewModel
         //public ObservableCollection<Brush> Colors { get; set; } = new(new Brush[128]);
 
         public event Action ColorUpdate;
+        public event Action ResultUpdate;
 
+
+        public Option<CodeDetectResult> TempResult { get; set; } = None;
 
         public int DebugExpoure
         {

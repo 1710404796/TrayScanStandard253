@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
-    class DelectCCDCommandHander
+    class DelectCCDCommandHander // 这个就是默认全部的
     {
     }
 }
