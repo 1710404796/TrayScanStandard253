@@ -3,6 +3,7 @@ using Humanizer;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.Utils;
+using LinxUniverse.VM;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RPDelectPallet.Meditor.Queries;
@@ -10,6 +11,7 @@ using System.Data;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
+using MugenCodeDetecter;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -66,6 +68,19 @@ namespace TrayScanStandard.Mediator.Handlers
                     var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);
+            MainStorage.Algo = CodeDetectExtensions
+                .LoadSolution(new VMSolutionInfo(@"D:\multi_code_without_roi.sol", ""))
+                .Bind(s => s.CreateAlgo(new DetectVMConfig("T1", "detect")))
+                ;
+
+            MainStorage.Algo.IfLeft(
+                s =>
+                {
+                    logger.LogError(s);
+                    return;
+                }
+            );
+
             //messageboxmanager
             //MainStorage.Cst[0] =
             //    await mediator.Send(new CreateCSTLightCommand(Com: SerialPortType.COM1));
