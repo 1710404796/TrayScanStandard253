@@ -8,6 +8,9 @@ using TrayScanStandard.Mediator.Queries;
 
 namespace TrayScanStandard.Mediator.Commands
 {
-    public record DelectResult(Arr<Channel> Channels, string[] Imgs);
+    public record DelectResult(
+        Arr<Channel> Channels
+        //, string[] Imgs
+        );
     public record DelectCCDCommand(): IRequest<DelectResult>;
 }
