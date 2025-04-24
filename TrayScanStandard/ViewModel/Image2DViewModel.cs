@@ -22,6 +22,8 @@ using TrayScanStandard.Data;
 using MediatR;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
+using LinxUniverse.Algo.Common;
+using Microsoft.Extensions.Logging;
 
 
 namespace TrayScanStandard.ViewModel
@@ -74,6 +76,7 @@ namespace TrayScanStandard.ViewModel
         public Image2DViewModel()
         {
             _mediator = App.GetService<IMediator>();
+            _logger = App.GetService<ILogger<Image2DViewModel>>();
         }
         public LinxContext LinxContext;
         public void RefreshBatteryInfos()
@@ -105,6 +108,8 @@ namespace TrayScanStandard.ViewModel
         }
         public BatteryTypeInfo SelectBattery { get;  set; }
         public IMediator _mediator { get; }
+
+        private ILogger<Image2DViewModel> _logger;
 
         [RelayCommand]
         public async void DebugCapture()
@@ -144,19 +149,40 @@ namespace TrayScanStandard.ViewModel
 
         
         [RelayCommand]
+        public async Task Detect()
+        {
+            var data = await _mediator.Send(new DetectCodeCommand([new DetectParam(tempImg, [])]));
+            data.Match(
+                Right: r =>
+                {
+                    // 绘制到图上？
+
+                    _logger.LogInformation(r.ToArr().ToString());
+
+
+                },
+                Left: l =>
+                {
+                }
+                );
+        }
+        byte[] tempImg = [];
+
+        [RelayCommand]
         public async Task Capture()
         {
             var data = await _mediator.Send(new CamCaptureCommand(
                 [
-                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
-                ]
+                    //Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
+                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, [DebugExpoure]))
+                ] 
                 ));
 
 
             data.Match(
                 Right: r =>
                 {
-                    var img = r.First().First().Data; // 对结果要验证一下 加个验证器
+                    var img = tempImg  = r.First().First().Data; // 对结果要验证一下 加个验证器
                     var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.jpg";
                     File.WriteAllBytes(name, img);
                     ResultImg = FilenameHelper.AppPath + "/" + name;

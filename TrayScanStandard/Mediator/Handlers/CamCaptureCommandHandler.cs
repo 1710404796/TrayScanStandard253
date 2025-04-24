@@ -4,6 +4,7 @@ using MediatR;
 using MugenCamera;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, IEnumerable<ImageData[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
         {
+            return Either<string, IEnumerable<ImageData[]>>.Right
+                ([[new ImageData(File.ReadAllBytes(@"D:\testImg\1.png"))]]).Apply(Task.FromResult);
             return DetectUtil.UseLight( 
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
