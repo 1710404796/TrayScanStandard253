@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -401,6 +402,12 @@ namespace TrayScanStandard.View
         private void Capture_Click_1(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private async void AutoRoi_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.AutoROI();
+            RefreshBorder();
         }
     }
 }

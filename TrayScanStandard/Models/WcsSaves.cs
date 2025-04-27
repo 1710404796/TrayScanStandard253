@@ -1,5 +1,6 @@
 ﻿using Camera.Fs.Common;
 using LanguageExt;
+using LinxUniverse.Algo.Common;
 using LinxUniverse.Utils;
 using MugenCamera;
 using System;
@@ -215,6 +216,11 @@ namespace TrayScanStandard.Models
         public int Height { get; set; } = 600;
 
         public int ChannelIdx { get; set; } = 0;
+
+        public ROI ToROI()
+        {
+            return new ROI(new LinxUniverse.Common.Rect<float>(Top, Left, Width, Height), ChannelIdx);
+        } 
 
     }
 }

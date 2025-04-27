@@ -12,6 +12,7 @@ using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 using MugenCodeDetecter;
+using TrayScanStandard.Data;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -25,6 +26,7 @@ namespace TrayScanStandard.Mediator.Handlers
         ILogger<InitMeCommandHandler> logger, 
         RoleManager<LinxRole, LinxUser> role
         , ScanCameraService scanCameraService
+        , LinxContext linxContext
         )
         : IRequestHandler<InitMeCommand>
     {
@@ -47,7 +49,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     }
                 }
             }
-
+            MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
             foreach (var item in Enum.GetNames<RoleEnum>())
             {

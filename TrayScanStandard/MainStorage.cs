@@ -7,6 +7,7 @@ using LinxUniverse.Algo.Common;
 using LinxUniverse.CST;
 using LinxUniverse.Utils;
 using TrayScanStandard.Attritubes;
+using TrayScanStandard.Data.Models;
 using TrayScanStandard.Models;
 
 namespace TrayScanStandard
@@ -21,12 +22,13 @@ namespace TrayScanStandard
         public static int[] DefaultExp = [7500, 15000, 22500, 30000];
         public static PowerEnum[] PowerEnums => Enum.GetValues<PowerEnum>().ToArray();
         public static RoleEnum[] RoleEnums => Enum.GetValues<RoleEnum>().SkipLast(1).ToArray();
-
+        public static BatteryTypeInfo? SelectBattery { get; set; }
         public static IEnumerable<LightCST> CST { get; set; } = [];
 
         public static void Init()
         {
             SaveManager.Load();
+
         }
     }
 }

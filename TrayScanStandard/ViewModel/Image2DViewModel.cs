@@ -24,6 +24,7 @@ using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 using LinxUniverse.Algo.Common;
 using Microsoft.Extensions.Logging;
+using MugenCodeDetecter;
 
 
 namespace TrayScanStandard.ViewModel
@@ -60,7 +61,7 @@ namespace TrayScanStandard.ViewModel
         }
 
 
-        //public BatteryInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
+        //public BatteryTypeInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
 
         [ObservableProperty]
         BarCodeRegionInfo? _selectBarCodeRegionInfo;
@@ -92,6 +93,7 @@ namespace TrayScanStandard.ViewModel
         partial void OnSelectIdxChanged(int oldValue, int newValue)
         {
             MainStorage.Saves.SelectBatteryId = newValue < 0 ? 0 : BatteryInfos[newValue].Id;
+            MainStorage.SelectBattery = SelectBattery;
 
             //MainStorage.SaveManager.Save();
         }
@@ -110,7 +112,7 @@ namespace TrayScanStandard.ViewModel
         {
             get; set;
         }
-        public BatteryTypeInfo SelectBattery { get;  set; }
+        public BatteryTypeInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
         public IMediator _mediator { get; }
 
         private ILogger<Image2DViewModel> _logger;
@@ -175,6 +177,41 @@ namespace TrayScanStandard.ViewModel
             UpdateResult();
         }
         byte[] tempImg = [];
+
+        [RelayCommand]
+        public async Task AutoROI()
+        {
+            if (SelectBattery == null)
+            {
+                await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
+                return ;
+            }
+
+            var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, 100));
+
+           
+            SelectBattery.Regions[CameraIdx - 1] =
+                data.Match(
+                    Right: r =>
+                    {
+                        return r.Map(s => new BarCodeRegionInfo() {
+                            Left = (int)s.Rect.X,
+                            Top = (int)s.Rect.Y,
+                            Width = (int)s.Rect.Width,
+                            Height = (int)s.Rect.Height,
+                            ChannelIdx = s.Index
+
+                        }).ToList(); 
+                    }
+                    , Left: l =>
+                    {
+                        _mediator.Send(new WarningBoxCommand("l")).Wait();
+                        return SelectBattery.Regions[CameraIdx - 1];
+                    }
+                    );
+            LinxContext.SaveChanges();
+            Update();
+        }
 
         [RelayCommand]
         public async Task Capture()
