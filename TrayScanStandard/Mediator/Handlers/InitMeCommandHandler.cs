@@ -13,6 +13,7 @@ using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 using MugenCodeDetecter;
 using TrayScanStandard.Data;
+using System.Windows;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -62,7 +63,6 @@ namespace TrayScanStandard.Mediator.Handlers
             // 例如：相机、光源、CST等
 
             // 也需要注册一些任务等
-            var dd = SerialPortType.COM1.Humanize();
             MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
                 async s =>
                 {
@@ -75,10 +75,18 @@ namespace TrayScanStandard.Mediator.Handlers
                 .Bind(s => s.CreateAlgo(new DetectVMConfig("T1", "detect")))
                 ;
 
+            if (MainStorage.CST == null) 
+            {
+                logger.LogError("光源初始化失败");
+                MessageBox.Show("光源初始化失败", "光源初始化失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             MainStorage.Algo.IfLeft(
                 s =>
                 {
                     logger.LogError(s);
+                    MessageBox.Show("算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             );
