@@ -104,49 +104,61 @@ namespace TrayScanStandard.View
 
         private async void AllCapture_Click(object sender, RoutedEventArgs e)
         {
+
+
+
             //Parallel.ForEach(CRService.Image2DViewModels, vm =>
             //{
             //    vm.Capture();
             //});
             //await Task.Yield();
 
-            //(sender as Button).IsEnabled = false;
+            (sender as Button).IsEnabled = false;
 
-            //try
-            //{
-            //    var res = await meditor.Send(new DelectCCDCommand());
-            //    var batterylist = linxContext.BatteryTypeInfos.ToArray();
-            //    BatteryInfo batteryInfo = batterylist.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBattery);
+            try
+            {
+                var res = await meditor.Send(new DelectCCDCommand(MainStorage.SelectBattery));
+                res.Match(
+                    Right: r =>
+                    {
+                        logger.LogInformation("结果: {0}", r.Channels);
 
-            //    var regions = batteryInfo.Regions.SelectMany(s => s).Select(s => s.ChannelIdx);
-            //    var cnt = regions.Count() == 0 ? 0 : regions.Max();
-            //    logger.LogInformation("总通道数{cnt}", cnt);
-            //    var channels = Enumerable.Range(1, cnt);
-            //    var resChannels = res.CodeInfos.Where(s => !string.IsNullOrWhiteSpace(s.Code)).Select(s => s.Channel).ToList();
-            //    if (channels.All(s => resChannels.Contains(s)))
-            //    {
-            //        MainStorage.Saves.OkCnt++;
-            //    }
+                    },
+                    Left: l =>
+                    {
+                        logger.LogError(l);
+                        MessageBox.Show(l);
+                    }
+                    );
 
-            //    MainStorage.Saves.ScanCnt++;
-            //    UpdateRatio();
-            //}
-            //catch (Exception ex)
-            //{
-            //    logger.LogError(ex, "error");
+                //var batterylist = linxContext.BatteryTypeInfos.ToArray();
+                //BatteryInfo batteryInfo = batterylist.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBattery);
+
+                //var regions = batteryInfo.Regions.SelectMany(s => s).Select(s => s.ChannelIdx);
+                //var cnt = regions.Count() == 0 ? 0 : regions.Max();
+                //logger.LogInformation("总通道数{cnt}", cnt);
+                //var channels = Enumerable.Range(1, cnt);
+                //var resChannels = res.CodeInfos.Where(s => !string.IsNullOrWhiteSpace(s.Code)).Select(s => s.Channel).ToList();
+                //if (channels.All(s => resChannels.Contains(s)))
+                //{
+                //    MainStorage.Saves.OkCnt++;
+                //}
+
+                //MainStorage.Saves.ScanCnt++;
+                UpdateRatio();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "error");
 
 
-            //}
-            
+            }
 
-            //(sender as Button).IsEnabled = true;
+
+            (sender as Button).IsEnabled = true;
 
             //Ratio.Text = $"成功次数: {MainStorage.Saves.OkCnt} 总次数: {MainStorage.Saves.ScanCnt} 成功率: {MainStorage.Saves.OkCnt * 1.0 / MainStorage.Saves.ScanCnt:P}%";
-            //foreach (var vm in CRService.Image2DViewModels)
-            //{
-            //    vm.Capture();
-
-            //}
+        
         }
 
         private async void ManualStart_Click(object sender, RoutedEventArgs e)
@@ -181,6 +193,7 @@ namespace TrayScanStandard.View
                     try
                     {
                         var res = await meditor.Send(new DelectCCDCommand(
+                            MainStorage.SelectBattery
                             //DebugExp
                             ));
 

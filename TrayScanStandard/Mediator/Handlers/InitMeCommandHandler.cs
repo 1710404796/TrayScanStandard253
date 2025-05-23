@@ -3,6 +3,7 @@ using Humanizer;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.Utils;
+using LinxUniverse.VM;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RPDelectPallet.Meditor.Queries;
@@ -10,6 +11,9 @@ using System.Data;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
+using MugenCodeDetecter;
+using TrayScanStandard.Data;
+using System.Windows;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -23,6 +27,7 @@ namespace TrayScanStandard.Mediator.Handlers
         ILogger<InitMeCommandHandler> logger, 
         RoleManager<LinxRole, LinxUser> role
         , ScanCameraService scanCameraService
+        , LinxContext linxContext
         )
         : IRequestHandler<InitMeCommand>
     {
@@ -45,7 +50,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     }
                 }
             }
-
+            MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
             foreach (var item in Enum.GetNames<RoleEnum>())
             {
@@ -61,10 +66,31 @@ namespace TrayScanStandard.Mediator.Handlers
             MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
                 async s =>
                 {
-                    var com = s.Com.DehumanizeTo<SerialPortType>();
+                    Enum.TryParse<SerialPortType>(s.Com, out var com);
                     var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);
+            MainStorage.Algo = CodeDetectExtensions
+                .LoadSolution(new VMSolutionInfo(@"D:\multi_code_without_roi.sol", ""))
+                .Bind(s => s.CreateAlgo(new DetectVMConfig("T1", "detect")))
+                ;
+
+            if (MainStorage.CST == null) 
+            {
+                logger.LogError("光源初始化失败");
+                MessageBox.Show("光源初始化失败", "光源初始化失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            MainStorage.Algo.IfLeft(
+                s =>
+                {
+                    logger.LogError(s);
+                    MessageBox.Show("算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            );
+
             //messageboxmanager
             //MainStorage.Cst[0] =
             //    await mediator.Send(new CreateCSTLightCommand(Com: SerialPortType.COM1));

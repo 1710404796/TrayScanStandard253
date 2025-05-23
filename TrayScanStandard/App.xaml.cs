@@ -100,6 +100,8 @@ namespace TrayScanStandard
                          services.AddSingleton<MainViewModel>();
                          services.AddTransient<MainWindow>();
 
+                         services.AddTransient<PalletLogViewModel>();
+                         services.AddTransient<PalletLogView>();
 
                          services.AddSingleton<SettingViewModel>();
                          services.AddTransient<SettingView>();

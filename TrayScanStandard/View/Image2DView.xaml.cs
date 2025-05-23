@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,7 +24,9 @@ namespace TrayScanStandard.View
 
         public Image2DViewModel ViewModel { get; set; }
 
-        private List<(Border, BarCodeRegionInfo)> _regions = [];
+        private List<(Border, BarCodeRegionInfo)> _rois = [];
+
+
 
 
         Border _nowBorder;
@@ -53,8 +56,46 @@ namespace TrayScanStandard.View
 
             ViewModel.ColorUpdate += ViewModel_ColorUpdate;
             ViewModel_ColorUpdate();
+
+            ViewModel.ResultUpdate += ViewModel_ResultUpdate;
+
         }
+
+        private void ViewModel_ResultUpdate()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var item in resultRects)
+                {
+                    img2d.ResultCanvas.Children.Remove(item);
+                }
+                ViewModel.TempResult.IfSome(s =>
+                {
+                    s.Codes.Iter(
+                        c =>
+                        {
+                            var border = new Border()
+                            {
+                                Width = c.Rect.Rect.Width,
+                                Height = c.Rect.Rect.Height,
+                                LayoutTransform = new RotateTransform(c.Rect.Angle),
+                                BorderBrush = Brushes.Aqua,
+                                BorderThickness = new Thickness(2),
+                                Margin = new Thickness(c.Rect.Rect.X, c.Rect.Rect.Y, 0 , 0),
+                            };
+                            img2d.BorderCanvas.Children.Add(border);
+                            resultRects.Add(border);
+                        }
+                        );
+                 
+                });
+
+
+            });
+        }
+
         List<TextBlock> codes = [];
+        List<Border> resultRects = [];
         private void ViewModel_ColorUpdate()
         {
             Dispatcher.Invoke(() =>
@@ -63,7 +104,7 @@ namespace TrayScanStandard.View
                 {
                     img2d.BorderCanvas.Children.Remove(item);
                 }
-                foreach (var region in _regions)
+                foreach (var region in _rois)
                 {
                     region.Item1.BorderBrush = ViewModel.Colors[region.Item2.ChannelIdx];
                     (region.Item1.Child as TextBlock).Foreground = ViewModel.Colors[region.Item2.ChannelIdx];
@@ -105,7 +146,7 @@ namespace TrayScanStandard.View
             img2d.BorderCanvas.Children.Add(border);
             BarCodeRegionInfo barCodeRegionInfo = new();
 
-            var lastBordor = _regions.LastOrDefault().Item2;
+            var lastBordor = _rois.LastOrDefault().Item2;
             if (lastBordor is not null) {
                 barCodeRegionInfo.Width = lastBordor.Width;
                 barCodeRegionInfo.Height = lastBordor.Height;
@@ -115,10 +156,10 @@ namespace TrayScanStandard.View
 
 
             border.Tag = barCodeRegionInfo;
-            barCodeRegionInfo.ChannelIdx = (_regions.LastOrDefault().Item2?.ChannelIdx + 1) ?? + 1;
+            barCodeRegionInfo.ChannelIdx = (_rois.LastOrDefault().Item2?.ChannelIdx + 1) ?? + 1;
             (border.Child as TextBlock).Text = barCodeRegionInfo.ChannelIdx.ToString();
             UpdateBorderThickness(border);
-            _regions.Add((border, barCodeRegionInfo));
+            _rois.Add((border, barCodeRegionInfo));
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
@@ -130,7 +171,7 @@ namespace TrayScanStandard.View
 
             ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].Clear();
             //_context.SaveChanges();
-            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].AddRange(_regions.Select(s => s.Item2).ToList());
+            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].AddRange(_rois.Select(s => s.Item2).ToList());
             var cnt = ViewModel.LinxContext.SaveChanges();
         }
 
@@ -149,7 +190,7 @@ namespace TrayScanStandard.View
 
             img2d.BorderCanvas.Children.Clear();
             CreateBorder();
-            _regions.Clear();
+            _rois.Clear();
             foreach (var regionInfo in ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1])
             {
                 var border = CreateBorder();
@@ -165,7 +206,7 @@ namespace TrayScanStandard.View
                 img2d.BorderCanvas.Children.Add(border);
                 UpdateBorderThickness(border);
 
-                _regions.Add((border, regionInfo));
+                _rois.Add((border, regionInfo));
             }
 
            
@@ -344,7 +385,7 @@ namespace TrayScanStandard.View
             border.MouseRightButtonDown -= Border_MouseRightButtonDown;
             border.MouseRightButtonUp -= Border_MouseRightButtonUp;
             border.MouseLeftButtonDown -= Border_MouseLeftButtonDown;
-            _regions.Remove(_regions.Find(s => s.Item1 == border));
+            _rois.Remove(_rois.Find(s => s.Item1 == border));
 
         }
 
@@ -361,6 +402,12 @@ namespace TrayScanStandard.View
         private void Capture_Click_1(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private async void AutoRoi_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.AutoROI();
+            RefreshBorder();
         }
     }
 }

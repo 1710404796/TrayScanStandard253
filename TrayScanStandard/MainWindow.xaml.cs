@@ -209,5 +209,10 @@ namespace TrayScanStandard
             NageTo<BatteryManager>();
 
         }
+
+        private void ZPALgo_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<PalletLogView>();
+        }
     }
 }

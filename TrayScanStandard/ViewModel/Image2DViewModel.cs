@@ -22,6 +22,9 @@ using TrayScanStandard.Data;
 using MediatR;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
+using LinxUniverse.Algo.Common;
+using Microsoft.Extensions.Logging;
+using MugenCodeDetecter;
 
 
 namespace TrayScanStandard.ViewModel
@@ -40,7 +43,10 @@ namespace TrayScanStandard.ViewModel
         //public ObservableCollection<Brush> Colors { get; set; } = new(new Brush[128]);
 
         public event Action ColorUpdate;
+        public event Action ResultUpdate;
 
+
+        public Option<CodeDetectResult> TempResult { get; set; } = None;
 
         public int DebugExpoure
         {
@@ -55,7 +61,7 @@ namespace TrayScanStandard.ViewModel
         }
 
 
-        //public BatteryInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
+        //public BatteryTypeInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
 
         [ObservableProperty]
         BarCodeRegionInfo? _selectBarCodeRegionInfo;
@@ -74,6 +80,7 @@ namespace TrayScanStandard.ViewModel
         public Image2DViewModel()
         {
             _mediator = App.GetService<IMediator>();
+            _logger = App.GetService<ILogger<Image2DViewModel>>();
         }
         public LinxContext LinxContext;
         public void RefreshBatteryInfos()
@@ -86,6 +93,7 @@ namespace TrayScanStandard.ViewModel
         partial void OnSelectIdxChanged(int oldValue, int newValue)
         {
             MainStorage.Saves.SelectBatteryId = newValue < 0 ? 0 : BatteryInfos[newValue].Id;
+            MainStorage.SelectBattery = SelectBattery;
 
             //MainStorage.SaveManager.Save();
         }
@@ -98,13 +106,16 @@ namespace TrayScanStandard.ViewModel
         private string _ratioText = string.Empty;
 
         public void Update() => ColorUpdate?.Invoke();
+        public void UpdateResult() => ResultUpdate?.Invoke();
 
         public CancellationTokenSource Cts
         {
             get; set;
         }
-        public BatteryTypeInfo SelectBattery { get;  set; }
+        public BatteryTypeInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
         public IMediator _mediator { get; }
+
+        private ILogger<Image2DViewModel> _logger;
 
         [RelayCommand]
         public async void DebugCapture()
@@ -144,19 +155,79 @@ namespace TrayScanStandard.ViewModel
 
         
         [RelayCommand]
+        public async Task Detect()
+        {
+            var data = await _mediator.Send(new DetectCodeCommand([new DetectParam(tempImg, [])]));
+            data.Match(
+                Right: r =>
+                {
+                    // 绘制到图上？
+
+                    _logger.LogInformation(r.ToArr().ToString());
+
+
+                },
+                Left: l =>
+                {
+
+                }
+                );
+            // 理论上 一定会有结果
+            TempResult = data.ToOption().Map(s => s.First());
+            UpdateResult();
+        }
+        byte[] tempImg = [];
+
+        [RelayCommand]
+        public async Task AutoROI()
+        {
+            if (SelectBattery == null)
+            {
+                await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
+                return ;
+            }
+
+            var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, 100));
+
+           
+            SelectBattery.Regions[CameraIdx - 1] =
+                data.Match(
+                    Right: r =>
+                    {
+                        return r.Map(s => new BarCodeRegionInfo() {
+                            Left = (int)s.Rect.X,
+                            Top = (int)s.Rect.Y,
+                            Width = (int)s.Rect.Width,
+                            Height = (int)s.Rect.Height,
+                            ChannelIdx = s.Index
+
+                        }).ToList(); 
+                    }
+                    , Left: l =>
+                    {
+                        _mediator.Send(new WarningBoxCommand("l")).Wait();
+                        return SelectBattery.Regions[CameraIdx - 1];
+                    }
+                    );
+            LinxContext.SaveChanges();
+            Update();
+        }
+
+        [RelayCommand]
         public async Task Capture()
         {
             var data = await _mediator.Send(new CamCaptureCommand(
                 [
-                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
-                ]
+                    //Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, CameraSetting.Exposure))
+                    Service.GetMugen(CameraIdx).Map(s => new CaptureInfo(s, [DebugExpoure]))
+                ] 
                 ));
 
 
             data.Match(
                 Right: r =>
                 {
-                    var img = r.First().First().Data; // 对结果要验证一下 加个验证器
+                    var img = tempImg  = r.First().First().Data; // 对结果要验证一下 加个验证器
                     var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.jpg";
                     File.WriteAllBytes(name, img);
                     ResultImg = FilenameHelper.AppPath + "/" + name;

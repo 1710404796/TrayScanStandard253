@@ -28,7 +28,13 @@ namespace TrayScanStandard.Utils
 
             var result = func();
             // Ensure the light is turned off after the action
-            MainStorage.CST.Iter((i, s) => s.SetLight(i, 0));
+            lightInfos.Iter(s =>
+            {
+                s.Item1.Values.Iter((i, v) =>
+                {
+                    s.Item2.SetLight(i, 0);
+                });
+            });
             return result;
 
         }

@@ -137,6 +137,15 @@ Cursor="Hand"
 >
                 光源管理界面
             </RadioButton>
+
+            <RadioButton 
+Style="{StaticResource MenuRadioButtonStyle}" 
+Cursor="Hand"
+                x:Name="ZPALgo"
+                Click="ZPALgo_Click"
+>
+                组盘扫码日志
+            </RadioButton>
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
