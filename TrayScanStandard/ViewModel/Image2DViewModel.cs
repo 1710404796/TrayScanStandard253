@@ -198,6 +198,11 @@ namespace TrayScanStandard.ViewModel
                 {
                     _mediator.Send (new WarningBoxCommand(l)).Wait();
 
+                },
+                Bottom: () => 
+                {
+                    _mediator.Send(new WarningBoxCommand("Detect failed")).Wait();
+                    _logger.LogError("Detect failed");
                 }
                 );
             // 理论上 一定会有结果
