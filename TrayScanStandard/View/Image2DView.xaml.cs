@@ -69,7 +69,7 @@ namespace TrayScanStandard.View
                 {
                     img2d.ResultCanvas.Children.Remove(item);
                 }
-                ViewModel.TempResult.IfSome(s =>
+                ViewModel.TempResult.IfSome(s => // 这里显示有点问题
                 {
                     s.Codes.Iter(
                         c =>
@@ -104,6 +104,7 @@ namespace TrayScanStandard.View
                 {
                     img2d.BorderCanvas.Children.Remove(item);
                 }
+                codes.Clear();
                 foreach (var region in _rois)
                 {
                     region.Item1.BorderBrush = ViewModel.Colors[region.Item2.ChannelIdx];
@@ -114,7 +115,7 @@ namespace TrayScanStandard.View
                         FontSize = 60,
                         TextWrapping = TextWrapping.Wrap,
                          Width = 500,
-                        Foreground = Brushes.LightGreen,
+                        Foreground = ViewModel.Colors[region.Item2.ChannelIdx],
                         Margin = new Thickness(region.Item2.Left, region.Item2.Top + region.Item2.Height, 0, 0)
                     };
 
@@ -407,6 +408,12 @@ namespace TrayScanStandard.View
         private async void AutoRoi_Click(object sender, RoutedEventArgs e)
         {
             await ViewModel.AutoROI();
+            RefreshBorder();
+        }
+
+        private async void SortRoi_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.AutoSortROI();
             RefreshBorder();
         }
     }

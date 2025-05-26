@@ -70,13 +70,15 @@ namespace TrayScanStandard.Mediator.Handlers
                     var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);
-            MainStorage.Algo = CodeDetectExtensions
-                .LoadSolution(new VMSolutionInfo(@"D:\multi_code_without_roi.sol", ""))
-                .Bind(s => s.CreateAlgo(new DetectVMConfig("T1", "detect")))
+            var sol= CodeDetectExtensions
+                .LoadSolution(new VMSolutionInfo(@"D:\scixing\TrayScanStandard\test.sol", ""));
+            MainStorage.Algo = sol
+                .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
                 ;
-
+            MainStorage.AlgoCnn = sol
+                .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
             if (MainStorage.CST == null) 
-            {
+            { 
                 logger.LogError("光源初始化失败");
                 MessageBox.Show("光源初始化失败", "光源初始化失败", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

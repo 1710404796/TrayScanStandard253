@@ -1,5 +1,4 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using LinxUniverse.Utils;
@@ -46,8 +45,32 @@ namespace TrayScanStandard.ViewModel
         public event Action ResultUpdate;
 
 
-        public Option<CodeDetectResult> TempResult { get; set; } = None;
-
+        public Option<CodeDetectResult> TempResult
+        {
+            get => _tempResult;
+            set
+            {
+                _tempResult = value;
+                Colors = Enumerable.Repeat(Brushes.Red, 128).ToArray();
+                Codes = Enumerable.Repeat("", 128).ToArray();
+                if (value.IsSome)
+                {
+                    var r = value.First();
+                    r.Codes.Do(s =>
+                    {
+                        if (s.Index < Colors.Length)
+                        {
+                            Colors[s.Index] = Brushes.Green;
+                            Codes[s.Index] = s.Code;
+                        }
+                    });
+                }
+                else
+                {
+                    RatioText = string.Empty;
+                }
+            }
+        }
         public int DebugExpoure
         {
             get; set;
@@ -157,7 +180,11 @@ namespace TrayScanStandard.ViewModel
         [RelayCommand]
         public async Task Detect()
         {
-            var data = await _mediator.Send(new DetectCodeCommand([new DetectParam(tempImg, [])]));
+            var data = await _mediator.Send(new DetectCodeCommand([new ROIDetectParam(tempImg, 
+                SelectBattery?.Regions[CameraIdx - 1]
+                .Map(s => s.ToROI())
+                .ToArray() ?? [])])
+                );
             data.Match(
                 Right: r =>
                 {
@@ -169,15 +196,67 @@ namespace TrayScanStandard.ViewModel
                 },
                 Left: l =>
                 {
+                    _mediator.Send (new WarningBoxCommand(l)).Wait();
 
                 }
                 );
             // 理论上 一定会有结果
             TempResult = data.ToOption().Map(s => s.First());
             UpdateResult();
+            Update();
         }
         byte[] tempImg = [];
+        private Option<CodeDetectResult> _tempResult = None;
 
+        [RelayCommand]
+        public async Task AutoSortROI()
+        {
+            // 整理ROI编号顺序 从左上角开始，按列排序，左右有容忍度
+            if (SelectBattery == null)
+            {
+                await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
+                return;
+            }
+            var regions = SelectBattery.Regions[CameraIdx - 1];
+            if (regions == null || regions.Count == 0)
+                return;
+            // 容忍度（像素）
+            int tolerance = 200;
+            // 按Left分组（同一列），再组内按Top排序
+            var columns = regions
+                .OrderBy(r => r.Left)
+                .GroupBy(r =>
+                {
+                    // 计算该ROI属于第几列
+                    // 找到已分组的列的最小Left，若与当前Left差小于容忍度则归为该列，否则新列
+                    // 这里用累加器实现
+                    int col = 0;
+                    int lastLeft = int.MinValue;
+                    foreach (var g in regions.OrderBy(x => x.Left).Select(x => x.Left).Distinct())
+                    {
+                        if (Math.Abs(r.Left - g) <= tolerance)
+                        {
+                            return g;
+                        }
+                    }
+                    return r.Left;
+                })
+                .OrderBy(g => g.Key)
+                .ToList();
+            var sorted = new List<BarCodeRegionInfo>();
+            foreach (var col in columns)
+            {
+                sorted.AddRange(col.OrderBy(r => r.Top));
+            }
+            // 重新编号ChannelIdx，从1开始
+            for (int i = 0; i < sorted.Count; i++)
+            {
+                sorted[i].ChannelIdx = i + 1;
+            }
+            SelectBattery.Regions[CameraIdx - 1] = sorted;
+            LinxContext.SaveChanges();
+            Update();
+        }
         [RelayCommand]
         public async Task AutoROI()
         {
@@ -205,12 +284,12 @@ namespace TrayScanStandard.ViewModel
                     }
                     , Left: l =>
                     {
-                        _mediator.Send(new WarningBoxCommand("l")).Wait();
+                        _mediator.Send(new WarningBoxCommand(l)).Wait();
                         return SelectBattery.Regions[CameraIdx - 1];
                     }
                     );
-            LinxContext.SaveChanges();
-            Update();
+            await AutoSortROI();
+            //Update();
         }
 
         [RelayCommand]

@@ -219,7 +219,7 @@ namespace TrayScanStandard.Models
 
         public ROI ToROI()
         {
-            return new ROI(new LinxUniverse.Common.Rect<float>(Top, Left, Width, Height), ChannelIdx);
+            return new ROI(new LinxUniverse.Common.Rect<float>(Left, Top, Width, Height), ChannelIdx);
         } 
 
     }

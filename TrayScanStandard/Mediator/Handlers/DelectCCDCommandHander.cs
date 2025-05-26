@@ -34,7 +34,7 @@ namespace TrayScanStandard.Mediator.Handlers
                         .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
                         .Map(
                             imgs => imgs.Item1.Map(s =>
-                                                    new DetectParam(
+                                                    new ROIDetectParam(
                                                             s.Data, 
                                                             imgs.Item2
                                                                 .Map(s => s.ToROI())

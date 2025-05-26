@@ -19,6 +19,7 @@ namespace TrayScanStandard
 
         public static bool IsWcsEnable { get; set; }
         public static Either<string, CodeDetecter> Algo { get; set; }
+        public static Either<string, CodeDetecter> AlgoCnn { get; set; }
         public static int[] DefaultExp = [7500, 15000, 22500, 30000];
         public static PowerEnum[] PowerEnums => Enum.GetValues<PowerEnum>().ToArray();
         public static RoleEnum[] RoleEnums => Enum.GetValues<RoleEnum>().SkipLast(1).ToArray();

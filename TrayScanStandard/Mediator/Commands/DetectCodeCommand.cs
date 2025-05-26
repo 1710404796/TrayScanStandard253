@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace TrayScanStandard.Mediator.Commands
 {
-    public record DetectCodeCommand(ImmutableArray<DetectParam> Params): IRequest<Either<string, ImmutableArray<CodeDetectResult>>>;
+    public record DetectCodeCommand(ImmutableArray<ROIDetectParam> Params): IRequest<Either<string, ImmutableArray<CodeDetectResult>>>;
 }
