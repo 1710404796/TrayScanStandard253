@@ -15,7 +15,7 @@ namespace TrayScanStandard.Mediator.Handlers
         public Task<Either<string, ImmutableArray<CodeDetectResult>>> Handle(DetectCodeCommand request, CancellationToken cancellationToken)
         {
             var data = request.Params.Select(p =>
-                MainStorage.Algo.Bind(s => s.DetectCodes(p))
+                MainStorage.Algo.Bind(s => s.DetectCodesV1(p))
 
 
             ).Traverse(s => s)
