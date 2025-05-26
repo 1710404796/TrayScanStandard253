@@ -80,7 +80,7 @@ namespace TrayScanStandard.View
                                 Height = c.Rect.Rect.Height,
                                 LayoutTransform = new RotateTransform(c.Rect.Angle),
                                 BorderBrush = Brushes.Aqua,
-                                BorderThickness = new Thickness(2),
+                                BorderThickness = new Thickness(5),
                                 Margin = new Thickness(c.Rect.Rect.X, c.Rect.Rect.Y, 0 , 0),
                             };
                             img2d.BorderCanvas.Children.Add(border);
