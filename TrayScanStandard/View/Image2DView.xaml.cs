@@ -407,12 +407,22 @@ namespace TrayScanStandard.View
 
         private async void AutoRoi_Click(object sender, RoutedEventArgs e)
         {
+            var result = MessageBox.Show("确定要自动生成ROI吗？此操作将覆盖当前所有ROI设置。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
             await ViewModel.AutoROI();
             RefreshBorder();
         }
 
         private async void SortRoi_Click(object sender, RoutedEventArgs e)
         {
+            var result = MessageBox.Show("确定要自动排序ROI吗？此操作将根据当前设置的通道顺序重新排列所有ROI。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
             await ViewModel.AutoSortROI();
             RefreshBorder();
         }

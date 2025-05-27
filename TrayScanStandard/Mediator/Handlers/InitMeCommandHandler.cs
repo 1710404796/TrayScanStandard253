@@ -71,7 +71,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);
             var sol= CodeDetectExtensions
-                .LoadSolution(new VMSolutionInfo(@"D:\scixing\TrayScanStandard\test.sol", ""));
+                .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
             MainStorage.Algo = sol
                 .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
                 ;
@@ -92,6 +92,14 @@ namespace TrayScanStandard.Mediator.Handlers
                     return;
                 }
             );
+            MainStorage.AlgoCnn.IfLeft(
+              s =>
+              {
+                  logger.LogError(s);
+                  MessageBox.Show("cnn算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                  return;
+              }
+          );
 
             //messageboxmanager
             //MainStorage.Cst[0] =
