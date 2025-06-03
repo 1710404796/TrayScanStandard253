@@ -14,11 +14,13 @@
   <Project Path="lxuv/LinxUniverse.FP/LinxUniverse.FP.csproj" />
   <Project Path="lxuv/LinxUniverse.Logger/LinxUniverse.Logger.csproj" />
   <Project Path="lxuv/LinxUniverse.Mediator/LinxUniverse.Mediator.csproj" />
+  <Project Path="lxuv/LinxUniverse.ProcessManager/LinxUniverse.ProcessManager.csproj" />
   <Project Path="lxuv/LinxUniverse.Utils/LinxUniverse.Utils.csproj" />
   <Project Path="lxuv/LinxUniverse.VM.Webapi/LinxUniverse.VM.Webapi.csproj" />
   <Project Path="lxuv/LinxUniverse.VM/LinxUniverse.VM.csproj" />
   <Project Path="lxuv/MugenCamera/MugenCamera.csproj" />
   <Project Path="lxuv/MugenCodeDetecter/MugenCodeDetecter.csproj" />
+  <Project Path="lxuv/VMWebAIClient/VMWebAIClient.csproj" />
   <Project Path="TrayScanStandard/TrayScanStandard.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>

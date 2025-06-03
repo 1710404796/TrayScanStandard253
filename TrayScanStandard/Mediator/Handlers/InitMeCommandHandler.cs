@@ -14,6 +14,7 @@ using TrayScanStandard.Service;
 using MugenCodeDetecter;
 using TrayScanStandard.Data;
 using System.Windows;
+using VMWebAIClient;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -28,6 +29,7 @@ namespace TrayScanStandard.Mediator.Handlers
         RoleManager<LinxRole, LinxUser> role
         , ScanCameraService scanCameraService
         , LinxContext linxContext
+        , IVMWebAIClient vmWebAIClient
         )
         : IRequestHandler<InitMeCommand>
     {
@@ -70,14 +72,16 @@ namespace TrayScanStandard.Mediator.Handlers
                     var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
                     return await mediator.Send(new GetLightQuery(g));
                 }).TraverseSerial(s => s!);
-            var sol= CodeDetectExtensions
-                .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
-            Console.WriteLine(sol);
-            MainStorage.Algo = sol
-                .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
-                ;
-            MainStorage.AlgoCnn = sol
-                .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
+            //var sol= CodeDetectExtensions
+            //    .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
+            //Console.WriteLine(sol);
+            //MainStorage.Algo = sol
+            //    .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
+            //    ;
+            //MainStorage.AlgoCnn = sol
+            //    .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
+            var algores = await vmWebAIClient.CreateAlgoAsync(FilenameHelper.AppPath + @"test.sol", LinxUniverse.Algo.Common.DetectType.VisionMaster);
+
             if (MainStorage.CST == null) 
             { 
                 logger.LogError("光源初始化失败");
@@ -85,6 +89,14 @@ namespace TrayScanStandard.Mediator.Handlers
                 return;
             }
 
+            algores.IfLeft(
+                s =>
+                {
+                    logger.LogError(s);
+                    MessageBox.Show("算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            );
             MainStorage.Algo.IfLeft(
                 s =>
                 {

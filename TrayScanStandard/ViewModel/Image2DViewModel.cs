@@ -24,6 +24,7 @@ using TrayScanStandard.Service;
 using LinxUniverse.Algo.Common;
 using Microsoft.Extensions.Logging;
 using MugenCodeDetecter;
+using VMWebAIClient;
 
 
 namespace TrayScanStandard.ViewModel
@@ -104,6 +105,7 @@ namespace TrayScanStandard.ViewModel
         {
             _mediator = App.GetService<IMediator>();
             _logger = App.GetService<ILogger<Image2DViewModel>>();
+            _vmClient = App.GetService<IVMWebAIClient>();
         }
         public LinxContext LinxContext;
         public void RefreshBatteryInfos()
@@ -139,6 +141,7 @@ namespace TrayScanStandard.ViewModel
         public IMediator _mediator { get; }
 
         private ILogger<Image2DViewModel> _logger;
+        private readonly IVMWebAIClient _vmClient;
 
         [RelayCommand]
         public async void DebugCapture()
@@ -270,10 +273,10 @@ namespace TrayScanStandard.ViewModel
                 await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
                 return ;
             }
+            
+            //var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, 100));
 
-            var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, 100));
-
-           
+            var data = await _vmClient.GetROIListAsync(ResultImg, 100);
             SelectBattery.Regions[CameraIdx - 1] =
                 data.Match(
                     Right: r =>

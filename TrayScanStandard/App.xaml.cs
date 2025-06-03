@@ -3,6 +3,7 @@ global using static LanguageExt.Prelude;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.DI;
+using LinxUniverse.ProcessManager;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -24,6 +25,7 @@ using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
 using TrayScanStandard.ViewModel.CZPallet;
+using VMWebAIClient;
 
 namespace TrayScanStandard
 {
@@ -136,6 +138,12 @@ namespace TrayScanStandard
 
                          services.AddCstService();
 
+
+                         services.AddVMWebAIClient(client =>
+                         {
+                             client.BaseAddress = new Uri("http://localhost:54567/");
+                             // other HttpClient configuration
+                         });
                          services.AddDbContext<LinxUserDBContext<LinxUser>, LinxContext>(option =>
                          {
                              option.UseSqlite(context.Configuration.GetConnectionString("LinxContextConnectionSqlite"));
@@ -180,10 +188,10 @@ namespace TrayScanStandard
                              // Set the limit to 256 MB
                              options.MultipartBodyLengthLimit = 2684354560;
                          });
-                     }).
+                     })
+                     .
                      Build();
             InitContext();
-
             //Host.UseSwagger();
             //Host.UseSwaggerUI(options => {
             //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -209,8 +217,17 @@ namespace TrayScanStandard
             var logger = Host.Services.GetRequiredService<ILogger<App>>();
             logger.LogInformation("Host created.");
 
+            manager = ProcessManagerFactory.Create();
+            var config = ProcessManagerFactory.CreateProcessConfig(
+                id: "vmapi",
+                name: "vm算法api",
+                executablePath: @"vmapi\LinxUniverse.VM.Webapi.exe"
+            );
+            manager.RegisterProcess(config);
+            var res =  manager.StartProcessAsync("vmapi").Result;
             Host.Start();
         }
+        static ProcessManager manager;
         private static void InitContext()
         {
             LinxContext DB = GetService<LinxContext>();
@@ -255,6 +272,12 @@ namespace TrayScanStandard
             //    richTextBox.CaretPosition = position;
             //}
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            manager?.Dispose();
+        }
     }
+    
 
 }

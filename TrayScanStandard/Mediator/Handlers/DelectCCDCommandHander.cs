@@ -10,10 +10,16 @@ using TrayScanStandard.Service;
 using MugenCodeDetecter;
 using LinxUniverse.Algo.Common;
 using TrayScanStandard.Mediator.Queries;
+using VMWebAIClient;
+using Camera.Fs.Common;
+using System.IO;
+using LinxUniverse.Utils;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
-    internal class DelectCCDCommandHander(ScanCameraService scanCameraService, ILogger<ScanCameraService> logger, IMediator mediator)
+    internal class DelectCCDCommandHander(ScanCameraService scanCameraService, ILogger<ScanCameraService> logger, IMediator mediator
+        , IVMWebAIClient vMWebAIClient
+        )
         : IRequestHandler<DelectCCDCommand, Either<string, DetectResult>>
     // 这个就是默认全部的
     {
@@ -28,20 +34,38 @@ namespace TrayScanStandard.Mediator.Handlers
                 .Zip(scanCameraService.Image2DViewModels.Select(s => s.CameraSetting))
                 .Map(s => s.Item1.Map(c => new CaptureInfo(c, s.Item2.Exposure))).ToArray();
             var data = await mediator.Send(new CamCaptureCommand(captureInfos));
-            var res = data.Bind(
+
+            // 将图片存为文件
+
+            var dataFilenames = data.Map((IEnumerable<ImageData[]> d) => 
+                                        d.Map(
+                                            (ci, s) => 
+                                                s.Map((ei, s1) =>
+                                                {
+                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{ci}_{ei}.png";
+                                                    File.WriteAllBytes(name, s1.Data);
+                                                    return name;
+                                                })
+                                            )
+                                    );
+
+
+            var res = dataFilenames.Bind(
                     camImgs => 
                         camImgs
                         .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
                         .Map(
-                            imgs => imgs.Item1.Map(s =>
-                                                    new ROIDetectParam(
-                                                            s.Data, 
+                            imgs => imgs.Item1
+                                           .Map(s =>
+                                                    (
+                                                            s,
                                                             imgs.Item2
                                                                 .Map(s => s.ToROI())
                                                                 .ToArray()
                                                         )
                                                    )
-                                              .Map(s => MainStorage.Algo.Bind(a => a.DetectCodes(s)))
+                                              .Map(s => vMWebAIClient.DetectCodesAsync(s.s, s.Item2).Result
+                                              )
                                               .Traverse(s => s)
                                               .Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
                             )

@@ -8,19 +8,30 @@ using System.Threading.Tasks;
 using TrayScanStandard.Mediator.Commands;
 using MugenCodeDetecter;
 using System.Collections.Immutable;
+using VMWebAIClient;
+using LinxUniverse.Utils;
+using System.IO;
 namespace TrayScanStandard.Mediator.Handlers
 {
-    public class DetectCodeCommandHandler : IRequestHandler<DetectCodeCommand, Either<string, ImmutableArray<CodeDetectResult>>>
+    public class DetectCodeCommandHandler(
+        IVMWebAIClient vMWebAIClient
+        ) : IRequestHandler<DetectCodeCommand, Either<string, ImmutableArray<CodeDetectResult>>>
     {
         public Task<Either<string, ImmutableArray<CodeDetectResult>>> Handle(DetectCodeCommand request, CancellationToken cancellationToken)
         {
-            var data = request.Params.Select(p =>
-                MainStorage.AlgoCnn.Bind(s => s.DetectCodesV1(p))
 
-
-            ).Traverse(s => s)
-            .Map(s => s.ToImmutableArray());
-            return Task.FromResult(data);
+            var data = request.Params.Select((p, i) =>
+            {
+                var path = $"{FilenameHelper.AppPath}Data2D\\Detect-{FilenameHelper.FileName}-{i}.jpg";
+                File.WriteAllBytes(path, p.ImageByte);
+                return vMWebAIClient.DetectCodesV1Async(path, p.ROIS, cancellationToken);
+            }
+            //vMWebAIClient.DetectCodesV1Async(p.ImagePath, p.ROIs, cancellationToken)
+            )
+                .TraverseSerial(s => s)
+                
+            .Map(s => s.Traverse(s => s).Map(s => s.ToImmutableArray()));
+            return data;
         }
     }
 }
