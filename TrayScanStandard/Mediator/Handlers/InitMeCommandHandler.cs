@@ -72,6 +72,7 @@ namespace TrayScanStandard.Mediator.Handlers
                 }).TraverseSerial(s => s!);
             var sol= CodeDetectExtensions
                 .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
+            Console.WriteLine(sol);
             MainStorage.Algo = sol
                 .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
                 ;
