@@ -21,7 +21,7 @@ namespace TrayScanStandard.Utils
             {
                 s.Item1.Values.Iter((i, v) =>
                 {
-                    s.Item2.SetLight(i, v);
+                    s.Item2.SetLight(i + 1, v);
                 });
             });
             //lightValue.Iter((i, s) => lightCST.SetLight(i, s));
@@ -32,7 +32,7 @@ namespace TrayScanStandard.Utils
             {
                 s.Item1.Values.Iter((i, v) =>
                 {
-                    s.Item2.SetLight(i, 0);
+                    s.Item2.SetLight(i + 1, 0);
                 });
             });
             return result;

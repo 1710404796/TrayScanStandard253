@@ -65,10 +65,12 @@ namespace TrayScanStandard.View
         {
             Dispatcher.Invoke(() =>
             {
-                foreach (var item in resultRects)
-                {
-                    img2d.ResultCanvas.Children.Remove(item);
-                }
+                img2d.ResultCanvas.Children.Clear();
+                resultRects.Clear();
+                //foreach (var item in resultRects)
+                //{
+                //    img2d.ResultCanvas.Children.Remove(item);
+                //}
                 ViewModel.TempResult.IfSome(s => // 这里显示有点问题
                 {
                     s.Codes.Iter(
@@ -83,7 +85,7 @@ namespace TrayScanStandard.View
                                 BorderThickness = new Thickness(5),
                                 Margin = new Thickness(c.Rect.Rect.X, c.Rect.Rect.Y, 0 , 0),
                             };
-                            img2d.BorderCanvas.Children.Add(border);
+                            img2d.ResultCanvas.Children.Add(border);
                             resultRects.Add(border);
                         }
                         );
