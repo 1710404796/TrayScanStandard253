@@ -100,6 +100,22 @@ namespace TrayScanStandard.ViewModel
         [ObservableProperty]
         private int _batchHeight = 600;
 
+        // 跟踪是否有未保存的修改
+        [ObservableProperty]
+        private bool _hasUnsavedChanges = false;
+
+        // 标记有未保存的修改
+        public void MarkAsChanged()
+        {
+            HasUnsavedChanges = true;
+        }
+
+        // 标记已保存
+        public void MarkAsSaved()
+        {
+            HasUnsavedChanges = false;
+        }
+
         public BatteryTypeInfo[] BatteryInfos { get; set; } = [];
 
         //public HuaRuiBCR HuaRuiBCR
