@@ -1,5 +1,4 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -252,11 +251,12 @@ namespace TrayScanStandard.View
             // 可能需要直接显示通道号
 
             return border;
-        }        private void Border_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        }
+        private void Border_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             // 阻止事件冒泡到父级控件
             e.Handled = true;
-            
+
             if (_cancellationTokenSource is null)
                 return;
             _cancellationTokenSource.Cancel();
@@ -430,6 +430,27 @@ namespace TrayScanStandard.View
             }
             await ViewModel.AutoSortROI();
             RefreshBorder();
+        }
+
+        private void ApplyBatchSize_Click(object sender, RoutedEventArgs e)
+        {
+            // 批量应用宽高到所有边框
+            foreach (var (border, regionInfo) in _rois)
+            {
+                border.Width = ViewModel.BatchWidth;
+                border.Height = ViewModel.BatchHeight;
+                
+                regionInfo.Width = ViewModel.BatchWidth;
+                regionInfo.Height = ViewModel.BatchHeight;
+                
+                UpdateBorderThickness(border);
+            }
+            
+            // 如果当前有选中的边框，更新ViewModel中的数据
+            if (ViewModel.SelectBarCodeRegionInfo != null)
+            {
+                ViewModel.RefreshBarCodeRegionData();
+            }
         }
     }
 }

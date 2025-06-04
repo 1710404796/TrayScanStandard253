@@ -93,6 +93,13 @@ namespace TrayScanStandard.ViewModel
         [ObservableProperty]
         BarCodeRegionInfo? _selectBarCodeRegionInfo;
 
+        // 批量配置边框尺寸的属性
+        [ObservableProperty]
+        private int _batchWidth = 600;
+
+        [ObservableProperty]
+        private int _batchHeight = 600;
+
         public BatteryTypeInfo[] BatteryInfos { get; set; } = [];
 
         //public HuaRuiBCR HuaRuiBCR
