@@ -7,7 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-     <Grid MouseWheel="Grid_MouseWheel" >
+     <Grid MouseWheel="Grid_MouseWheel" 
+           MouseRightButtonDown="Grid_MouseRightButtonDown"
+           MouseRightButtonUp="Grid_MouseRightButtonUp"
+           MouseMove="Grid_MouseMove" >
         <Grid.LayoutTransform >
             <ScaleTransform  
             x:Name="GTran"
