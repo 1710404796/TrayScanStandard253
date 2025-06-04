@@ -252,27 +252,28 @@ namespace TrayScanStandard.View
             // 可能需要直接显示通道号
 
             return border;
-        }
-
-        private void Border_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        }        private void Border_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+            // 阻止事件冒泡到父级控件
+            e.Handled = true;
+            
             if (_cancellationTokenSource is null)
                 return;
             _cancellationTokenSource.Cancel();
 
             var border = (sender as Border);
-            var region = border.Tag as BarCodeRegionInfo;
+            if (border?.Tag is BarCodeRegionInfo region)
+            {
+                _nowBorder = border;
+                ViewModel.SelectBarCodeRegionInfo = region;
 
-            _nowBorder = border;
-            ViewModel.SelectBarCodeRegionInfo = region;
+                region.Top = (int)border.Margin.Top;
+                region.Left = (int)border.Margin.Left;
+                region.Width = (int)border.Width;
+                region.Height = (int)border.Height;
 
-            region.Top = (int)border.Margin.Top;
-            region.Left = (int)border.Margin.Left;
-            region.Width = (int)border.Width;
-            region.Height = (int)border.Height;
-
-            ViewModel.RefreshBarCodeRegionData();
-
+                ViewModel.RefreshBarCodeRegionData();
+            }
         }
         private static void UpdateBorderThickness(Border border)
         {
@@ -294,26 +295,29 @@ namespace TrayScanStandard.View
 
         CancellationTokenSource _cancellationTokenSource;
         CancellationToken _cancellationToken;
-        private LinxContext _context;
-
-        private async void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private LinxContext _context;        private async void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // 阻止事件冒泡到父级控件（防止影响大图拖动）
+            e.Handled = true;
+            
             _cancellationTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancellationTokenSource.Token;
             Border? button = (sender as Border);
 
+            if (button == null) return;
 
-            //var border = (sender as Border);
-            //var region = border.Tag as BarCodeRegionInfo;
+            // 获取相对于 Canvas 的初始位置
+            var canvas = button.Parent as Canvas;
+            if (canvas == null) return;
 
-            //ViewModel.SelectBarCodeRegionInfo = region;
-            //_nowBorder = border;
-            //_logger.LogInformation("修改识别位置...");
-            while (true)
+            var initialPosition = e.GetPosition(canvas);
+            var initialMargin = button.Margin;
+
+            while (!_cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    // 让按钮跟随鼠标
+                    // 获取当前鼠标位置（相对于 Canvas）
                     var p = e.GetPosition(button.Parent as Canvas);
                     Debug.WriteLine(p);
                     var mar = button.Margin;
@@ -326,7 +330,6 @@ namespace TrayScanStandard.View
                 catch (TaskCanceledException)
                 {
                     break;
-                    //throw;
                 }
             }
         }
