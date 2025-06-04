@@ -369,13 +369,28 @@ namespace TrayScanStandard.View
 
             (_nowBorder.Child as TextBlock).Text = ViewModel.SelectBarCodeRegionInfo.ChannelIdx.ToString();
 
-        }
-
-        private void Delete_Border_Click(object sender, RoutedEventArgs e)
+        }        private void Delete_Border_Click(object sender, RoutedEventArgs e)
         {
             DeleteBorder(_nowBorder);
+            _nowBorder = null!;
+            ViewModel.SelectBarCodeRegionInfo = null;
+        }        private void ClearAllBoxes_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("确定要清理所有选定框吗？此操作将删除所有ROI选择框。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
 
-            _nowBorder = null;
+            // 清除所有边框
+            var bordersToRemove = _rois.ToList(); // 创建副本以避免在迭代过程中修改集合
+            foreach (var (border, regionInfo) in bordersToRemove)
+            {
+                DeleteBorder(border);
+            }
+
+            // 清除选中状态
+            _nowBorder = null!;
             ViewModel.SelectBarCodeRegionInfo = null;
         }
 

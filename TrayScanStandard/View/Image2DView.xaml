@@ -231,15 +231,22 @@ Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
                     <Button Margin="0,5,0,10"
                             Width="120"
                             Click="ApplyBatchSize_Click" 
-                            Content="应用到所有边框"/>
-
-                    <Button 
+                            Content="应用到所有边框"/>                    <Button 
                Margin="0,19.02,0,0"
     Width="123.6"
     x:Name="DeleteBtn"
     Content="{x:Static lang:Resources.DeleteTheSelectedBox}"
     Click="Delete_Border_Click"
     ></Button>
+                    
+                    <Button 
+               Margin="0,19.02,0,0"
+    Width="123.6"
+    x:Name="ClearAllBoxesBtn"
+    Content="清理所有选定框"
+    Click="ClearAllBoxes_Click"
+    ></Button>
+                    
                     <TextBlock Margin="0,19.02,0,0" Text="{Binding ViewModel.RatioText, Mode=TwoWay}" TextWrapping="Wrap"></TextBlock>
                     <Button Margin="0,19.02,0,0"  x:Name="Clear" Click="Clear_Click" Content="{x:Static lang:Resources.ClearDebuggingData}"/>
                 </StackPanel>
