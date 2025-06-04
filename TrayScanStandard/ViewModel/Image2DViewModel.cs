@@ -77,6 +77,9 @@ namespace TrayScanStandard.ViewModel
             get; set;
         } = 5000;
 
+        [ObservableProperty]
+        int _roiPadding = 100;
+
         public int CameraIdx { get; set; } = 0;
 
         public CameraSetting CameraSetting
@@ -264,8 +267,7 @@ namespace TrayScanStandard.ViewModel
             SelectBattery.Regions[CameraIdx - 1] = sorted;
             LinxContext.SaveChanges();
             Update();
-        }
-        [RelayCommand]
+        }        [RelayCommand]
         public async Task AutoROI()
         {
             if (SelectBattery == null)
@@ -274,9 +276,9 @@ namespace TrayScanStandard.ViewModel
                 return ;
             }
             
-            //var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, 100));
+            //var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, RoiPadding));
 
-            var data = await _vmClient.GetROIListAsync(ResultImg, 100);
+            var data = await _vmClient.GetROIListAsync(ResultImg, RoiPadding);
             SelectBattery.Regions[CameraIdx - 1] =
                 data.Match(
                     Right: r =>
