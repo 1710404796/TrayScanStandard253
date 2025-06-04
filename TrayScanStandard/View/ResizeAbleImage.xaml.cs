@@ -87,16 +87,23 @@ namespace TrayScanStandard.View
                 var deltaX = currentPosition.X - _lastPosition.X;
                 var deltaY = currentPosition.Y - _lastPosition.Y;
 
-                // 获取当前的变换
+                // 根据当前缩放比例调整拖动速度
+                // 缩放越大，拖动的实际移动距离需要除以缩放比例以保持一致的手感
+                deltaX /= GTran.ScaleX;
+                deltaY /= GTran.ScaleY;
+
+                // 获取当前的变换组
                 var transform = BImage.RenderTransform as TransformGroup;
                 if (transform == null)
                 {
                     transform = new TransformGroup();
                     // 保留原有的旋转变换
-                    transform.Children.Add(new RotateTransform());
+                    var rotateTransform = new RotateTransform();
+                    transform.Children.Add(rotateTransform);
                     BImage.RenderTransform = transform;
                 }
 
+                // 查找或创建平移变换
                 var translateTransform = transform.Children.OfType<TranslateTransform>().FirstOrDefault();
                 if (translateTransform == null)
                 {
@@ -104,6 +111,7 @@ namespace TrayScanStandard.View
                     transform.Children.Add(translateTransform);
                 }
 
+                // 应用平移
                 translateTransform.X += deltaX;
                 translateTransform.Y += deltaY;
 
