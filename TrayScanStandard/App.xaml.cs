@@ -122,7 +122,7 @@ namespace TrayScanStandard
 
 
                          services.AddTransient<ImageDisplayView>();
-                         services.AddTransient<ImageDisplayViewModel>();
+                         services.AddSingleton<ImageDisplayViewModel>();
 
                          services.AddTransient<AllBcrListView>();
                          //services.AddSingleton<YWStageViewViewModels>();

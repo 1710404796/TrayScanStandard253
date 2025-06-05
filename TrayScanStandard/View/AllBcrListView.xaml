@@ -29,15 +29,15 @@
                    ></TextBlock>
             <Button Width="150" Margin="15,0,0,0" x:Name="AllCapture" Click="AllCapture_Click" Content="{x:Static lang:Resources.ShootAll}"></Button>
 
-            <Button Width="150" Margin="15,0,0,0" x:Name="ManualStart" Click="ManualStart_Click" Content="{x:Static lang:Resources.ManuallyStartDetection}"></Button>
-            <Button Width="150" Margin="15,0,0,0" x:Name="ManualStop" Click="ManualStop_Click" Content="{x:Static lang:Resources.ManualShutdownDetection}"></Button>
+            <!--<Button Width="150" Margin="15,0,0,0" x:Name="ManualStart" Click="ManualStart_Click" Content="{x:Static lang:Resources.ManuallyStartDetection}"></Button>
+            <Button Width="150" Margin="15,0,0,0" x:Name="ManualStop" Click="ManualStop_Click" Content="{x:Static lang:Resources.ManualShutdownDetection}"></Button>-->
 
 
-            <Button Width="150" Margin="15,0,0,0" x:Name="DebugCapture" Click="DebugCapture_Click" Content="{x:Static lang:Resources.DebuggingQRCodeScanning}"></Button>
-            <TextBox Width="150" Margin="15,0,0,0" Text="{Binding DebugExp}" VerticalContentAlignment="Center"></TextBox>
-            <TextBlock FontSize="24" 
+            <!--<Button Width="150" Margin="15,0,0,0" x:Name="DebugCapture" Click="DebugCapture_Click" Content="{x:Static lang:Resources.DebuggingQRCodeScanning}"></Button>-->
+            <!--<TextBox Width="150" Margin="15,0,0,0" Text="{Binding DebugExp}" VerticalContentAlignment="Center"></TextBox>-->
+            <!--<TextBlock FontSize="24" 
                        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                       Text="{x:Static lang:Resources.EnterExposureParameters}"/>
+                       Text="{x:Static lang:Resources.EnterExposureParameters}"/>-->
 
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">

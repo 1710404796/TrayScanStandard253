@@ -1,24 +1,27 @@
-﻿using MediatR;
+﻿using Camera.Fs.Common;
+using LanguageExt.Common;
+using LinxUniverse.Algo.Common;
+using LinxUniverse.Utils;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using MugenCodeDetecter;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrayScanStandard.Mediator.Commands;
-using TrayScanStandard.Service;
-using MugenCodeDetecter;
-using LinxUniverse.Algo.Common;
 using TrayScanStandard.Mediator.Queries;
+using TrayScanStandard.Service;
+using TrayScanStandard.ViewModel;
 using VMWebAIClient;
-using Camera.Fs.Common;
-using System.IO;
-using LinxUniverse.Utils;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
     internal class DelectCCDCommandHander(ScanCameraService scanCameraService, ILogger<ScanCameraService> logger, IMediator mediator
-        , IVMWebAIClient vMWebAIClient
+        , IVMWebAIClient vMWebAIClient,
+        ImageDisplayViewModel imageDisplayViewModel
         )
         : IRequestHandler<DelectCCDCommand, Either<string, DetectResult>>
     // 这个就是默认全部的
@@ -36,44 +39,57 @@ namespace TrayScanStandard.Mediator.Handlers
             var data = await mediator.Send(new CamCaptureCommand(captureInfos));
 
             // 将图片存为文件
+            //data.IfRight(s => { Console.WriteLine(s.Count()); });
 
-            var dataFilenames = data.Map((IEnumerable<ImageData[]> d) => 
+            var dataFilenames = data.Map((IEnumerable<ImageData[]> d) =>
                                         d.Map(
-                                            (ci, s) => 
+                                            (ci, s) =>
                                                 s.Map((ei, s1) =>
                                                 {
-                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{ci}_{ei}.png";
+                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}{ci}_{ei}.png";
                                                     File.WriteAllBytes(name, s1.Data);
                                                     return name;
                                                 })
                                             )
                                     );
-
-
-            var res = dataFilenames.Bind(
-                    camImgs => 
+                ;
+           
+            //dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
+            var res = (await dataFilenames.BindAsync(
+                    camImgs =>
                         camImgs
                         .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
                         .Map(
                             imgs => imgs.Item1
                                 .Map(s =>
                                         (
-                                                s,
-                                                imgs.Item2
-                                                    .Map(s => s.ToROI())
-                                                    .ToArray()
-                                            )
+                                        s,
+                                        imgs.Item2
+                                            .Map(s => s.ToROI())
+                                            .ToArray()
                                         )
-                                    .Map(s =>
-                                    {
-                                        return vMWebAIClient.DetectCodesAsync(s.s, s.Item2).Result;
-                                    })
-                                    .Traverse(s => s)
-                                    .Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
+                                    )
+                                .Map(s =>
+                                {
+                                    return vMWebAIClient.DetectCodesAsync(s.s, s.Item2);
+                                })
+                                .TraverseSerial(s => s)
+                                .Map(s =>
+                                    s.Traverse(s1 => s1.Codes)
+                                    .Map(s1 => s1.SelectMany(s => s))
+                                )
+                            //.Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
                             )
-                        .Traverse(s=>s)
-                        // 这里merge一下
-                    );
+                        .TraverseSerial(s => s)
+                        .Map(s =>
+                                s.Traverse(s1 => s1)
+                                    //.Map(s1 => s1.SelectMany(s2 => s2))
+                        )
+                    // 这里merge一下
+                    ))
+                    //.Map(res => res.DistinctBy(s => s.Index))
+
+                ;
             res.Iter(s =>
                     s.Zip(scanCameraService.Image2DViewModels)
                     .Iter(d =>
@@ -81,11 +97,27 @@ namespace TrayScanStandard.Mediator.Handlers
                         d.Item2.TempResult = new CodeDetectResult(d.Item1.ToArr());
                     })
             );
-
-            return res.Map(r => 
+            
+            var res1 = res.Map(r => 
                 r.SelectMany(s => s)
                 .DistinctBy(s => s.Index)
                 ).Map(s => new DetectResult(s.ToArr()));
+            // 清空一下？
+            imageDisplayViewModel.XYLStation.ClearStage();
+            res1.Iter(s =>
+                s.Channels.Iter
+                    ( async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
+                    )
+             );
+
+            dataFilenames.IfRight(f =>
+            {
+                var d = f.Select(s => s.First());
+
+                mediator.Send(new PushImgCommand(d.ToArray()));
+
+            });
+            return res1;
             //).Traverse(s => s)
             //    ));
         }

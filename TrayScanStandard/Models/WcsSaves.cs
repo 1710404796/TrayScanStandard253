@@ -69,6 +69,7 @@ namespace TrayScanStandard.Models
         public StageSetting StageSetting { get; set; } = new();
         public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
+        public bool CameraEnable { get; set; } = false;
     }
 
     public record LightInfo(string Com, int[] Values);

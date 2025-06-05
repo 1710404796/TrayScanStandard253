@@ -43,6 +43,13 @@ BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
             Orientation="Vertical"
             HorizontalAlignment="Center"        
                     >
+                    <TextBlock 
+Width="123.6"
+    Margin="0,19.02,0,0"
+Text="电池方案:"
+         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        
+></TextBlock>
                     <ComboBox Width="123.6" 
                           SelectedIndex="{Binding ViewModel.SelectIdx}"
                           ItemsSource="{Binding ViewModel.BatteryInfos}"
@@ -55,13 +62,20 @@ BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
                     </ComboBox>
 
 
-                    <Button 
+                    <!--<Button 
     Width="123.6"
         Margin="0,19.02,0,0"
     x:Name="DebugCapture"
     Content="{x:Static lang:Resources.DebuggingQRCodeScanning}"
     Command="{Binding ViewModel.DebugCaptureCommand}"
-    ></Button>
+    ></Button>-->
+                    <TextBlock 
+Width="123.6"
+    Margin="0,19.02,0,0"
+Text="调试曝光:"
+         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                        
+></TextBlock>
                     <TextBox 
 Width="123.6"
     Margin="0,19.02,0,0"
@@ -248,7 +262,7 @@ Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
     ></Button>
                     
                     <TextBlock Margin="0,19.02,0,0" Text="{Binding ViewModel.RatioText, Mode=TwoWay}" TextWrapping="Wrap"></TextBlock>
-                    <Button Margin="0,19.02,0,0"  x:Name="Clear" Click="Clear_Click" Content="{x:Static lang:Resources.ClearDebuggingData}"/>
+                    <!--<Button Margin="0,19.02,0,0"  x:Name="Clear" Click="Clear_Click" Content="{x:Static lang:Resources.ClearDebuggingData}"/>-->
                 </StackPanel>
             </ScrollViewer>
         </Border>

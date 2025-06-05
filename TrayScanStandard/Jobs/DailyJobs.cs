@@ -28,6 +28,16 @@ namespace TrayScanStandard.Jobs
                     File.Delete(file.FullName);
                 }
             }
+
+             files = new DirectoryInfo("Data2d").GetFiles();
+
+            foreach (var file in files)
+            {
+                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(60))
+                {
+                    File.Delete(file.FullName);
+                }
+            }
             return Task.CompletedTask;
         }
     }

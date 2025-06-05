@@ -18,8 +18,18 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, IEnumerable<ImageData[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
         {
-            return Either<string, IEnumerable<ImageData[]>>.Right
-               ([[new ImageData(File.ReadAllBytes(@"D:\testImg\right.png"))]]).Apply(Task.FromResult);
+            var a = request.CaptureInfos.Select(s => 1);
+            if (!MainStorage.Saves.CameraEnable)
+            {
+                return Either<string, IEnumerable<ImageData[]>>.Right
+               ([..request.CaptureInfos
+               .Select(s => new ImageData[]
+                       { new ImageData(File.ReadAllBytes(@"D:\testImg\right.png"))
+                       }
+                 )
+               ]).Apply(Task.FromResult);
+            }
+            
             return DetectUtil.UseLight( 
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
