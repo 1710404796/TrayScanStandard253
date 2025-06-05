@@ -120,6 +120,10 @@ namespace TrayScanStandard
                          services.AddTransient<LightManagerView>();
                          services.AddTransient<LightManagerViewModel>();
 
+
+                         services.AddTransient<ImageDisplayView>();
+                         services.AddTransient<ImageDisplayViewModel>();
+
                          services.AddTransient<AllBcrListView>();
                          //services.AddSingleton<YWStageViewViewModels>();
                          services.AddTransient<YWStageView>();

@@ -114,6 +114,7 @@ Source="Images/linx.png" HorizontalAlignment="Center"></Image>
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
 IsChecked="True"
+                Click="RadioButton_Click"
 >
                 工作面板
             </RadioButton>

@@ -56,18 +56,20 @@ namespace TrayScanStandard.Mediator.Handlers
                         .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
                         .Map(
                             imgs => imgs.Item1
-                                           .Map(s =>
-                                                    (
-                                                            s,
-                                                            imgs.Item2
-                                                                .Map(s => s.ToROI())
-                                                                .ToArray()
-                                                        )
-                                                   )
-                                              .Map(s => vMWebAIClient.DetectCodesAsync(s.s, s.Item2).Result
-                                              )
-                                              .Traverse(s => s)
-                                              .Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
+                                .Map(s =>
+                                        (
+                                                s,
+                                                imgs.Item2
+                                                    .Map(s => s.ToROI())
+                                                    .ToArray()
+                                            )
+                                        )
+                                    .Map(s =>
+                                    {
+                                        return vMWebAIClient.DetectCodesAsync(s.s, s.Item2).Result;
+                                    })
+                                    .Traverse(s => s)
+                                    .Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
                             )
                         .Traverse(s=>s)
                         // 这里merge一下

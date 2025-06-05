@@ -214,5 +214,11 @@ namespace TrayScanStandard
         {
             NageTo<PalletLogView>();
         }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<ImageDisplayView>();
+
+        }
     }
 }
