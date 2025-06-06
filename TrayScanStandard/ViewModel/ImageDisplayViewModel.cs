@@ -49,7 +49,7 @@ namespace TrayScanStandard.ViewModel
 
         public ImageDisplayViewModel(LinxContext linxContext)
         {
-            XYLStation =  new Pallet(1,"1") { Column = 4, ChannelNum = MainStorage.SelectBattery?.Count ?? 0 };
+            XYLStation =  new Pallet(1,"1") { Column = MainStorage.SelectBattery?.Column ?? 1, ChannelNum = MainStorage.SelectBattery?.Count ?? 0 };
             _linxContext = linxContext;
             Refresh();
             SelectBatteryInfo = BatteryInfos.FirstOrDefault(s => s.Id == MainStorage.SelectBattery?.Id) ?? new();
