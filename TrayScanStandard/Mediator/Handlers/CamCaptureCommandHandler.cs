@@ -18,7 +18,7 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, IEnumerable<ImageData[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
         {
-            var a = request.CaptureInfos.Select(s => 1);
+            //var a = request.CaptureInfos.Select(s => 1);
             if (!MainStorage.Saves.CameraEnable)
             {
                 return Either<string, IEnumerable<ImageData[]>>.Right
@@ -29,34 +29,33 @@ namespace TrayScanStandard.Mediator.Handlers
                  )
                ]).Apply(Task.FromResult);
             }
-            
-            return DetectUtil.UseLight( 
+
+            return DetectUtil.UseLight(
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
                     .Traverse(s => s)
-                    .Bind(c => 
-                        c.AsParallel()
-                        .Select(s =>
-                        {
-                            var aa = s.Exps.Map(e =>
-                            {
-                                return s.Camera
-                                .SetControl(new AcquisitionControl { ExposureTime = e })
-                                .Bind(DetectUtil.CaptureOne);
-                                //return s.Camera.CaptureOne();
-
-                            })
-                            // 这段为无视拍照的错误
-                            //.Choose(s => s.ToOption()).Apply(Either<string, IEnumerable<ImageData>>.Right);
-                            .Traverse(s => s)
-                            .Map(s => s.ToArray());
-                            return aa;
-                        })
-                    .Traverse(s => s)
+                    .Bind(c =>
+                        c
+                        .AsParallel()
+                        .AsOrdered()
+                        .Select(ProcessCaptureInfo)
+                        .Traverse(s => s)
                     )
                 ).Apply(Task.FromResult);
-            //return a.Apply(Task.FromResult);
 
+            // 本地函数：处理单个CaptureInfo
+            Either<string, ImageData[]> ProcessCaptureInfo(CaptureInfo s)
+            {
+                var aa = s.Exps.Map(e =>
+                {
+                    return s.Camera
+                    .SetControl(new AcquisitionControl { ExposureTime = e })
+                    .Bind(DetectUtil.CaptureOne);
+                })
+                .Traverse(s => s)
+                .Map(s => s.ToArray());
+                return aa;
+            }
         }
     }
 

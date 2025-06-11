@@ -81,6 +81,7 @@ namespace TrayScanStandard.Utils
                 {
                     var results = mugenCameras
                         .AsParallel()
+                        .AsOrdered()
                         .Select(cam => cam.CaptureOne())
                         .Traverse(s => s);
                     return results;

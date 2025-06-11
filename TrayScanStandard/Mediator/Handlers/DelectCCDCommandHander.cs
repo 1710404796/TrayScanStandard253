@@ -37,24 +37,27 @@ namespace TrayScanStandard.Mediator.Handlers
                 .Zip(scanCameraService.Image2DViewModels.Select(s => s.CameraSetting))
                 .Map(s => s.Item1.Map(c => new CaptureInfo(c, s.Item2.Exposure))).ToArray();
             var data = await mediator.Send(new CamCaptureCommand(captureInfos));
-
+            Console.WriteLine("testData");
             // 将图片存为文件
             //data.IfRight(s => { Console.WriteLine(s.Count()); });
+            //data.IfRight(s => { Console.WriteLine(s.FirstOrDefault().Length.ToString() ?? "dani"); });
 
             var dataFilenames = data.Map((IEnumerable<ImageData[]> d) =>
                                         d.Map(
                                             (ci, s) =>
                                                 s.Map((ei, s1) =>
                                                 {
-                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}{ci}_{ei}.png";
+                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}_{ci}_{ei}.png";
                                                     File.WriteAllBytes(name, s1.Data);
                                                     return name;
-                                                })
-                                            )
+                                                }).ToArray()
+                                            ).ToArray()
                                     );
                 ;
-           
-            //dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
+            Console.WriteLine("testdataFilenames");
+            dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
+            dataFilenames.IfRight(s => { Console.WriteLine(s.FirstOrDefault()?.Count().ToString() ?? "dani"); });
+
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
                         camImgs
@@ -71,7 +74,7 @@ namespace TrayScanStandard.Mediator.Handlers
                                     )
                                 .Map(s =>
                                 {
-                                    return vMWebAIClient.DetectCodesAsync(s.s, s.Item2);
+                                    return vMWebAIClient.DetectCodesV1Async(s.s, s.Item2);
                                 })
                                 .TraverseSerial(s => s)
                                 .Map(s =>
