@@ -46,12 +46,11 @@ namespace TrayScanStandard.Mediator.Handlers
             // 本地函数：处理单个CaptureInfo
             Either<string, ImageData[]> ProcessCaptureInfo(CaptureInfo s)
             {
-                var aa = s.Exps.Map(e =>
-                {
-                    return s.Camera
-                    .SetControl(new AcquisitionControl { ExposureTime = e })
-                    .Bind(DetectUtil.CaptureOne);
-                })
+                var aa = s.Exps.Map(e => 
+                        s.Camera
+                        .SetControl(new AcquisitionControl { ExposureTime = e })
+                        .Bind(DetectUtil.CaptureOne)
+                    )
                 .Traverse(s => s)
                 .Map(s => s.ToArray());
                 return aa;
