@@ -7,36 +7,63 @@ using Camera.Fs.Common;
 using LinxUniverse.CST;
 using MugenCamera;
 namespace TrayScanStandard.Utils
-{
-    public static class DetectUtil
+{    public static class DetectUtil
     {
 
         // 还需要一个光源的中间件
 
-        public static Either<string, TResult> UseLight<TResult>
-            ( Func<Either<string, TResult>> func)
+        /// <summary>
+        /// 控制光源的开启和关闭
+        /// </summary>
+        /// <param name="turnOn">true为开启光源，false为关闭光源</param>
+        private static void ControlLights(bool turnOn)
         {
             var lightInfos = MainStorage.Saves.LightInfos.Zip(MainStorage.CST);
             lightInfos.Iter(s =>
             {
                 s.Item1.Values.Iter((i, v) =>
                 {
-                    s.Item2.SetLight(i + 1, v);
+                    s.Item2.SetLight(i + 1, turnOn ? v : 0);
                 });
             });
-            //lightValue.Iter((i, s) => lightCST.SetLight(i, s));
+        }
 
-            var result = func();
-            // Ensure the light is turned off after the action
-            lightInfos.Iter(s =>
+        /// <summary>
+        /// 在开启光源的环境下执行同步操作
+        /// </summary>
+        public static Either<string, TResult> UseLight<TResult>
+            (Func<Either<string, TResult>> func)
+        {
+            ControlLights(true);
+            try
             {
-                s.Item1.Values.Iter((i, v) =>
-                {
-                    s.Item2.SetLight(i + 1, 0);
-                });
-            });
-            return result;
+                var result = func();
+                return result;
+            }
+            finally
+            {
+                // Ensure the light is turned off after the action
+                ControlLights(false);
+            }
+        }
 
+        /// <summary>
+        /// 在开启光源的环境下执行异步操作
+        /// </summary>
+        public static async Task<Either<string, TResult>> UseLight<TResult>
+            (Func<Task<Either<string, TResult>>> func)
+        {
+            ControlLights(true);
+            try
+            {
+                var result = await func();
+                return result;
+            }
+            finally
+            {
+                // Ensure the light is turned off after the action
+                ControlLights(false);
+            }
         }
 
         public static Either<string, TResult> UseCamera<TResult>(

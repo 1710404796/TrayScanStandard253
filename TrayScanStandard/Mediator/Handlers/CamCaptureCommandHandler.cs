@@ -30,18 +30,20 @@ namespace TrayScanStandard.Mediator.Handlers
                ]).Apply(Task.FromResult);
             }
 
-            return DetectUtil.UseLight(
+            var a = DetectUtil.UseLight(
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
                     .Traverse(s => s)
-                    .Bind(c =>
+                    .BindAsync(c =>
                         c
-                        .AsParallel()
-                        .AsOrdered()
-                        .Select(ProcessCaptureInfo)
-                        .Traverse(s => s)
+                        // .AsParallel()
+                        // .AsOrdered()
+                        .Select(s => Task.Run(() => ProcessCaptureInfo(s)))
+                        .Apply(Task.WhenAll)
+                        .Map(s => s.Traverse(q => q))
+                    //.TraverseParallel(s => s)
                     )
-                ).Apply(Task.FromResult);
+                );//.Apply(Task.FromResult);
 
             // 本地函数：处理单个CaptureInfo
             Either<string, ImageData[]> ProcessCaptureInfo(CaptureInfo s)
