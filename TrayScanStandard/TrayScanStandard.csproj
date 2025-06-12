@@ -59,9 +59,6 @@
 
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Apis\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Auth\LinxUniverse.Auth.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.CST\LinxUniverse.CST.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.FP\LinxUniverse.FP.csproj" />
