@@ -30,7 +30,7 @@ namespace TrayScanStandard.Mediator.Handlers
                ]).Apply(Task.FromResult);
             }
 
-            var a = DetectUtil.UseLight(
+            return DetectUtil.UseLight(
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
                     .Traverse(s => s)
