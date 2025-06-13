@@ -43,6 +43,7 @@ namespace TrayScanStandard.ViewModel
             MainStorage.SelectBattery = value;
             MainStorage.Saves.SelectBatteryId = value.Id;
             XYLStation.ChannelNum = value.Count;
+            XYLStation.Column = value.Column;
 
             MainStorage.SaveManager.Save();
         }

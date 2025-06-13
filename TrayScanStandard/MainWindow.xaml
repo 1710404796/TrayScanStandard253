@@ -42,7 +42,7 @@
         </Border>
         <TextBlock VerticalAlignment="Center"
         FontSize="20" 
-                Text="{x:Static lang:Resources.SoftwareTitle}"
+                Text="扫码工具"
         HorizontalAlignment="Center"
         ></TextBlock>
         <!--<TextBlock Grid.Column="1"

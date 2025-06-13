@@ -35,7 +35,7 @@ namespace TrayScanStandard.Apis
                 r =>
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
-                    var batteryCodes = Enumerable.Range(0, r.Channels.Count)
+                    var batteryCodes = Enumerable.Range(1, r.Channels.Count)
                         .Select(s => codes.GetValueOrDefault(s, ""))
                         .ToList();
                     var log = new PalletLog
@@ -61,15 +61,15 @@ namespace TrayScanStandard.Apis
                 Right: r =>
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
-                    var batteryCodes = Enumerable.Range(0, r.Channels.Count)
+                    var batteryCodes = Enumerable.Range(1, r.Channels.Count)
                         .Select(s => codes.GetValueOrDefault(s, ""))
                         .ToList(); // Todo: 如何简化
                     return new QRCodeResult()
                     {
                         ErrorCode = ErrorType.Successed,
                         Data = batteryCodes
-                            .Select((s, i) => new { Index = i, Code = s }) //Todo: 看看+1
-                            .ToDictionary(s => s.Index + 1, s => s.Code)
+                            .Select((s, i) => new { Index = i + 1, Code = s }) //Todo: 看看+1
+                            .ToDictionary(s => s.Index, s => s.Code)
                     };
                 },
                 Left: e =>

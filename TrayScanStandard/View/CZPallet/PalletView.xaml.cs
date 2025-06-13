@@ -136,8 +136,8 @@ namespace TrayScanStandard.View.CZPallet
                     }
 
                 }
-                PalletBorder.Height = _borders.Length * 64 / Station.Column + 40;
-                PalletBorder.Width = Station.Column * 430 + 60;
+                PalletBorder.Height = (_borders.Length * 64 / Station.Column + 40) * 1;
+                PalletBorder.Width = (Station.Column * 430 + 60) * 1;
 
 
 

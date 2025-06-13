@@ -83,5 +83,11 @@ namespace TrayScanStandard.View
         {
 
         }
+
+        private async void ComboBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            await Task.Delay(100);
+            palletv.Refesh();
+        }
     }
 }

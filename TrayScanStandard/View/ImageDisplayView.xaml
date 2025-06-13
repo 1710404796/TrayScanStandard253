@@ -66,6 +66,7 @@
                 </TextBlock>
                 <ComboBox Width="150"
                           
+                          SelectionChanged="ComboBox_SelectionChanged_1"
                         
                           SelectedItem="{Binding ViewModel.SelectBatteryInfo}"
                           ItemsSource="{Binding ViewModel.BatteryInfos}">
@@ -131,7 +132,7 @@
 
                 <TabItem Header="虚拟界面">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <Viewbox  Width="1500">
+                        <Viewbox  Width="1146">
                             <czpallet:PalletView ClickAvaliable="False" x:Name="palletv">
 
                             </czpallet:PalletView>
