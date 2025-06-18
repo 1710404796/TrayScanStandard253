@@ -70,6 +70,7 @@ namespace TrayScanStandard.Models
         public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
         public bool CameraEnable { get; set; } = false;
+        public bool IsAlgoEnable { get; set; } = true;
     }
 
     public record LightInfo(string Com, int[] Values);

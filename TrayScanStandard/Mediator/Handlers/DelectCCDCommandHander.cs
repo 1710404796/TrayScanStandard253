@@ -53,44 +53,32 @@ namespace TrayScanStandard.Mediator.Handlers
                                                 }).ToArray()
                                             ).ToArray()
                                     );
-                ;
+            ;
             Console.WriteLine("testdataFilenames");
             dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
             dataFilenames.IfRight(s => { Console.WriteLine(s.FirstOrDefault()?.Count().ToString() ?? "dani"); });
+            var tempResult = new DetectResult(
+                Enumerable.Range(0, request.BatteryTypeInfo.Count)
+                        .Select(s => new CodeInfo($"Test{s:000}", s, new())).ToArr()
+                );
 
-            var res = (await dataFilenames.BindAsync(
-                    camImgs =>
-                        camImgs
-                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
-                        .Map(
-                            imgs => imgs.Item1
-                                .Map(s =>
-                                        (
-                                        s,
-                                        imgs.Item2
-                                            .Map(s => s.ToROI())
-                                            .ToArray()
-                                        )
-                                    )
-                                .Map(s =>
-                                {
-                                    return vMWebAIClient.DetectCodesV1Async(s.s, s.Item2);
-                                })
-                                .TraverseSerial(s => s)
-                                .Map(s =>
-                                    s.Traverse(s1 => s1.Codes)
-                                    .Map(s1 => s1.SelectMany(s => s))
-                                )
-                            //.Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
-                            )
-                        .TraverseSerial(s => s)
-                        .Map(s =>
-                                s.Traverse(s1 => s1)
-                                    //.Map(s1 => s1.SelectMany(s2 => s2))
-                        )
+            dataFilenames.IfRight(f =>
+            {
+                var d = f.Select(s => s.First());
+
+                mediator.Send(new PushImgCommand(d.ToArray()));
+
+            });
+            if (!MainStorage.Saves.IsAlgoEnable)
+            {
+                return tempResult;
+            }
+
+            var res = await dataFilenames.BindAsync(
+                    GetResult(request)
                     // 这里merge一下
-                    ))
-                    //.Map(res => res.DistinctBy(s => s.Index))
+                    )
+                //.Map(res => res.DistinctBy(s => s.Index))
 
                 ;
             res.Iter(s =>
@@ -100,8 +88,8 @@ namespace TrayScanStandard.Mediator.Handlers
                         d.Item2.TempResult = new CodeDetectResult(d.Item1.ToArr());
                     })
             );
-            
-            var res1 = res.Map(r => 
+
+            var res1 = res.Map(r =>
                 r.SelectMany(s => s)
                 .DistinctBy(s => s.Index)
                 ).Map(s => new DetectResult(s.ToArr()));
@@ -109,20 +97,47 @@ namespace TrayScanStandard.Mediator.Handlers
             imageDisplayViewModel.XYLStation.ClearStage();
             res1.Iter(s =>
                 s.Channels.Iter
-                    ( async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
+                    (async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
                     )
              );
 
-            dataFilenames.IfRight(f =>
-            {
-                var d = f.Select(s => s.First());
-
-                mediator.Send(new PushImgCommand(d.ToArray()));
-
-            });
             return res1;
             //).Traverse(s => s)
             //    ));
+        }
+
+        private Func<string[][], Task<Either<string, IEnumerable<IEnumerable<CodeInfo>>>>> GetResult(DelectCCDCommand request)
+        {
+            // 读码函数考虑一体化
+            return camImgs =>
+                                    camImgs
+                                    .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
+                                    .Map(
+                                        imgs => imgs.Item1
+                                            .Map(s =>
+                                                    (
+                                                    s,
+                                                    imgs.Item2
+                                                        .Map(s => s.ToROI())
+                                                        .ToArray()
+                                                    )
+                                                )
+                                            .Map(s =>
+                                            {
+                                                return vMWebAIClient.DetectCodesV1Async(s.s, s.Item2);
+                                            })
+                                            .TraverseSerial(s => s)
+                                            .Map(s =>
+                                                s.Traverse(s1 => s1.Codes)
+                                                .Map(s1 => s1.SelectMany(s => s))
+                                            )
+                                        //.Map(s => s.SelectMany(d => d.Codes).DistinctBy(d => d.Index)) // 看看要不要考虑重复位置
+                                        )
+                                    .TraverseSerial(s => s)
+                                    .Map(s =>
+                                            s.Traverse(s1 => s1)
+                                    //.Map(s1 => s1.SelectMany(s2 => s2))
+                                    );
         }
     }
 }
