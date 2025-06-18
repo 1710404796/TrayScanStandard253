@@ -239,7 +239,7 @@ namespace TrayScanStandard.ViewModel
             UpdateResult();
             Update();
         }
-        byte[] tempImg = [];
+        public byte[] tempImg = [];
         private Option<CodeDetectResult> _tempResult = None;
 
         [RelayCommand]

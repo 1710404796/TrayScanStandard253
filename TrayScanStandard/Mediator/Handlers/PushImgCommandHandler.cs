@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace TrayScanStandard.Mediator.Handlers
             for (int i = 0; i < request.Imgs.Length; i++)
             {
                 scanCameraService.Image2DViewModels[i].ResultImg = request.Imgs[i];
+                scanCameraService.Image2DViewModels[i].tempImg = File.ReadAllBytes(request.Imgs[i]);
                 scanCameraService.Image2DViewModels[i].Update();
                 scanCameraService.Image2DViewModels[i].UpdateResult();
             }
