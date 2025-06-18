@@ -1,5 +1,6 @@
 ﻿using Camera.Fs.Common;
 using HKCamera.Fs.NET.Controls;
+using LinxUniverse.Utils;
 using MediatR;
 using MugenCamera;
 using System;
@@ -23,8 +24,8 @@ namespace TrayScanStandard.Mediator.Handlers
             {
                 return Either<string, IEnumerable<ImageData[]>>.Right
                ([..request.CaptureInfos
-               .Select(s => new ImageData[]
-                       { new ImageData(File.ReadAllBytes(@"D:\testImg\right.png"))
+               .Select((s, i) => new ImageData[]
+                       { new ImageData(File.ReadAllBytes( @$"testImg\{i}.png"))
                        }
                  )
                ]).Apply(Task.FromResult);

@@ -340,7 +340,7 @@ namespace TrayScanStandard.ViewModel
                 Right: r =>
                 {
                     var img = tempImg  = r.First().First().Data; // 对结果要验证一下 加个验证器
-                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.jpg";
+                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.png";
                     File.WriteAllBytes(name, img);
                     ResultImg = FilenameHelper.AppPath + "/" + name;
                 },

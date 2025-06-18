@@ -6,14 +6,15 @@ using LinxUniverse.Utils;
 using LinxUniverse.VM;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MugenCodeDetecter;
 using RPDelectPallet.Meditor.Queries;
 using System.Data;
+using System.Text;
+using System.Windows;
 using TrayScanStandard.Attritubes;
+using TrayScanStandard.Data;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
-using MugenCodeDetecter;
-using TrayScanStandard.Data;
-using System.Windows;
 using VMWebAIClient;
 
 namespace TrayScanStandard.Mediator.Handlers
@@ -35,6 +36,7 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
         {
+            FilenameHelper.CreateDir("InsertLog");
             FilenameHelper.CreateDir("Data2D");
 
             foreach (var item in Enum.GetValues<PowerEnum>())
@@ -52,6 +54,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     }
                 }
             }
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
             foreach (var item in Enum.GetNames<RoleEnum>())

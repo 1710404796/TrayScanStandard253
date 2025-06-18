@@ -22,7 +22,7 @@ namespace TrayScanStandard.Mediator.Handlers
 
             var data = request.Params.Select((p, i) =>
             {
-                var path = $"{FilenameHelper.AppPath}Data2D\\Detect-{FilenameHelper.FileName}-{i}.jpg";
+                var path = $"{FilenameHelper.AppPath}Data2D\\Detect-{FilenameHelper.FileName}-{i}.png";
                 File.WriteAllBytes(path, p.ImageByte);
                 return vMWebAIClient.DetectCodesV1Async(path, p.ROIS, cancellationToken);
             }
