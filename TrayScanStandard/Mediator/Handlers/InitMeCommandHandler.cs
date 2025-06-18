@@ -36,6 +36,7 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
         {
+            FilenameHelper.CreateDir("DataFrame");
             FilenameHelper.CreateDir("InsertLog");
             FilenameHelper.CreateDir("Data2D");
 
