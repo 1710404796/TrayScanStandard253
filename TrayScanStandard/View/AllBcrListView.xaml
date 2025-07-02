@@ -44,11 +44,10 @@
             <Button  x:Name="Clear" Click="Clear_Click"
                     Content="{x:Static lang:Resources.ClearDebuggingData}"/>
             <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" x:Name="Ratio" FontSize="24"></TextBlock>
-        </StackPanel>
-        <ScrollViewer Grid.Row="2">
-            <WrapPanel x:Name="BcrPanel">
+        </StackPanel>        <ScrollViewer Grid.Row="2">
+            <Canvas x:Name="BcrPanel" Background="Transparent">
                 
-            </WrapPanel>
+            </Canvas>
         </ScrollViewer>
     </Grid>
 </Page>

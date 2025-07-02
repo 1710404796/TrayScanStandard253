@@ -86,6 +86,9 @@ namespace TrayScanStandard.Mediator.Handlers
             //    .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
             var algores = await vmWebAIClient.CreateAlgoAsync(FilenameHelper.AppPath + @"test.sol", LinxUniverse.Algo.Common.DetectType.VisionMaster);
 
+            logger.LogInformation("算法加载结果: {Result}", algores);
+
+
             if (MainStorage.CST == null) 
             { 
                 logger.LogError("光源初始化失败");

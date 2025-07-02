@@ -22,7 +22,6 @@ using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 using TrayScanStandard.ViewModel;
 
-
 namespace TrayScanStandard.View
 {
     /// <summary>
@@ -38,14 +37,19 @@ namespace TrayScanStandard.View
         private readonly ILogger<AllBcrListView> logger;
         private readonly LinxContext linxContext;
 
-        CancellationTokenSource _cts;
+        CancellationTokenSource? _cts;
 
-        public int DebugExp {  get; set; }
+        // 拖拽相关变量
+        private bool _isDragging = false;
+        private BcrBorder? _draggingElement = null;
+        private Point _lastMousePosition;
+
+        public int DebugExp { get; set; }
 
         public AllBcrListView()
         {
             DataContext = this;
-            CRService = App.GetService<ScanCameraService>();   
+            CRService = App.GetService<ScanCameraService>();
             meditor = App.GetService<IMediator>();
             logger = App.GetService<ILogger<AllBcrListView>>();
             linxContext = App.GetService<LinxContext>();
@@ -57,18 +61,135 @@ namespace TrayScanStandard.View
             UpdateRatio();
 
             int idx = 0;
+            double x = 10, y = 10; // 初始位置
+            int itemsPerRow = 3; // 每行显示3个
+            double itemWidth = 320, itemHeight = 320;
+            double spacing = 10;
+
             foreach (var item in CRService.BcrBorderViewModels)
             {
                 int i = idx;
-                var bborder = new BcrBorder(item) { Width = 320, Height = 320, Margin = new Thickness(5) };
+                var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
+
+                // 在Canvas中设置位置
+                Canvas.SetLeft(bborder, x);
+                Canvas.SetTop(bborder, y);
+
+                // 添加拖拽事件
+                bborder.MouseLeftButtonDown += BcrBorder_MouseLeftButtonDown;
+                bborder.MouseLeftButtonUp += BcrBorder_MouseLeftButtonUp;
+                bborder.MouseMove += BcrBorder_MouseMove;
 
                 BcrPanel.Children.Add(bborder);
                 bborder.MouseDoubleClick += (o, s) => Bborder_MouseDoubleClick(i);
                 _borderList.Add(bborder);
 
+                // 计算下一个位置
+                x += itemWidth + spacing;
+                if ((idx + 1) % itemsPerRow == 0)
+                {
+                    x = 10;
+                    y += itemHeight + spacing;
+                }
+
                 idx++;
             }
+
+            // 设置Canvas背景鼠标事件
+            BcrPanel.MouseLeftButtonUp += Canvas_MouseLeftButtonUp;
+            BcrPanel.MouseMove += Canvas_MouseMove;
         }
+
+        #region 拖拽功能实现
+
+        private void BcrBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as BcrBorder;
+            if (border != null && e.ClickCount == 1) // 单击才开始拖拽，双击交给双击事件处理
+            {
+                _isDragging = true;
+                _draggingElement = border;
+                _lastMousePosition = e.GetPosition(BcrPanel);
+                border.CaptureMouse();
+                
+                // 将当前元素置于最顶层
+                Panel.SetZIndex(border, 1000);
+                
+                e.Handled = true;
+            }
+        }
+
+        private void BcrBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isDragging && _draggingElement != null)
+            {
+                _isDragging = false;
+                _draggingElement.ReleaseMouseCapture();
+                Panel.SetZIndex(_draggingElement, 0); // 恢复正常层级
+                _draggingElement = null;
+                e.Handled = true;
+            }
+        }
+
+        private void BcrBorder_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isDragging && _draggingElement != null && e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point currentPosition = e.GetPosition(BcrPanel);
+                
+                // 计算移动距离
+                double deltaX = currentPosition.X - _lastMousePosition.X;
+                double deltaY = currentPosition.Y - _lastMousePosition.Y;
+                
+                // 获取当前位置
+                double left = Canvas.GetLeft(_draggingElement);
+                double top = Canvas.GetTop(_draggingElement);
+                
+                // 处理NaN值（第一次设置时可能为NaN）
+                if (double.IsNaN(left)) left = 0;
+                if (double.IsNaN(top)) top = 0;
+                
+                // 计算新位置
+                double newLeft = left + deltaX;
+                double newTop = top + deltaY;
+                
+                // 边界检查，防止拖拽出Canvas范围
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + _draggingElement.Width > BcrPanel.ActualWidth && BcrPanel.ActualWidth > 0)
+                    newLeft = BcrPanel.ActualWidth - _draggingElement.Width;
+                if (newTop + _draggingElement.Height > BcrPanel.ActualHeight && BcrPanel.ActualHeight > 0)
+                    newTop = BcrPanel.ActualHeight - _draggingElement.Height;
+                
+                // 设置新位置
+                Canvas.SetLeft(_draggingElement, newLeft);
+                Canvas.SetTop(_draggingElement, newTop);
+                
+                _lastMousePosition = currentPosition;
+                e.Handled = true;
+            }
+        }
+
+        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isDragging && _draggingElement != null)
+            {
+                _isDragging = false;
+                _draggingElement.ReleaseMouseCapture();
+                Panel.SetZIndex(_draggingElement, 0);
+                _draggingElement = null;
+            }
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isDragging && _draggingElement != null && e.LeftButton == MouseButtonState.Pressed)
+            {
+                BcrBorder_MouseMove(_draggingElement, e);
+            }
+        }
+
+        #endregion
 
         private void UpdateRatio()
         {
@@ -77,43 +198,35 @@ namespace TrayScanStandard.View
 
         private void Bborder_MouseDoubleClick(int idx)
         {
-            MainWindow.NageTo(new Image2DView(CRService.Image2DViewModels[idx]) );
-            //MessageBox.Show("双击");
+            // 双击事件，只有在非拖拽状态下才触发
+            if (!_isDragging)
+            {
+                MainWindow.NageTo(new Image2DView(CRService.Image2DViewModels[idx]));
+            }
         }
 
         private BcrBorder CreateBorder(BcrBorderViewModel viewModel)
         {
             var bborder = new BcrBorder(viewModel) { Width = 200, Height = 200 };
-
             return bborder;
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            //foreach (var bborder in _borderList)
-            //{
-            //    bborder.MouseDoubleClick -= bborder.MouseDoubleClick;
-
-            //}
-            // 是不是要删除事件
+            // 清理拖拽事件
+            foreach (var bborder in _borderList)
+            {
+                bborder.MouseLeftButtonDown -= BcrBorder_MouseLeftButtonDown;
+                bborder.MouseLeftButtonUp -= BcrBorder_MouseLeftButtonUp;
+                bborder.MouseMove -= BcrBorder_MouseMove;
+            }
 
             _cts?.Cancel();
-
-
         }
 
         private async void AllCapture_Click(object sender, RoutedEventArgs e)
         {
-
-
-
-            //Parallel.ForEach(CRService.Image2DViewModels, vm =>
-            //{
-            //    vm.Capture();
-            //});
-            //await Task.Yield();
-
-            (sender as Button).IsEnabled = false;
+            (sender as Button)!.IsEnabled = false;
 
             try
             {
@@ -122,7 +235,6 @@ namespace TrayScanStandard.View
                     Right: r =>
                     {
                         logger.LogInformation("结果: {0}", r.Channels);
-
                     },
                     Left: l =>
                     {
@@ -131,34 +243,14 @@ namespace TrayScanStandard.View
                     }
                     );
 
-                //var batterylist = linxContext.BatteryTypeInfos.ToArray();
-                //BatteryInfo batteryInfo = batterylist.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBattery);
-
-                //var regions = batteryInfo.Regions.SelectMany(s => s).Select(s => s.ChannelIdx);
-                //var cnt = regions.Count() == 0 ? 0 : regions.Max();
-                //logger.LogInformation("总通道数{cnt}", cnt);
-                //var channels = Enumerable.Range(1, cnt);
-                //var resChannels = res.CodeInfos.Where(s => !string.IsNullOrWhiteSpace(s.Code)).Select(s => s.Channel).ToList();
-                //if (channels.All(s => resChannels.Contains(s)))
-                //{
-                //    MainStorage.Saves.OkCnt++;
-                //}
-
-                //MainStorage.Saves.ScanCnt++;
                 UpdateRatio();
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "error");
-
-
             }
 
-
-            (sender as Button).IsEnabled = true;
-
-            //Ratio.Text = $"成功次数: {MainStorage.Saves.OkCnt} 总次数: {MainStorage.Saves.ScanCnt} 成功率: {MainStorage.Saves.OkCnt * 1.0 / MainStorage.Saves.ScanCnt:P}%";
-        
+            (sender as Button)!.IsEnabled = true;
         }
 
         private async void ManualStart_Click(object sender, RoutedEventArgs e)
@@ -170,57 +262,31 @@ namespace TrayScanStandard.View
         private async void ManualStop_Click(object sender, RoutedEventArgs e)
         {
             //await meditor.Send(new StartDelectTaskCommand(false));
-
         }
-        static object obj = new object ();
+
+        static object obj = new object();
         private async void DebugCapture_Click(object sender, RoutedEventArgs e)
         {
-           
             if (_cts != null && !_cts.IsCancellationRequested)
             {
-                (sender as Button).Content = Properties.Resources.DebuggingQRCodeScanning;
-
+                (sender as Button)!.Content = Properties.Resources.DebuggingQRCodeScanning;
                 _cts.Cancel();
             }
             else
             {
-
-                (sender as Button).Content = Properties.Resources.StopDebugging;
-
+                (sender as Button)!.Content = Properties.Resources.StopDebugging;
                 _cts = new CancellationTokenSource();
+                
                 while (!_cts.Token.IsCancellationRequested)
                 {
                     try
                     {
-                        var res = await meditor.Send(new DelectCCDCommand(
-                            MainStorage.SelectBattery
-                            //DebugExp
-                            ));
-
-
-                        //var batterylist = linxContext.BatteryTypeInfos.ToArray();
-                        //BatteryTypeInfo batteryInfo = batterylist.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
-
-                        //var regions = batteryInfo.Regions.SelectMany(s => s).Select(s => s.ChannelIdx);
-                        //var cnt = regions.Count() == 0 ? 0 : regions.Max();
-
-
-                        //logger.LogInformation("总通道数{cnt}", cnt);
-                        //var channels = Enumerable.Range(1, cnt);
-                        //var resChannels = res.CodeInfos.Where(s => !string.IsNullOrWhiteSpace(s.Code)).Select(s => s.Channel).ToList();
-                        //if (channels.All(s => resChannels.Contains(s)))
-                        //{
-                        //    MainStorage.Saves.OkCnt++;
-                        //}
-
-                        //MainStorage.Saves.ScanCnt++;
+                        var res = await meditor.Send(new DelectCCDCommand(MainStorage.SelectBattery));
                         UpdateRatio();
                     }
                     catch (Exception ex)
                     {
                         logger.LogError(ex, "error");
-
-
                     }
                     finally
                     {
@@ -228,14 +294,12 @@ namespace TrayScanStandard.View
                     }
                 }
             }
-        
-
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             //MainStorage.Saves.OkCnt = MainStorage.Saves.ScanCnt = 0;    
-            UpdateRatio() ;
+            UpdateRatio();
         }
     }
 }
