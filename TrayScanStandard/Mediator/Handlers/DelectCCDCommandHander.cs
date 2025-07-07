@@ -59,7 +59,7 @@ namespace TrayScanStandard.Mediator.Handlers
                                                 }).ToArray()
                                             ).ToArray()
                                     );
-                ;
+            ;
             Console.WriteLine("testdataFilenames");
             dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
             dataFilenames.IfRight(s => { Console.WriteLine(s.FirstOrDefault()?.Count().ToString() ?? "dani"); });
@@ -71,11 +71,9 @@ namespace TrayScanStandard.Mediator.Handlers
                         .Map(
                             imgs => imgs.Item1
                                 .Map(s =>
-                                        (
-                                        s,
-                                        imgs.Item2
-                                            .Map(s => s.ToROI())
-                                            .ToArray()
+                                        ( s, imgs.Item2
+                                                .Map(s => s.ToROI())
+                                                .ToArray()
                                         )
                                     )
                                 .Map(s =>
@@ -92,11 +90,11 @@ namespace TrayScanStandard.Mediator.Handlers
                         .TraverseSerial(s => s)
                         .Map(s =>
                                 s.Traverse(s1 => s1)
-                                    //.Map(s1 => s1.SelectMany(s2 => s2))
+                        //.Map(s1 => s1.SelectMany(s2 => s2))
                         )
                     // 这里merge一下
                     ))
-                    //.Map(res => res.DistinctBy(s => s.Index))
+                //.Map(res => res.DistinctBy(s => s.Index))
 
                 ;
             res.Iter(s =>
@@ -105,14 +103,19 @@ namespace TrayScanStandard.Mediator.Handlers
                     {
                         d.Item2.TempResult = new CodeDetectResult(d.Item1.ToArr());
                     })
-            );            var res1 = res.Map(r => 
+            );
+            var res1 = res.Map(r =>
                 r.SelectMany(s => s)
                 .DistinctBy(s => s.Index)
                 ).Map(s => new DetectResult(s.ToArr()));
 
+
+
+
             // 保存数据帧
             dataFilenames.IfRight(f =>
-            {                res1.IfRight(async detectResult =>
+            {
+                res1.IfRight(async detectResult =>
                 {
                     // 构建CamImages数组
                     var camImages = f.Select((imageFiles, cameraIndex) =>
@@ -128,25 +131,25 @@ namespace TrayScanStandard.Mediator.Handlers
                                 () => $"Camera_{cameraIndex + 1}"   // 如果相机不存在，使用默认序列号
                             );
                         }
-                          // 获取当前相机的曝光设置数组（每个相机的曝光设置是固定的）
+                        // 获取当前相机的曝光设置数组（每个相机的曝光设置是固定的）
                         var cameraExposureArray = scanCameraService.Image2DViewModels[cameraIndex].CameraSetting.Exposure;
-                        
+
                         var imageInfos = imageFiles.Select((imagePath, imageIndex) =>
                         {
                             // 从曝光数组中选择对应的曝光值，如果索引超出范围则使用第一个值
                             var exposure = imageIndex < cameraExposureArray.Length ? cameraExposureArray[imageIndex] : cameraExposureArray[0];
                             return new ImageInfo(imagePath, exposure);
                         }).ToArray();
-                        
+
                         return new CamImages(cameraSerial, imageInfos);
                     }).ToArray();
-                    
+
                     // 构建CodeInfo数组，直接使用detectResult.Channels中的CodeInfo
                     var codeInfos = detectResult.Channels.ToArray();
-                    
+
                     // 创建数据帧
                     var dataFrame = new DataFrame(camImages, request.BatteryTypeInfo, codeInfos);
-                    
+
                     // 发送保存命令
                     await mediator.Send(new SaveDataFrameCommand(dataFrame));
                 });
@@ -156,7 +159,7 @@ namespace TrayScanStandard.Mediator.Handlers
             imageDisplayViewModel.XYLStation.ClearStage();
             res1.Iter(s =>
                 s.Channels.Iter
-                    ( async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
+                    (async c => await imageDisplayViewModel.XYLStation.BindBattery(c.Index - 1, c.Code, true, Models.BatteryLevel.OK)
                     )
              );
 
