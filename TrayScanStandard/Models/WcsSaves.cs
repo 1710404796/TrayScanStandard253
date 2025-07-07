@@ -66,10 +66,14 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// 工位设置 // 防止有多工位的
         /// </summary>
-        public StageSetting StageSetting { get; set; } = new();
-        public int SelectBatteryId { get; set; } = 0;
+        public StageSetting StageSetting { get; set; } = new();        public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
         public bool CameraEnable { get; set; } = false;
+        
+        /// <summary>
+        /// BcrBorder控件的位置信息
+        /// </summary>
+        public Dictionary<int, BcrPosition> BcrPositions { get; set; } = new();
     }
 
     public record LightInfo(string Com, int[] Values);
@@ -208,6 +212,16 @@ namespace TrayScanStandard.Models
         public string DeviceCode { get; set; } = "ccd";
     }
 
+    /// <summary>
+    /// BcrBorder控件的位置信息
+    /// </summary>
+    public class BcrPosition
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Width { get; set; } = 320;
+        public double Height { get; set; } = 320;
+    }
 
     public class BarCodeRegionInfo
     {

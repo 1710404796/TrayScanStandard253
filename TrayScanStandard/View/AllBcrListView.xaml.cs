@@ -19,6 +19,7 @@ using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Models;
 using TrayScanStandard.Service;
 using TrayScanStandard.ViewModel;
 
@@ -36,7 +37,7 @@ namespace TrayScanStandard.View
         private readonly IMediator meditor;
         private readonly ILogger<AllBcrListView> logger;
         private readonly LinxContext linxContext;
-
+        WcsSaves WcsSaves => MainStorage.Saves;
         CancellationTokenSource? _cts;
 
         // 拖拽相关变量
@@ -71,9 +72,29 @@ namespace TrayScanStandard.View
                 int i = idx;
                 var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
 
-                // 在Canvas中设置位置
-                Canvas.SetLeft(bborder, x);
-                Canvas.SetTop(bborder, y);
+                // 检查是否有保存的位置信息
+                if (WcsSaves.BcrPositions.ContainsKey(idx))
+                {
+                    var savedPosition = WcsSaves.BcrPositions[idx];
+                    Canvas.SetLeft(bborder, savedPosition.X);
+                    Canvas.SetTop(bborder, savedPosition.Y);
+                    bborder.Width = savedPosition.Width;
+                    bborder.Height = savedPosition.Height;
+                }
+                else
+                {
+                    // 使用默认位置
+                    Canvas.SetLeft(bborder, x);
+                    Canvas.SetTop(bborder, y);
+                    
+                    // 计算下一个位置
+                    x += itemWidth + spacing;
+                    if ((idx + 1) % itemsPerRow == 0)
+                    {
+                        x = 10;
+                        y += itemHeight + spacing;
+                    }
+                }
 
                 // 添加拖拽事件
                 bborder.MouseLeftButtonDown += BcrBorder_MouseLeftButtonDown;
@@ -83,14 +104,6 @@ namespace TrayScanStandard.View
                 BcrPanel.Children.Add(bborder);
                 bborder.MouseDoubleClick += (o, s) => Bborder_MouseDoubleClick(i);
                 _borderList.Add(bborder);
-
-                // 计算下一个位置
-                x += itemWidth + spacing;
-                if ((idx + 1) % itemsPerRow == 0)
-                {
-                    x = 10;
-                    y += itemHeight + spacing;
-                }
 
                 idx++;
             }
@@ -117,15 +130,17 @@ namespace TrayScanStandard.View
                 
                 e.Handled = true;
             }
-        }
-
-        private void BcrBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        }        private void BcrBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_isDragging && _draggingElement != null)
             {
                 _isDragging = false;
                 _draggingElement.ReleaseMouseCapture();
                 Panel.SetZIndex(_draggingElement, 0); // 恢复正常层级
+                
+                // 保存位置信息
+                SaveBcrPosition(_draggingElement);
+                
                 _draggingElement = null;
                 e.Handled = true;
             }
@@ -186,6 +201,35 @@ namespace TrayScanStandard.View
             if (_isDragging && _draggingElement != null && e.LeftButton == MouseButtonState.Pressed)
             {
                 BcrBorder_MouseMove(_draggingElement, e);
+            }
+        }
+
+        /// <summary>
+        /// 保存BcrBorder的位置信息
+        /// </summary>
+        /// <param name="border"></param>
+        private void SaveBcrPosition(BcrBorder border)
+        {
+            // 找到这个border在列表中的索引
+            int index = _borderList.IndexOf(border);
+            if (index >= 0)
+            {
+                var position = new BcrPosition
+                {
+                    X = Canvas.GetLeft(border),
+                    Y = Canvas.GetTop(border),
+                    Width = border.Width,
+                    Height = border.Height
+                };
+
+                // 处理NaN值
+                if (double.IsNaN(position.X)) position.X = 0;
+                if (double.IsNaN(position.Y)) position.Y = 0;
+
+                WcsSaves.BcrPositions[index] = position;
+                
+                // 保存到文件
+                MainStorage.SaveManager.Save();
             }
         }
 
@@ -257,9 +301,7 @@ namespace TrayScanStandard.View
         {
             await Task.Yield();
             //await meditor.Send(new StartDelectTaskCommand(true));
-        }
-
-        private async void ManualStop_Click(object sender, RoutedEventArgs e)
+        }        private void ManualStop_Click(object sender, RoutedEventArgs e)
         {
             //await meditor.Send(new StartDelectTaskCommand(false));
         }
