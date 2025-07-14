@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using LanguageExt.Pipes;
+using LinxUniverse.DI;
+using MediatR;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,13 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using LinxUniverse.DI;
-using MediatR;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Queries;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
+using VMWebAIClient;
 
 namespace TrayScanStandard
 {
@@ -28,6 +30,8 @@ namespace TrayScanStandard
         {
             get; set;
         }
+        public IVMWebAIClient VMClient { get; }
+
         public MainWindow()
         {
             MainStorage.SaveManager.Load();
@@ -35,6 +39,7 @@ namespace TrayScanStandard
 
             DataContext = this;
             ViewModel = App.GetService<MainViewModel>();
+            VMClient = App.GetService<IVMWebAIClient>();
             InitializeComponent();
         }
 
@@ -177,6 +182,7 @@ namespace TrayScanStandard
             }
             if (await mediator.Send(new CheckPowerQuery(PowerEnum.关闭软件)))
             {
+                await VMClient.Exit();
                 e.Cancel = false;
             }
             else

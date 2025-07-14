@@ -279,6 +279,7 @@ namespace TrayScanStandard
 
         protected override void OnExit(ExitEventArgs e)
         {
+
             manager?.Dispose();
         }
     }

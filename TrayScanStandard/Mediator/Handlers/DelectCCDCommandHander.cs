@@ -48,7 +48,7 @@ namespace TrayScanStandard.Mediator.Handlers
 
             // 实现数据帧暂存
 
-            var dataFilenames = data.Map((IEnumerable<ImageData[]> d) =>
+            var dataFilenames = data.Map((IEnumerable<Image2DResult[]> d) =>
                                         d.Map(
                                             (ci, s) =>
                                                 s.Map((ei, s1) =>
@@ -74,10 +74,11 @@ namespace TrayScanStandard.Mediator.Handlers
                                         ( s, imgs.Item2
                                                 .Map(s => s.ToROI())
                                                 .ToArray()
-                                        )
+                                        ) 
                                     )
                                 .Map(s =>
                                 {
+                                    logger.LogInformation("检测{idx}图片", s.s);
                                     return vMWebAIClient.DetectCodesV1Async(s.s, s.Item2);
                                 })
                                 .TraverseSerial(s => s)

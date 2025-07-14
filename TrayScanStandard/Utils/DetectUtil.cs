@@ -80,7 +80,7 @@ namespace TrayScanStandard.Utils
         }
 
 
-        public static Either<string, ImageData> CaptureOne(this MugenCamera.MugenCamera mugenCamera)
+        public static Either<string, Image2DResult> CaptureOne(this MugenCamera.MugenCamera mugenCamera)
         {
             // Define the specific action: Software Trigger then Capture
 
@@ -88,7 +88,7 @@ namespace TrayScanStandard.Utils
                 UseCamera(mugenCamera, 
                     cam =>
                     cam.SoftwareTrigger() // Assuming SoftwareTrigger returns Either<string, MugenCamera>
-                       .Bind(s => s.Capture(TimeSpan.FromSeconds(3))));
+                       .Bind(s => s.Capture(TimeSpan.FromSeconds(3)).Map(s => (s as Image2DResult)!)));
             // Use the helper method to execute the action within a session
             //return ;
         }
@@ -101,7 +101,7 @@ namespace TrayScanStandard.Utils
         //    cam = cam.Bind(s => s.StopGrab());
         //    return cam.Bind(s => img);
         //}
-        public static Either<string, IEnumerable<ImageData>> Capture(MugenCamera.MugenCamera[] mugenCameras)
+        public static Either<string, IEnumerable<Image2DResult>> Capture(MugenCamera.MugenCamera[] mugenCameras)
         {
             return UseLight(
                 () =>
