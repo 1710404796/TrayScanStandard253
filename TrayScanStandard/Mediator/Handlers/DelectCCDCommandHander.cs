@@ -73,7 +73,7 @@ namespace TrayScanStandard.Mediator.Handlers
                 var d = f.Select(s => s.First());
 
                 mediator.Send(new PushImgCommand(d.ToArray()));
-
+            });
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
                         camImgs
@@ -174,13 +174,13 @@ namespace TrayScanStandard.Mediator.Handlers
                     )
              );
 
-            dataFilenames.IfRight(f =>
-            {
-                var d = f.Select(s => s.First());
+            //dataFilenames.IfRight(f =>
+            //{
+            //    var d = f.Select(s => s.First());
 
-                mediator.Send(new PushImgCommand(d.ToArray()));
+            //    mediator.Send(new PushImgCommand(d.ToArray()));
 
-            });
+            //});
             return res1;
             //).Traverse(s => s)
             //    ));

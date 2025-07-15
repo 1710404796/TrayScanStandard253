@@ -18,8 +18,11 @@
 
             <StackPanel VerticalAlignment="Center"
                      HorizontalAlignment="Center"
+                       
          >
-                <StackPanel >
+                <StackPanel 
+                     Orientation="Horizontal"
+                    >
                     <TextBlock HorizontalAlignment="Center"
                             FontSize="20"
                             Margin="5"
