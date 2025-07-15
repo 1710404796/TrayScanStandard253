@@ -74,6 +74,7 @@ namespace TrayScanStandard.Models
         /// BcrBorder控件的位置信息
         /// </summary>
         public Dictionary<int, BcrPosition> BcrPositions { get; set; } = new();
+        public bool IsAlgoEnable { get; set; } = true;
     }
 
     public record LightInfo(string Com, int[] Values);

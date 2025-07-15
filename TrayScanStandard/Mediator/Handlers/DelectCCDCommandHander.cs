@@ -63,6 +63,16 @@ namespace TrayScanStandard.Mediator.Handlers
             Console.WriteLine("testdataFilenames");
             dataFilenames.IfRight(s => { Console.WriteLine(s.Count()); });
             dataFilenames.IfRight(s => { Console.WriteLine(s.FirstOrDefault()?.Count().ToString() ?? "dani"); });
+            var tempResult = new DetectResult(
+                Enumerable.Range(0, request.BatteryTypeInfo.Count)
+                        .Select(s => new CodeInfo($"Test{s:000}", s, new())).ToArr()
+                );
+
+            dataFilenames.IfRight(f =>
+            {
+                var d = f.Select(s => s.First());
+
+                mediator.Send(new PushImgCommand(d.ToArray()));
 
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
