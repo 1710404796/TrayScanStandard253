@@ -36,6 +36,8 @@ namespace TrayScanStandard.View
 
         public BcrBorderViewModel ViewModel { get; }
 
+        
+
         /// <summary>
         /// 设置
         /// </summary>

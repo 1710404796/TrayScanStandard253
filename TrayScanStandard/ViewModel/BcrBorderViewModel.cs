@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Camera.Fs.Common;
+using CommunityToolkit.Mvvm.ComponentModel;
+using MugenCamera;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace TrayScanStandard.ViewModel
     {
         [ObservableProperty]
         [NotifyPropertyChangedFor("BorderBrush")]
+        [NotifyPropertyChangedFor("Code")]
         [NotifyPropertyChangedFor("ConnectText")]
         private bool _isConnect = false;
 
@@ -20,6 +23,7 @@ namespace TrayScanStandard.ViewModel
         public string ConnectText => IsConnect ? Properties.Resources.Connected : Properties.Resources.Disconnect;
 
         public CameraSetting BcrInfo => Image2DViewModel.CameraSetting;
+        public string Code => ((BcrInfo.CameraAddresses as HKAddress)?.ConnectAddress as Key)?.Value ?? "";
 
         public int CameraIdx => Image2DViewModel?.CameraIdx ?? 0;
 

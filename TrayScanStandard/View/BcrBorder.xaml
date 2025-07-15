@@ -26,6 +26,13 @@
                             Text="{Binding ViewModel.ConnectText}"
                             Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
                  ></TextBlock>
+
+                    <TextBlock HorizontalAlignment="Center"
+           FontSize="20"
+           Margin="5"
+           Text="{Binding ViewModel.Code}"
+           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+></TextBlock>
                 </StackPanel>
                 <Viewbox 
                     IsHitTestVisible="False"
