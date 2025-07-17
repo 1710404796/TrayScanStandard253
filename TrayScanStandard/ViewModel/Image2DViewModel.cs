@@ -55,8 +55,8 @@ namespace TrayScanStandard.ViewModel
                 _tempResult = value;
                 Colors = Enumerable.Repeat(Brushes.Red, 128).ToArray();
                 Codes = Enumerable.Repeat("", 128).ToArray();
-                Dispatcher.CurrentDispatcher.Invoke(() =>
-                {
+                //Dispatcher.CurrentDispatcher.Invoke(() =>
+                //{
                     if (value.IsSome)
                     {
                         var r = value.First();
@@ -73,7 +73,7 @@ namespace TrayScanStandard.ViewModel
                     {
                         RatioText = string.Empty;
                     }
-                });
+                //});
             }
         }
         public int DebugExpoure
