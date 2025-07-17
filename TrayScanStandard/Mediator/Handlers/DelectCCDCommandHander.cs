@@ -5,6 +5,7 @@ using LinxUniverse.Algo.Common;
 using LinxUniverse.Utils;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MugenCamera;
 using MugenCodeDetecter;
 using System;
 using System.Collections.Generic;
@@ -129,48 +130,61 @@ namespace TrayScanStandard.Mediator.Handlers
 
             logger.LogInformation("保存数据帧");
 
+            //from f in dataFilenames
+            //from detectResult in res1
+
+
             // 保存数据帧
-            //dataFilenames.IfRight(f =>
-            //{
-            //    res1.IfRight(async detectResult =>
-            //    {
-            //        // 构建CamImages数组
-            //        var camImages = f.Select((imageFiles, cameraIndex) =>
-            //        {
-            //            // 获取相机序列号，如果没有则使用默认值
-            //            var cameraSerial = $"Camera_{cameraIndex + 1}";
-            //            if (cameraIndex < scanCameraService.MugenCameras.Length)
-            //            {
-            //                var camera = scanCameraService.MugenCameras[cameraIndex];
-            //                // 这里假设MugenCamera有Serial属性，如果没有则使用默认序列号
-            //                cameraSerial = camera.Match(
-            //                    cam => ((cam as HKCamera.Fs.NET.HKCamera).Address as Key).Value, // 如果相机存在，使用索引作为序列号
-            //                    () => $"Camera_{cameraIndex + 1}"   // 如果相机不存在，使用默认序列号
-            //                );
-            //            }
-            //            // 获取当前相机的曝光设置数组（每个相机的曝光设置是固定的）
-            //            var cameraExposureArray = scanCameraService.Image2DViewModels[cameraIndex].CameraSetting.Exposure;
+            dataFilenames.IfRight(f =>
+            {
+                res1.IfRight(async detectResult =>
+                {
+                    // 构建CamImages数组
+                    try
+                    {
+                        var camImages = f.Select((imageFiles, cameraIndex) =>
+                        {
+                            // 获取相机序列号，如果没有则使用默认值
+                            var cameraSerial = $"Camera_{cameraIndex + 1}";
+                            if (cameraIndex < scanCameraService.MugenCameras.Length)
+                            {
+                                var camera = scanCameraService.MugenCameras[cameraIndex];
+                                // 这里假设MugenCamera有Serial属性，如果没有则使用默认序列号
+                                cameraSerial = camera.Match(
+                                    cam => ((cam as HikVision)?.Cam?.Address as Key)?.Value ?? $"Camera_{cameraIndex + 1}", // 如果相机存在，使用索引作为序列号
+                                    () => $"Camera_{cameraIndex + 1}"   // 如果相机不存在，使用默认序列号
+                                );
+                            }
+                            // 获取当前相机的曝光设置数组（每个相机的曝光设置是固定的）
+                            var cameraExposureArray = scanCameraService.Image2DViewModels[cameraIndex].CameraSetting.Exposure;
 
-            //            var imageInfos = imageFiles.Select((imagePath, imageIndex) =>
-            //            {
-            //                // 从曝光数组中选择对应的曝光值，如果索引超出范围则使用第一个值
-            //                var exposure = imageIndex < cameraExposureArray.Length ? cameraExposureArray[imageIndex] : cameraExposureArray[0];
-            //                return new ImageInfo(imagePath, exposure);
-            //            }).ToArray();
+                            var imageInfos = imageFiles.Select((imagePath, imageIndex) =>
+                            {
+                                // 从曝光数组中选择对应的曝光值，如果索引超出范围则使用第一个值
+                                var exposure = imageIndex < cameraExposureArray.Length ? cameraExposureArray[imageIndex] : cameraExposureArray[0];
+                                return new ImageInfo(imagePath, exposure);
+                            }).ToArray();
 
-            //            return new CamImages(cameraSerial, imageInfos);
-            //        }).ToArray();
+                            return new CamImages(cameraSerial, imageInfos);
+                        }).ToArray();
 
-            //        // 构建CodeInfo数组，直接使用detectResult.Channels中的CodeInfo
-            //        var codeInfos = detectResult.Channels.ToArray();
+                        // 构建CodeInfo数组，直接使用detectResult.Channels中的CodeInfo
+                        var codeInfos = detectResult.Channels.ToArray();
 
-            //        // 创建数据帧
-            //        var dataFrame = new DataFrame(camImages, request.BatteryTypeInfo, codeInfos);
+                        // 创建数据帧
+                        var dataFrame = new DataFrame(camImages, request.BatteryTypeInfo, codeInfos);
+                        await mediator.Send(new SaveDataFrameCommand(dataFrame));
 
-            //        // 发送保存命令
-            //        await mediator.Send(new SaveDataFrameCommand(dataFrame));
-            //    });
-            //});
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "存数据帧错误");
+                    }
+                    
+
+                    // 发送保存命令
+                });
+            });
 
             // 清空一下？
             imageDisplayViewModel.XYLStation.ClearStage();
