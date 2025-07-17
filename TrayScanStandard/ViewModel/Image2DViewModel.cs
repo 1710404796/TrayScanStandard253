@@ -25,6 +25,7 @@ using LinxUniverse.Algo.Common;
 using Microsoft.Extensions.Logging;
 using MugenCodeDetecter;
 using VMWebAIClient;
+using System.Windows.Threading;
 
 
 namespace TrayScanStandard.ViewModel
@@ -54,22 +55,25 @@ namespace TrayScanStandard.ViewModel
                 _tempResult = value;
                 Colors = Enumerable.Repeat(Brushes.Red, 128).ToArray();
                 Codes = Enumerable.Repeat("", 128).ToArray();
-                if (value.IsSome)
+                Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
-                    var r = value.First();
-                    r.Codes.Do(s =>
+                    if (value.IsSome)
                     {
-                        if (s.Index < Colors.Length)
+                        var r = value.First();
+                        r.Codes.Do(s =>
                         {
-                            Colors[s.Index] = Brushes.Green;
-                            Codes[s.Index] = s.Code;
-                        }
-                    });
-                }
-                else
-                {
-                    RatioText = string.Empty;
-                }
+                            if (s.Index < Colors.Length)
+                            {
+                                Colors[s.Index] = Brushes.Green;
+                                Codes[s.Index] = s.Code;
+                            }
+                        });
+                    }
+                    else
+                    {
+                        RatioText = string.Empty;
+                    }
+                });
             }
         }
         public int DebugExpoure
