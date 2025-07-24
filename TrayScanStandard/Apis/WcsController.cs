@@ -35,13 +35,15 @@ namespace TrayScanStandard.Apis
                 r =>
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
-                    var batteryCodes = Enumerable.Range(1, r.Channels.Count)
+                    var batteryCodes = Enumerable.Range(1, MainStorage.SelectBattery.Count)
                         .Select(s => codes.GetValueOrDefault(s, ""))
                         .ToList();
                     var log = new PalletLog
                     {
                         Column = MainStorage.SelectBattery.Column, // 这里要可派之
                         PalletType = Models.CZPallet.PalletType.组盘,
+
+                        ChannelCount = MainStorage.SelectBattery.Count,
                         BatteryInfo
                             = batteryCodes.Map(s => new BatteryInfo
                             {
@@ -61,7 +63,7 @@ namespace TrayScanStandard.Apis
                 Right: r =>
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
-                    var batteryCodes = Enumerable.Range(1, r.Channels.Count)
+                    var batteryCodes = Enumerable.Range(1, MainStorage.SelectBattery.Count)
                         .Select(s => codes.GetValueOrDefault(s, ""))
                         .ToList(); // Todo: 如何简化
                     return new QRCodeResult()

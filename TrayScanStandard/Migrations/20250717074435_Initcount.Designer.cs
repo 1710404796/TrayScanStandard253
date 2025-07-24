@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrayScanStandard.Data;
 
@@ -10,9 +11,11 @@ using TrayScanStandard.Data;
 namespace TrayScanStandard.Migrations
 {
     [DbContext(typeof(LinxContext))]
-    partial class LinxContextModelSnapshot : ModelSnapshot
+    [Migration("20250717074435_Initcount")]
+    partial class Initcount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");

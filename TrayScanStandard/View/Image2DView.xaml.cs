@@ -173,6 +173,8 @@ namespace TrayScanStandard.View
             //_context.SaveChanges();
             ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].AddRange(_rois.Select(s => s.Item2).ToList());
             var cnt = ViewModel.LinxContext.SaveChanges();
+
+            MainStorage.SelectBattery = ViewModel.SelectBattery;
             
             // 标记已保存
             ViewModel.MarkAsSaved();

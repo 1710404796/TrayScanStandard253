@@ -197,7 +197,10 @@ namespace TrayScanStandard.Mediator.Handlers
              );
             //));
             logger.LogInformation("返回数据");
-
+            foreach (var item in scanCameraService.Image2DViewModels)
+            {
+                item.Update();
+            }
             //dataFilenames.IfRight(f =>
             //{
             //    var d = f.Select(s => s.First());

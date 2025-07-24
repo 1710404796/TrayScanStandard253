@@ -28,7 +28,10 @@ namespace TrayScanStandard.ViewModel.CZPallet
 
         public void RefreshContext()
         {
-            _logs = context.PalletLogs.AsNoTracking().OrderByDescending(s => s.Id).Where(s => s.PalletType == PalletType.组盘).Take(100);
+            _logs = context
+                .PalletLogs.AsNoTracking()
+                .OrderByDescending(s => s.Id)
+                .Where(s => s.PalletType == PalletType.组盘).Take(100).ToArray();
             Search();
         }
 
