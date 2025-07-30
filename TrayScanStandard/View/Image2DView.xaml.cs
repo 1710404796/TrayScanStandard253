@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using LinxUniverse.Algo.Common;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -162,7 +163,10 @@ namespace TrayScanStandard.View
             (border.Child as TextBlock).Text = barCodeRegionInfo.ChannelIdx.ToString();
             UpdateBorderThickness(border);
             _rois.Add((border, barCodeRegionInfo));
-        }        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        }       
+        
+        
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.SelectBattery is null)
             {
@@ -298,11 +302,13 @@ namespace TrayScanStandard.View
 
         CancellationTokenSource _cancellationTokenSource;
         CancellationToken _cancellationToken;
-        private LinxContext _context;        private async void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private LinxContext _context;
+
+        private async void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 阻止事件冒泡到父级控件（防止影响大图拖动）
             e.Handled = true;
-            
+
             _cancellationTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancellationTokenSource.Token;
             Border? button = (sender as Border);
@@ -375,7 +381,9 @@ namespace TrayScanStandard.View
             DeleteBorder(_nowBorder);
             _nowBorder = null!;
             ViewModel.SelectBarCodeRegionInfo = null;
-        }        private void ClearAllBoxes_Click(object sender, RoutedEventArgs e)
+        }     
+        
+        private void ClearAllBoxes_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("确定要清理所有选定框吗？此操作将删除所有ROI选择框。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes)
@@ -409,7 +417,9 @@ namespace TrayScanStandard.View
             border.MouseLeftButtonDown -= Border_MouseLeftButtonDown;
             _rois.Remove(_rois.Find(s => s.Item1 == border));
 
-        }        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        }        
+        
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             // 检查是否有未保存的修改
             if (ViewModel.HasUnsavedChanges)
@@ -438,8 +448,24 @@ namespace TrayScanStandard.View
                 ViewModel.MarkAsSaved(); // 标记为已保存，避免重复提示
                 // 如果选择No，则不保存，直接离开
             }
-            
+            img2d.Source = null!;
+            img2d.BorderCanvas.Children.Clear();
+            img2d.ResultCanvas.Children.Clear();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+
+            foreach (var item in _rois)
+            {
+                DeleteBorder(item.Item1);
+            }
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _rois.Clear();
+            _nowBorder = null!;
+
             ViewModel.ColorUpdate -= ViewModel_ColorUpdate;
+            ViewModel.ResultUpdate -= ViewModel_ResultUpdate;
         }
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
@@ -494,6 +520,22 @@ namespace TrayScanStandard.View
             
             // 标记有未保存的修改
             ViewModel.MarkAsChanged();
+        }
+
+        // In Image2DView class (if it contains images)
+        public void Dispose()
+        {
+            // Clear any image sources
+            if (img2d != null)
+            {
+                img2d.Source = null;
+            }
+            
+            // Remove event handlers
+            // ...
+            
+            // Clear references to viewmodels
+            DataContext = null;
         }
     }
 }

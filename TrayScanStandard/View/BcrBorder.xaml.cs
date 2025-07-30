@@ -57,5 +57,15 @@ namespace TrayScanStandard.View
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
         }
+
+        public void Dispose()
+        {
+            // Remove child element and call disposal if Image2DView implements IDisposable
+            if (camview.Child is IDisposable disposableView)
+            {
+                disposableView.Dispose();
+            }
+            camview.Child = null;
+        }
     }
 }

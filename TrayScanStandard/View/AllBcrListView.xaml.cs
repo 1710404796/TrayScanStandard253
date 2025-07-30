@@ -71,7 +71,6 @@ namespace TrayScanStandard.View
             {
                 int i = idx;
                 var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
-
                 // 检查是否有保存的位置信息
                 if (WcsSaves.BcrPositions.ContainsKey(idx))
                 {
@@ -102,6 +101,7 @@ namespace TrayScanStandard.View
                 bborder.MouseMove += BcrBorder_MouseMove;
 
                 BcrPanel.Children.Add(bborder);
+
                 bborder.MouseDoubleClick += (o, s) => Bborder_MouseDoubleClick(i);
                 _borderList.Add(bborder);
 
@@ -257,15 +257,23 @@ namespace TrayScanStandard.View
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            // 清理拖拽事件
+            // Properly dispose of each BcrBorder
             foreach (var bborder in _borderList)
             {
                 bborder.MouseLeftButtonDown -= BcrBorder_MouseLeftButtonDown;
                 bborder.MouseLeftButtonUp -= BcrBorder_MouseLeftButtonUp;
                 bborder.MouseMove -= BcrBorder_MouseMove;
+                // Call dispose if you implement IDisposable
+                (bborder as IDisposable)?.Dispose();
             }
-
+            
+            _borderList.Clear();
+            BcrPanel.Children.Clear();
             _cts?.Cancel();
+            
+            // Force garbage collection after cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         private async void AllCapture_Click(object sender, RoutedEventArgs e)
@@ -342,6 +350,7 @@ namespace TrayScanStandard.View
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
+            GC.Collect();
             //MainStorage.Saves.OkCnt = MainStorage.Saves.ScanCnt = 0;    
             UpdateRatio();
         }

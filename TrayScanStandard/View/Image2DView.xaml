@@ -19,15 +19,16 @@
 
         </Grid.ColumnDefinitions>
         <Grid x:Name="ImgGrid">
+ 
             <ScrollViewer
                 HorizontalScrollBarVisibility="Auto" 
 VerticalScrollBarVisibility="Auto"
             >
+
                 <local:ResizeAbleImage
-                x:Name="img2d"
+ x:Name="img2d"
                 Source="{Binding ViewModel.ResultImg}">
                 </local:ResizeAbleImage>
-
             </ScrollViewer>
 
         </Grid>
