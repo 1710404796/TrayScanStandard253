@@ -31,6 +31,7 @@ namespace TrayScanStandard.Apis
             if (MainStorage.SelectBattery is null) return new QRCodeResult() { ErrorCode = ErrorType.SomeResultError };
 
             var data = await mediator.Send(new DelectCCDCommand(MainStorage.SelectBattery));
+            GC.Collect();
             data.IfRight(
                 r =>
                 {

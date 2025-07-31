@@ -455,10 +455,10 @@ namespace TrayScanStandard.View
             GC.WaitForPendingFinalizers();
 
 
-            foreach (var item in _rois)
-            {
-                DeleteBorder(item.Item1);
-            }
+            //foreach (var item in _rois)
+            //{
+            //    DeleteBorder(item.Item1);
+            //}
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _rois.Clear();

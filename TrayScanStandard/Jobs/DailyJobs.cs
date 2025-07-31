@@ -33,7 +33,7 @@ namespace TrayScanStandard.Jobs
 
             foreach (var file in files)
             {
-                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(60))
+                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay))
                 {
                     File.Delete(file.FullName);
                 }
@@ -43,7 +43,7 @@ namespace TrayScanStandard.Jobs
 
             foreach (var file in files)
             {
-                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(60))
+                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay))
                 {
                     File.Delete(file.FullName);
                 }
