@@ -38,8 +38,23 @@
                      
                      ></TextBox>
 
+            <TextBlock VerticalAlignment="Center" Margin="10,0,0,0"
+           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                       
+                Text="显示条目"
+                       
+></TextBlock>
+            <TextBox Width="150" Margin="10,0,0,0" Text="{Binding ViewModel.LogNum}"
+                     VerticalContentAlignment="Center"
+                     
+                     ></TextBox>
+
             <Button Content="{x:Static lang:Resources.DeriveCVS}" Margin="10,0,0,0"
 Command="{Binding ViewModel.ExportCommand}"/>
+            
+            
+            <Button Content="导出全部" Margin="10,0,0,0"
+Command="{Binding ViewModel.ExportAllCommand}"/>
         </StackPanel>
 
         <DataGrid Grid.Row="1" 
@@ -52,6 +67,7 @@ Command="{Binding ViewModel.ExportCommand}"/>
                 <DataGridTextColumn Header="{x:Static lang:Resources.TrayBarcode}" Binding="{Binding PalletCode}" ></DataGridTextColumn>
                 <DataGridTextColumn Header="{x:Static lang:Resources.AssemblyTime}" Binding="{Binding ZuPanTime}"></DataGridTextColumn>
                 <DataGridTextColumn Header="{x:Static lang:Resources.ChannelCount}" Binding="{Binding ChannelCount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="识别条码数" Binding="{Binding RealCount}"></DataGridTextColumn>
                 <!--<DataGridTextColumn Header="托盘信息" Binding="{Binding }" ></DataGridTextColumn>-->
                 <DataGridTemplateColumn Header="{x:Static lang:Resources.TrayInformation}">
                     <DataGridTemplateColumn.CellTemplate>

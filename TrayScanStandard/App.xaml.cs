@@ -89,7 +89,16 @@ namespace TrayScanStandard
                              {
                                  trigger.ForJob(jobKey).WithCronSchedule("0 10 0 * * ?");
                              });
+
+                             JobKey jobKey1 = JobKey.Create(nameof(HourJobs));
+                             config.AddJob<HourJobs>(jobKey1).AddTrigger(trigger =>
+                             {
+                                 trigger.ForJob(jobKey1).WithCronSchedule("0 10 * * * ?");
+                             });
+
                          });
+
+
                          services.AddQuartzHostedService(config =>
                          {
                              config.WaitForJobsToComplete = true;
@@ -227,7 +236,13 @@ namespace TrayScanStandard
                 name: "vm算法api",
                 executablePath: @"vmapi\LinxUniverse.VM.Webapi.exe"
             );
+
+            // 用系统指令启动@"vmapi\LinxUniverse.VM.Webapi.exe"
+
+
+
             manager.RegisterProcess(config);
+
             var res =  manager.StartProcessAsync("vmapi").Result;
             Host.Start();
         }

@@ -31,6 +31,9 @@ namespace TrayScanStandard.Data.Models
         //[NotMapped]
         public int ChannelCount { get; set; } = 64;
 
+        [NotMapped]
+        public int RealCount => BatteryInfo.Count(s => s.BatteryCode.Length > 0);
+
         public DateTime ZuPanTime { get; set; } = DateTime.Now;
         public int Column { get; set; }
         public PalletType PalletType
