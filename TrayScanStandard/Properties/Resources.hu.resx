@@ -120,6 +120,9 @@
   <data name="SoftwareTitle" xml:space="preserve">
     <value>Robotkar Felső Számítógép</value>
   </data>
+  <data name="SoftwareTitle2" xml:space="preserve">
+    <value>Robotkar Felső Számítógép</value>
+  </data>
   <data name="SoftwareTitle1" xml:space="preserve">
     <value>Robotkar Felső Számítógép</value>
   </data>
@@ -391,7 +394,7 @@
     <value>Folyamatban</value>
   </data>
   <data name="RequestData" xml:space="preserve">
-    <value>Adat Kérés:</value>
+    <value>Adat Kérés</value>
   </data>
   <data name="ResponseData" xml:space="preserve">
     <value>Válasz Adatok</value>
@@ -400,25 +403,28 @@
     <value>Sikertelen Riasztási Napló Írás</value>
   </data>
   <data name="ErrorOccurredWhileWritingAlarm" xml:space="preserve">
-    <value>Hiba Történt a Riasztás Írása Közben:</value>
+    <value>Hiba Történt a Riasztás Írása Közben</value>
   </data>
   <data name="ErrorAccessingInterfaceResultIsNull" xml:space="preserve">
     <value>Hiba Az Interface Elérésében; Eredmény Null</value>
   </data>
+  <data name="CompareCellBarcodeWithLocalData" xml:space="preserve">
+    <value>Cellaszám Összehasonlítása Helyi Adatokkal</value>
+  </data>
   <data name="Local" xml:space="preserve">
-    <value>Helyi:</value>
+    <value>Helyi</value>
   </data>
   <data name="Incoming" xml:space="preserve">
     <value>Bejövő</value>
   </data>
-  <data name="ClearAllWorkstationsdata" xml:space="preserve">
-    <value>Az összes munkaállomás adat törlése</value>
+  <data name="ClearAllWorkstations" xml:space="preserve">
+    <value>Minden Munkahely Törlése</value>
   </data>
   <data name="RequestInterface" xml:space="preserve">
-    <value>Interface Kérés:</value>
+    <value>Interface Kérés</value>
   </data>
   <data name="RequestTime" xml:space="preserve">
-    <value>Kérés Időpontja:</value>
+    <value>Kérés Időpontja</value>
   </data>
   <data name="ResponseTime" xml:space="preserve">
     <value>Válasz Időpontja</value>
@@ -558,35 +564,200 @@
   <data name="WaitingTimeFake" xml:space="preserve">
     <value>Hamis Cellaszám Tálca Várakozási Idő (s)</value>
   </data>
+  <data name="AddUserInformation" xml:space="preserve">
+    <value>Felhasználói Információ Hozzáadása</value>
+  </data>
+	<data name="I currently do not have this permission" xml:space="preserve">
+    <value>Jelenleg nincs ilyen engedélyem</value>
+  </data>
+	<data name="Add" xml:space="preserve">
+    <value>Hozzáadás</value>
+  </data>
+	<data name="ApplyForFakeBatteries" xml:space="preserve">
+    <value>Kérjen hamis akkumulátort</value>
+  </data>
+	<data name="Check" xml:space="preserve">
+    <value>Jelölje be a négyzetet</value>
+  </data>
+	<data name="DisassemblyLog" xml:space="preserve">
+    <value>Lemez szétszerelési napló</value>
+  </data>
+	<data name="DeriveCVS" xml:space="preserve">
+    <value>származikCVS</value>
+  </data>
+	<data name="SaveAndReset" xml:space="preserve">
+    <value>Mentés és alaphelyzetbe állítás</value>
+  </data>
+	<data name="WCSStatus" xml:space="preserve">
+    <value>WCS futási állapot</value>
+  </data>
+	<data name="FakeCoreRule" xml:space="preserve">
+    <value>Hamis alapszabály</value>
+  </data>
+	<data name="OrdinaryPointCoreRule" xml:space="preserve">
+    <value>Általános pontalapszabály</value>
+  </data>
+	<data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+	<data name="Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+	<data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
+    <value>Jelenleg nincs hozzáférésem ehhez az oldalhoz!</value>
+  </data>
+	<data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
+    <value>Nem áll rendelkezésre ilyen cím</value>
+  </data>
+	<data name="CellBarcodeAndlocalComparison" xml:space="preserve">
+    <value>Mobil vonalkód és helyi összehasonlítás! </value>
+  </data>
+	<data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
+    <value>Ez a program egyszerre csak egy példányt tud futtatni!</value>
+  </data>
+	<data name="GroupTime" xml:space="preserve">
+    <value>Csoportidő</value>
+  </data>
+	<data name="NumberOfBatteries" xml:space="preserve">
+    <value>Az elemek száma</value>
+  </data>
+	<data name="BatteryBarcode" xml:space="preserve">
+    <value>Akkumulátor vonalkódja</value>
+  </data>
+	<data name="ThereisMaterial" xml:space="preserve">
+    <value>Van anyag.</value>
+  </data>
+	<data name="ItemNumber" xml:space="preserve">
+    <value>Tételszám:</value>
+  </data>
+	<data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
+    <value>Nem található a megadott azonosítóval rendelkező felhasználó</value>
+  </data>
+	<data name="PrepareToObtainTheTray" xml:space="preserve">
+    <value>Készüljön fel a tálca megszerzésére.</value>
+  </data>
+	<data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
+    <value>Jelentse a lemez szétszerelését</value>
+  </data>
+	<data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
+    <value>Hagyd üresen, hagyd ki!</value>
+  </data>
+	<data name="clampingJaw" xml:space="preserve">
+    <value>Karom:</value>
+  </data>
+	<data name="logOn" xml:space="preserve">
+    <value>Bejelentkezés</value>
+  </data>
+	<data name="UnknownBatteryCellGrade" xml:space="preserve">
+    <value>Ismeretlen akkumulátorcellák minősége</value>
+  </data>
+	<data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
+    <value>Hiba történt a csoportlemeznaplóban:</value>
+  </data>
+	<data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
+    <value>Visszaküldött nem megfelelő vonalkód-ellenőrzés!</value>
+  </data>
+	<data name="PleaseCheckTheLogs" xml:space="preserve">
+    <value>Kérem, ellenőrizze a naplókat.</value>
+  </data>
+	<data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
+    <value>Az ütemezési berendezések rendellenes állapota</value>
+  </data>
+	<data name="AttemptToObtainTable" xml:space="preserve">
+    <value>Kísérlet megszerzésére felület</value>
+  </data>
+	<data name="OpcTableNotSet" xml:space="preserve">
+    <value>OpcTable nincs beállítva</value>
+  </data>
+	<data name="PLCTaskServiceNotConnected" xml:space="preserve">
+    <value>PLC TaskService not connected</value>
+  </data>
+	<data name="ReadDB500" xml:space="preserve">
+    <value>DB500 olvasása</value>
+  </data>
+	<data name="OpenReading" xml:space="preserve">
+    <value>Olvasás megnyitása</value>
+  </data>
+	<data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
+    <value>A vonalkód szkenner nem létezik</value>
+  </data>
+	<data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
+    <value>Hiba történt a kérelem feldolgozása során:</value>
+  </data>
+	<data name="TrayNotObtained" xml:space="preserve">
+    <value>Nem nyert tálca</value>
+  </data>
+	<data name="PLCDataVerification" xml:space="preserve">
+    <value>PLC-adatok ellenőrzése</value>
+  </data>
+	<data name="WCSReturnsDataVerification" xml:space="preserve">
+    <value>A WCS visszaadja az adatok ellenőrzését</value>
+  </data>
+	<data name="RequestStatus" xml:space="preserve">
+    <value>A kérelem állapota:</value>
+  </data>
+	<data name="TheUsernameCannotBeEmpty" xml:space="preserve">
+    <value>A felhasználónév nem lehet üres</value>
+  </data>
+	<data name="RFCannotBeEmpty" xml:space="preserve">
+    <value>RF nem lehet üres</value>
+  </data>
+	<data name="AddedSuccessfully" xml:space="preserve">
+    <value>Hozzáadva sikeresen</value>
+  </data>
+	<data name="DeleteSuccessfully" xml:space="preserve">
+    <value>Törlés sikeres</value>
+  </data>
+	<data name="AddRuleName" xml:space="preserve">
+    <value>Szabálynév hozzáadása</value>
+  </data>
+	<data name="ComparedToRegularExpressions" xml:space="preserve">
+    <value>A reguláris kifejezésekhez képest</value>
+  </data>
+	<data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
+    <value>Tényleg feladod?</value>
+  </data>
+	<data name="AbandoningConfirmation" xml:space="preserve">
+    <value>Megerősítés elhagyása</value>
+  </data>
+	<data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
+    <value>El szeretné indítani a kézi lemezkötési folyamatot</value>
+  </data>
+	<data name="GroupConfirmation" xml:space="preserve">
+    <value>Csoport megerősítése</value>
+  </data>
+	<data name="ConfirmToClearThis" xml:space="preserve">
+    <value>Erősítse meg, hogy törölje ezt</value>
+  </data>
+	<data name="DoYouRemember" xml:space="preserve">
+    <value>Emlékszel?</value>
+  </data>
+	<data name="WriteConfirmation" xml:space="preserve">
+    <value>Megerősítés írása</value>
+  </data>
+	<data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>Biztos, hogy kényszeríti a vonalkód írását?</value>
+  </data>
+	<data name="PLCMonitoringProblem" xml:space="preserve">
+    <value>PLC monitoring probléma</value>
+  </data>
+	<data name="Error" xml:space="preserve">
+    <value>hiba:</value>
+  </data>
+	<data name="AddUserInformation" xml:space="preserve">
+    <value>AddUserInformation</value>
+  </data>
+	<data name="PermissionsSetting" xml:space="preserve">
+    <value>PermissionsSetting</value>
+  </data>
+  <data name="PermissionsSetting" xml:space="preserve">
+    <value>Jogosultságok Beállítása</value>
+  </data>
   <data name="I currently do not have this permission" xml:space="preserve">
     <value>Jelenleg nincs ilyen engedélyem</value>
   </data>
-  <data name="Add" xml:space="preserve">
-    <value>Hozzáadás</value>
-  </data>
-  <data name="ApplyForFakeBatteries" xml:space="preserve">
-    <value>Kérjen hamis akkumulátort</value>
-  </data>
-  <data name="Check" xml:space="preserve">
-    <value>Jelölje be a négyzetet</value>
-  </data>
-  <data name="DisassemblyLog" xml:space="preserve">
-    <value>Lemez szétszerelési napló</value>
-  </data>
-  <data name="DeriveCVS" xml:space="preserve">
-    <value>származikCVS</value>
-  </data>
-  <data name="SaveAndReset" xml:space="preserve">
-    <value>Mentés és alaphelyzetbe állítás</value>
-  </data>
-  <data name="WCSStatus" xml:space="preserve">
-    <value>WCS futási állapot</value>
-  </data>
-  <data name="FakeCoreRule" xml:space="preserve">
-    <value>Hamis alapszabály</value>
-  </data>
-  <data name="OrdinaryPointCoreRule" xml:space="preserve">
-    <value>Általános pontalapszabály</value>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Bejelentkezés sikertelen</value>
   </data>
   <data name="Online" xml:space="preserve">
     <value>Online</value>
@@ -594,98 +765,119 @@
   <data name="Offline" xml:space="preserve">
     <value>Offline</value>
   </data>
-  <data name="ICurrentlyDoNotHavePermissionToAccessThisPage" xml:space="preserve">
-    <value>Jelenleg nincs hozzáférésem ehhez az oldalhoz!</value>
+  <data name="ScannerInterface" xml:space="preserve">
+    <value>Szkennerfelület</value>
   </data>
-  <data name="ThereIsNoSuchAddressAvailable" xml:space="preserve">
-    <value>Nem áll rendelkezésre ilyen cím</value>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Leválasztva</value>
   </data>
-  <data name="CellBarcodeAndlocalComparison" xml:space="preserve">
-    <value>Mobil vonalkód és helyi összehasonlítás! </value>
+  <data name="ShootAll" xml:space="preserve">
+    <value>Mindent lelőni</value>
   </data>
-  <data name="ThisProgramCanOnlyRunOneInstanceAtATime" xml:space="preserve">
-    <value>Ez a program egyszerre csak egy példányt tud futtatni!</value>
+  <data name="Reconnect" xml:space="preserve">
+    <value>Újracsatlakozás</value>
   </data>
-  <data name="GroupTime" xml:space="preserve">
-    <value>Csoportidő</value>
+  <data name="SetUp" xml:space="preserve">
+    <value>felállítás</value>
   </data>
-  <data name="NumberOfBatteries" xml:space="preserve">
-    <value>Az elemek száma</value>
+  <data name="CodeReaderConfiguration" xml:space="preserve">
+    <value>Kódolvasó beállítása</value>
   </data>
-  <data name="BatteryBarcode" xml:space="preserve">
-    <value>Akkumulátor vonalkódja</value>
+  <data name="SerialNumber" xml:space="preserve">
+    <value>Sorszám</value>
   </data>
-  <data name="ThereisMaterial" xml:space="preserve">
-    <value>Van anyag.</value>
+  <data name="Exposure" xml:space="preserve">
+    <value>Expozíció</value>
   </data>
-  <data name="ItemNumber" xml:space="preserve">
-    <value>Tételszám:</value>
+  <data name="Gamma" xml:space="preserve">
+    <value>Gamma</value>
   </data>
-  <data name="NoUserWithTheSpecifiedIDWasFound" xml:space="preserve">
-    <value>Nem található a megadott azonosítóval rendelkező felhasználó</value>
+  <data name="ManagementOfBatteryCellTypes" xml:space="preserve">
+    <value>Az akkumulátortípusok kezelése</value>
   </data>
-  <data name="PrepareToObtainTheTray" xml:space="preserve">
-    <value>Készüljön fel a tálca megszerzésére.</value>
+  <data name="AddBattery" xml:space="preserve">
+    <value>Akkumulátor hozzáadása</value>
   </data>
-  <data name="ReportTheDisassemblyDiskInterface" xml:space="preserve">
-    <value>Jelentse a lemez szétszerelését</value>
+  <data name="RemoveBattery" xml:space="preserve">
+    <value>Az akkumulátor eltávolítása</value>
   </data>
-  <data name="SkipOneGrabAndLeaveItEmpty" xml:space="preserve">
-    <value>Hagyd üresen, hagyd ki!</value>
+  <data name="SaveBattery" xml:space="preserve">
+    <value>Akkumulátortakarítás</value>
   </data>
-  <data name="clampingJaw" xml:space="preserve">
-    <value>Karom:</value>
+  <data name="BatteryType" xml:space="preserve">
+    <value>Akkumulátor Típusa</value>
   </data>
-  <data name="logOn" xml:space="preserve">
-    <value>Bejelentkezés</value>
+  <data name="WCSLog" xml:space="preserve">
+    <value>WCS Napló</value>
   </data>
-  <data name="UnknownBatteryCellGrade" xml:space="preserve">
-    <value>Ismeretlen akkumulátorcellák minősége</value>
+  <data name="PLCIP Address" xml:space="preserve">
+    <value>PLCIP Cím</value>
   </data>
-  <data name="AnErrorOccurredInTheGroupDiskLog" xml:space="preserve">
-    <value>Hiba történt a csoportlemeznaplóban:</value>
+  <data name="NumberOfScanners" xml:space="preserve">
+    <value>Szkennerek Száma</value>
   </data>
-  <data name="InconsistentBarcodeVerificationReturned" xml:space="preserve">
-    <value>Visszaküldött nem megfelelő vonalkód-ellenőrzés!</value>
+  <data name="PermissionConfiguration" xml:space="preserve">
+    <value>Engedélyek Beállítása</value>
   </data>
-  <data name="PleaseCheckTheLogs" xml:space="preserve">
-    <value>Kérem, ellenőrizze a naplókat.</value>
+  <data name="System Administrator" xml:space="preserve">
+    <value>Rendszergazda</value>
   </data>
-  <data name="AbnormalStatusOfSchedulingEquipment" xml:space="preserve">
-    <value>Az ütemezési berendezések rendellenes állapota</value>
+  <data name="WorkstationConfiguration" xml:space="preserve">
+    <value>Munkaállomás Beállítása</value>
   </data>
-  <data name="AttemptToObtainTable" xml:space="preserve">
-    <value>Kísérlet megszerzésére felület</value>
+  <data name="IncomingPullStrap" xml:space="preserve">
+    <value>Bejövő húzószíj</value>
   </data>
-  <data name="OpcTableNotSet" xml:space="preserve">
-    <value>OpcTable nincs beállítva</value>
+  <data name="FeedingPullBelt" xml:space="preserve">
+    <value>Tápláló húzóöv</value>
   </data>
-  <data name="PLCTaskServiceNotConnected" xml:space="preserve">
-    <value>PLC TaskService not connected</value>
+  <data name="RobotClaws" xml:space="preserve">
+    <value>Robot Karmok</value>
   </data>
-  <data name="ReadDB500" xml:space="preserve">
-    <value>DB500 olvasása</value>
+  <data name="OKMatchingPlatform" xml:space="preserve">
+    <value>OK Megfelelő Platform</value>
   </data>
-  <data name="OpenReading" xml:space="preserve">
-    <value>Olvasás megnyitása</value>
+  <data name="REWORKPairingPlatform" xml:space="preserve">
+    <value>REWORK Párosító Platform</value>
   </data>
-  <data name="TheBarcodeScannerDoesNotExist" xml:space="preserve">
-    <value>A vonalkód szkenner nem létezik</value>
+  <data name="NGPullStrap" xml:space="preserve">
+    <value>NG Húzószíj</value>
   </data>
-  <data name="AnErrorOccurredWhileProcessingTheRequest" xml:space="preserve">
-    <value>Hiba történt a kérelem feldolgozása során:</value>
+  <data name="InProcess" xml:space="preserve">
+    <value>Észlelés alatt</value>
   </data>
-  <data name="TrayNotObtained" xml:space="preserve">
-    <value>Nem nyert tálca</value>
+  <data name="Capture" xml:space="preserve">
+    <value>lövés</value>
   </data>
-  <data name="PLCDataVerification" xml:space="preserve">
-    <value>PLC-adatok ellenőrzése</value>
+  <data name="SetParameters" xml:space="preserve">
+    <value>Paraméterek beállítása</value>
   </data>
-  <data name="WCSReturnsDataVerification" xml:space="preserve">
-    <value>A WCS visszaadja az adatok ellenőrzését</value>
+  <data name="AddSelectionBox" xml:space="preserve">
+    <value>Add selection box</value>
   </data>
-  <data name="RequestStatus" xml:space="preserve">
-    <value>A kérelem állapota:</value>
+  <data name="DeleteTheSelectedBox" xml:space="preserve">
+    <value>A kijelölt mező törlése</value>
+  </data>
+  <data name="ScanCodeGunSettings" xml:space="preserve">
+    <value>A kódfegyver beállításai</value>
+  </data>
+  <data name="OKMatchingPlatform2" xml:space="preserve">
+    <value>OK Megfelelő Platform2</value>
+  </data>
+  <data name="E99PullStrap" xml:space="preserve">
+    <value>E99 Húzószíj</value>
+  </data>
+  <data name="TrayFormula" xml:space="preserve">
+    <value>Tálca képlete</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Már csatlakoztatott</value>
+  </data>
+  <data name="AreYouSureYouWantToGiveUp" xml:space="preserve">
+    <value>Biztos vagy benne, hogy fel akarod adni?</value>
+  </data>
+  <data name="AbandoningDetermination" xml:space="preserve">
+    <value>Megerősítés elhagyása</value>
   </data>
   <data name="TheUsernameCannotBeEmpty" xml:space="preserve">
     <value>A felhasználónév nem lehet üres</value>
@@ -693,29 +885,11 @@
   <data name="RFCannotBeEmpty" xml:space="preserve">
     <value>RF nem lehet üres</value>
   </data>
-  <data name="AddedSuccessfully" xml:space="preserve">
-    <value>Hozzáadva sikeresen</value>
+  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
+    <value>Biztos, hogy kényszeríti a vonalkód írását?</value>
   </data>
-  <data name="DeleteSuccessfully" xml:space="preserve">
-    <value>Törlés sikeres</value>
-  </data>
-  <data name="AddRuleName" xml:space="preserve">
-    <value>Szabálynév hozzáadása</value>
-  </data>
-  <data name="ComparedToRegularExpressions" xml:space="preserve">
-    <value>A reguláris kifejezésekhez képest</value>
-  </data>
-  <data name="DoYouReallyHaveToGiveUp" xml:space="preserve">
-    <value>Tényleg feladod?</value>
-  </data>
-  <data name="AbandoningConfirmation" xml:space="preserve">
-    <value>Megerősítés elhagyása</value>
-  </data>
-  <data name="DoYouWantToStartTheManualDiskBindingProcess" xml:space="preserve">
-    <value>El szeretné indítani a kézi lemezkötési folyamatot</value>
-  </data>
-  <data name="GroupConfirmation" xml:space="preserve">
-    <value>Csoport megerősítése</value>
+  <data name="WriteConfirmation" xml:space="preserve">
+    <value>Megerősítés írása</value>
   </data>
   <data name="ConfirmToClearThis" xml:space="preserve">
     <value>Erősítse meg, hogy törölje ezt</value>
@@ -723,22 +897,73 @@
   <data name="DoYouRemember" xml:space="preserve">
     <value>Emlékszel?</value>
   </data>
-  <data name="WriteConfirmation" xml:space="preserve">
-    <value>Megerősítés írása</value>
+  <data name="PleaseSelectTheTrayToDelete" xml:space="preserve">
+    <value>Válassza ki a törölni kívánt tálcát</value>
   </data>
-  <data name="AreYouSureToForceBarcodeWriting" xml:space="preserve">
-    <value>Biztos, hogy kényszeríti a vonalkód írását?</value>
+  <data name="ManuallyStartDetection" xml:space="preserve">
+    <value>Az észlelés manuális indítása</value>
   </data>
-  <data name="PLCMonitoringProblem" xml:space="preserve">
-    <value>PLC monitoring probléma</value>
+  <data name="ManualShutdownDetection" xml:space="preserve">
+    <value>Kézi leállítás felismerése</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>hiba:</value>
+  <data name="EnterExposureParameters" xml:space="preserve">
+    <value>Az expozíciós paraméterek megadása</value>
   </data>
-  <data name="AddUserInformation" xml:space="preserve">
-    <value>AddUserInformation</value>
+  <data name="ClearDebuggingData" xml:space="preserve">
+    <value>Hibakeresési adatok törlése</value>
   </data>
-  <data name="PermissionsSetting" xml:space="preserve">
-    <value>PermissionsSetting</value>
+  <data name="NumberOfSuccessfulAttempts" xml:space="preserve">
+    <value>Sikeres kísérletek száma</value>
+  </data>
+  <data name="TotalNumberOfTimes" xml:space="preserve">
+    <value>Összes alkalommal</value>
+  </data>
+  <data name="SuccessRate" xml:space="preserve">
+    <value>Sikeres arány</value>
+  </data>
+  <data name="DebuggingQRCodeScanning" xml:space="preserve">
+    <value>QR-kódszkennelés hibakeresése</value>
+  </data>
+  <data name="StopDebugging" xml:space="preserve">
+    <value>Hibakeresés leállítása</value>
+  </data>
+  <data name="LoadTemporaryStorageConfiguration" xml:space="preserve">
+    <value>Ideiglenes tárolás beállításainak betöltése</value>
+  </data>
+  <data name="LoadNodeConfiguration" xml:space="preserve">
+    <value>Csomópont betöltése</value>
+  </data>
+  <data name="SaveCurrentConfigurationAsNodeConfiguration" xml:space="preserve">
+    <value>Az aktuális konfiguráció mentése csomópont konfigurációként</value>
+  </data>
+  <data name="CameraNotConnected" xml:space="preserve">
+    <value>A kamera nincs csatlakoztatva</value>
+  </data>
+  <data name="NoBatterySelected" xml:space="preserve">
+    <value>Nincs kiválasztva akkumulátor</value>
+  </data>
+  <data name="SelectBattery" xml:space="preserve">
+    <value>Akkumulátor kiválasztása</value>
+  </data>
+  <data name="StartDetection" xml:space="preserve">
+    <value>Vizsgálat megkezdése</value>
+  </data>
+  <data name="TestingCompleted" xml:space="preserve">
+    <value>A vizsgálat befejeződött</value>
+  </data>
+  <data name="ThereAreChannelNumbersWithDifferentBarcodes" xml:space="preserve">
+    <value>Vannak csatornaszámok különböző vonalkódokkal</value>
+  </data>
+  <data name="InTheory_ThisSituationShouldNotOccur" xml:space="preserve">
+    <value>Elméletileg ez a helyzet nem fordulhat elő</value>
+  </data>
+  <data name="MergeResultCompleted" xml:space="preserve">
+    <value>Az egyesítés eredménye befejeződött</value>
+  </data>
+  <data name="SameBarcodeExists" xml:space="preserve">
+    <value>Ugyanaz a vonalkód létezik</value>
+  </data>
+  <data name="Fail" xml:space="preserve">
+    <value>sikertelen</value>
   </data>
 </root>

@@ -24,11 +24,15 @@ namespace TrayScanStandard.ViewModel.CZPallet
         public DateTime EndTime { get; set; } = DateTime.Today.AddDays(1);
 
         public string Code { get; set; } = string.Empty;
+        public int LogNum { get; set; } = 100;
 
 
         public void RefreshContext()
         {
-            _logs = context.PalletLogs.AsNoTracking().OrderByDescending(s => s.Id).Where(s => s.PalletType == PalletType.组盘).Take(100);
+            _logs = context
+                .PalletLogs.AsNoTracking()
+                .OrderByDescending(s => s.Id)
+                .Where(s => s.PalletType == PalletType.组盘).Take(LogNum).ToArray();
             Search();
         }
 
@@ -38,6 +42,25 @@ namespace TrayScanStandard.ViewModel.CZPallet
             return log.WarningTime >= StartTime && log.WarningTime <= EndTime;
         }
 
+        [RelayCommand]
+        public void ExportAll()
+        {
+            StringBuilder sb = new(1000);
+            string[] titles = ["托盘编号", "组盘时间", "电池数量", "电池条码"];
+
+            sb.AppendLine(string.Join(",", titles));
+
+            foreach (var log in PalletLogs)
+            {
+                sb.AppendLine($"{log.PalletCode},{log.ZuPanTime},{log.ChannelCount},[{string.Join("|", log.BatteryInfo.Select(s => s.BatteryCode))}]");
+
+            }
+
+            string fileName = $"InsertLog/exportall-{FilenameHelper.FileName}.csv";
+            System.IO.File.WriteAllBytes(fileName, Encoding.GetEncoding("gb2312").GetBytes(sb.ToString()));
+            MessageBox.Show($"export to {fileName}");
+
+        }
         [RelayCommand]
         public void Export()
         {
@@ -73,7 +96,7 @@ namespace TrayScanStandard.ViewModel.CZPallet
             }
 
             PalletLogs = new(
-                 afterFilter.Take(100).Select(s => new PalletLogExt(s))
+                 afterFilter.Take(LogNum).Select(s => new PalletLogExt(s))
              );
         }
     }

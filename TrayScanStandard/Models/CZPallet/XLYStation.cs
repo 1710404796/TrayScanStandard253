@@ -119,12 +119,12 @@ namespace TrayScanStandard.Models
         private async ValueTask<bool> SetChannelCode(int id, string code, bool force = false, BatteryLevel batteryLevel = BatteryLevel.OK)
         {
             if (CheckBatteryUnique(code)
-                //|| force
+                || force
                 )
             {
                 // 目前只需校验当前的重复性 无需管理其他托盘
                 if (CheckBatterySerial(code)
-                    //|| force
+                    || force
                     )
                 {
                     SetChanelStage(id, code, batteryLevel);

@@ -25,6 +25,7 @@ namespace TrayScanStandard.ViewModel.CZPallet
             ZuPanTime = log.ZuPanTime;
             Id = log.Id;
             Column = log.Column;
+            ChannelCount = log.ChannelCount;
         }
         public bool IsSelect { get; set; }
     }

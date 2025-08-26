@@ -1,10 +1,28 @@
 <Solution>
-  <Project Path="TrayScanStandard/TrayScanStandard.csproj" />
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="lxuv/Camera.Fs.Common/Camera.Fs.Common.csproj" />
+  <Project Path="lxuv/HKCamera.Fs.NET/HKCamera.Fs.NET.csproj" />
+  <Project Path="lxuv/LinxUniverse.Algo.Common/LinxUniverse.Algo.Common.csproj" />
   <Project Path="lxuv/LinxUniverse.Auth/LinxUniverse.Auth.csproj" />
+  <Project Path="lxuv/LinxUniverse.Common/LinxUniverse.Common.fsproj" />
+  <Project Path="lxuv/LinxUniverse.CST/LinxUniverse.CST.csproj" />
   <Project Path="lxuv/LinxUniverse.DB/LinxUniverse.DB.csproj" />
   <Project Path="lxuv/LinxUniverse.DI/LinxUniverse.DI.csproj" />
   <Project Path="lxuv/LinxUniverse.FP/LinxUniverse.FP.csproj" />
   <Project Path="lxuv/LinxUniverse.Logger/LinxUniverse.Logger.csproj" />
   <Project Path="lxuv/LinxUniverse.Mediator/LinxUniverse.Mediator.csproj" />
+  <Project Path="lxuv/LinxUniverse.ProcessManager/LinxUniverse.ProcessManager.csproj" />
   <Project Path="lxuv/LinxUniverse.Utils/LinxUniverse.Utils.csproj" />
+  <Project Path="lxuv/LinxUniverse.VM.Webapi/LinxUniverse.VM.Webapi.csproj" />
+  <Project Path="lxuv/LinxUniverse.VM/LinxUniverse.VM.csproj" />
+  <Project Path="lxuv/MugenCamera/MugenCamera.csproj" />
+  <Project Path="lxuv/MugenCodeDetecter/MugenCodeDetecter.csproj" />
+  <Project Path="lxuv/VMWebAIClient/VMWebAIClient.csproj" />
+  <Project Path="TestProto/TestProto.csproj" Id="01ab78cc-f1ff-462f-bb62-0ef4a0dfd967" />
+  <Project Path="TrayScanStandard/TrayScanStandard.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
 </Solution>

@@ -28,8 +28,11 @@ namespace TrayScanStandard.Data.Models
         public string PalletCode { get; set; } = string.Empty;
 
         public List<BatteryInfo> BatteryInfo { get; set; } = [];
+        //[NotMapped]
+        public int ChannelCount { get; set; } = 64;
+
         [NotMapped]
-        public int ChannelCount => BatteryInfo.Count;
+        public int RealCount => BatteryInfo.Count(s => s.BatteryCode.Length > 0);
 
         public DateTime ZuPanTime { get; set; } = DateTime.Now;
         public int Column { get; set; }

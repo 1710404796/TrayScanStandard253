@@ -42,7 +42,7 @@
         </Border>
         <TextBlock VerticalAlignment="Center"
         FontSize="20" 
-                Text="{x:Static lang:Resources.SoftwareTitle}"
+                Text="扫码工具"
         HorizontalAlignment="Center"
         ></TextBlock>
         <!--<TextBlock Grid.Column="1"
@@ -111,26 +111,50 @@ Source="Images/linx.png" HorizontalAlignment="Center"></Image>
         <StackPanel Grid.Row="1" Visibility="Visible">
 
             <RadioButton 
+Style="{StaticResource MenuRadioButtonStyle}" 
+Cursor="Hand"
+IsChecked="True"
+                Click="RadioButton_Click"
+>
+                工作面板
+            </RadioButton>
+
+
+            <RadioButton 
         Style="{StaticResource MenuRadioButtonStyle}" 
         Cursor="Hand"
         IsChecked="True"
+                x:Name="CameraList"
+                Click="CameraList_Click"
         >
-                页面1
+                相机管理界面
             </RadioButton>
 
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
+                x:Name="LightBtn"
+                Click="LightBtn_Click"
 >
-                页面2
+                光源管理界面
+            </RadioButton>
+
+            <RadioButton 
+Style="{StaticResource MenuRadioButtonStyle}" 
+Cursor="Hand"
+                x:Name="ZPALgo"
+                Click="ZPALgo_Click"
+>
+                组盘扫码日志
             </RadioButton>
             <RadioButton 
 Style="{StaticResource MenuRadioButtonStyle}" 
 Cursor="Hand"
-                x:Name="StationView"
-                Click="StationView_Click"
+                x:Name="BatteryManager"
+                Click="BatteryManager_Click"
+                 Content="{x:Static lang:Resources.ManagementOfBatteryCellTypes}"
 >
-                工位状态
+
             </RadioButton>
 
             <RadioButton 

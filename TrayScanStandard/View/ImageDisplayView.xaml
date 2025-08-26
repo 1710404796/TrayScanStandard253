@@ -1,0 +1,154 @@
+﻿<Page x:Class="TrayScanStandard.View.ImageDisplayView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TrayScanStandard.View"
+      xmlns:model="clr-namespace:TrayScanStandard.Data.Models" xmlns:czpallet="clr-namespace:TrayScanStandard.View.CZPallet"
+      mc:Ignorable="d" 
+      d:DataContext="{d:DesignInstance Type=local:ImageDisplayView}"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ImageDisplayView">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50px"></RowDefinition>
+            <RowDefinition Height="50px"></RowDefinition>
+            <RowDefinition
+                Height="{Binding ElementName=zqd, Path=Height}">
+            </RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button
+                Width="150" 
+                Margin="5"
+                Command="{Binding ViewModel.RefreshCommand}">
+                刷新(同步档位数据)
+            </Button>
+            <Button Width="150" 
+                    Margin="5"
+                    Foreground="Red"
+                    Command="{Binding ViewModel.ResetCommand}">
+                重置此面板
+            </Button>
+            <!--<CheckBox IsChecked="{Binding ViewModel.Yy280Code}">280亚银标签</CheckBox>-->
+            <!--<Button Width="150" 
+        Margin="5"
+        Command="{Binding ViewModel.ChangeImageCommand}">
+                换图
+            </Button>-->
+
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+            <Border Width="10" 
+                    Margin="10,0,0,0"
+                    BorderThickness="2"
+                    Height="10" BorderBrush="Green"></Border>
+            <TextBlock
+                Margin="5,0,0,0"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                
+                
+                正常
+            </TextBlock>
+
+        </StackPanel>
+
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Left"
+                   Name="zqd">
+            <StackPanel
+                Margin="5">
+                <TextBlock
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    产品型号代码:
+                </TextBlock>
+                <ComboBox Width="150"
+                          
+                          SelectionChanged="ComboBox_SelectionChanged_1"
+                        
+                          SelectedItem="{Binding ViewModel.SelectBatteryInfo}"
+                          ItemsSource="{Binding ViewModel.BatteryInfos}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate
+                            DataType="{x:Type model:BatteryTypeInfo}">
+                            <TextBlock
+                                Text="{Binding TypeName}">
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                 <!--<ComboBox Width="150" 
+                           SelectedItem="{Binding ViewModel.SelectProModel, UpdateSourceTrigger=PropertyChanged}" 
+                           SelectionChanged="Selector_OnSelectionChanged" 
+                           ItemsSource="{Binding ViewModel.ProModels}"> 
+                 
+                 </ComboBox>--> 
+            </StackPanel>
+
+
+
+  
+            <StackPanel
+                Margin="5">
+                <TextBlock
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    <!-- 扫码: -->
+                </TextBlock>
+                <Button Width="150"
+                        IsEnabled="{Binding ViewModel.IsFree}"
+                        x:Name="DelectBtn"
+                        Click="DelectBtn_Click"
+                        >
+                    扫码
+                </Button>
+            </StackPanel>
+
+
+            <!--<StackPanel
+                Margin="5">
+                <TextBlock
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                    --><!-- 提交: --><!--
+                </TextBlock>
+                <Button Width="150" Name="Upload"
+                        IsEnabled="{Binding ViewModel.IsFree}"
+
+                        Command="{Binding ViewModel.UploadDataCommand}">
+                    提交
+                </Button>
+            </StackPanel>-->
+
+
+        </WrapPanel>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="19*"/>
+                <ColumnDefinition Width="581*"/>
+            </Grid.ColumnDefinitions>
+
+            <TabControl Grid.ColumnSpan="2" >
+
+                <TabItem Header="虚拟界面">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                        <Viewbox  Width="1146">
+                            <czpallet:PalletView ClickAvaliable="False" x:Name="palletv">
+
+                            </czpallet:PalletView>
+                        </Viewbox>
+                     
+
+                            <!--<StackPanel 
+           Orientation="Vertical"
+           Name="Pallet">
+
+                        </StackPanel>-->
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
+        </Grid>
+
+    </Grid>
+</Page>

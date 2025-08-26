@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Camera.Fs.Common;
+using LanguageExt;
+using LinxUniverse.Algo.Common;
+using LinxUniverse.Utils;
+using MugenCamera;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using LinxUniverse.Utils;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Models.CZPallet;
@@ -28,7 +32,7 @@ namespace TrayScanStandard.Models
             set;
         }
 
-        public XYLStage? Stage { get; set; } = new();
+        public XYLStage? Stage { get; set; } = null;
         public bool TwoOk { get; set; } = false;
         //public PLCCpuType PLCCpuType { get; set; } = PLCCpuType.小端;
 
@@ -47,6 +51,10 @@ namespace TrayScanStandard.Models
 
         public ApiEnableTable ApiEnableTable { get; set; } = new();
 
+        public CameraSetting[] ConnectAddresses { get; set; } = Enumerable.Range(0,32).Select(s => new CameraSetting()).ToArray();
+
+        public int CameraCnt { get; set; } = 1;
+
         //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
 
         /// <summary>
@@ -58,10 +66,32 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// 工位设置 // 防止有多工位的
         /// </summary>
-        public StageSetting StageSetting { get; set; } = new();
+        public StageSetting StageSetting { get; set; } = new();        public int SelectBatteryId { get; set; } = 0;
+        public LightInfo[] LightInfos { get; set; } = [];
+        public bool CameraEnable { get; set; } = false;
+        
+        /// <summary>
+        /// BcrBorder控件的位置信息
+        /// </summary>
+        public Dictionary<int, BcrPosition> BcrPositions { get; set; } = new();
+        public bool IsAlgoEnable { get; set; } = true;
     }
 
+    public record LightInfo(string Com, int[] Values);
+    public record CameraSetting(
 
+        )
+    {
+        public CameraAddress CameraAddresses { get; set; } = new HKAddress(new Key(""));
+        public int[] Exposure { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();
+        public int[] ExposureBackup { get; set; } = Enumerable.Range(0, 3).Select(s => 100).ToArray();
+        //public static CameraSetting CreateDefault() =>
+        //    new CameraSetting(
+        //        new HKAddress(new Key("")),
+        //        Enumerable.Range(0, 3).Select(s => 100).ToArray(),
+        //        Enumerable.Range(0, 3).Select(s => 100).ToArray()
+        //    );
+    }
     public class ApiEnableTable
     {
         /// <summary>
@@ -169,5 +199,44 @@ namespace TrayScanStandard.Models
         /// 等待假电池时间
         /// </summary>
         public double WaitFakeTime { get; set; }
+    }
+
+    public class BcrInfo
+    {
+        public string Key { get; set; } = string.Empty;
+
+        public List<int> Exposure { get; set; } = [.. MainStorage.DefaultExp];
+
+        public float Gamma { get; set; } = 1.0f;
+        public float Gain { get; set; } = 1f;
+
+        public string DeviceCode { get; set; } = "ccd";
+    }
+
+    /// <summary>
+    /// BcrBorder控件的位置信息
+    /// </summary>
+    public class BcrPosition
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Width { get; set; } = 320;
+        public double Height { get; set; } = 320;
+    }
+
+    public class BarCodeRegionInfo
+    {
+        public int Top { get; set; } = 100;
+        public int Left { get; set; } = 100;
+        public int Width { get; set; } = 600;
+        public int Height { get; set; } = 600;
+
+        public int ChannelIdx { get; set; } = 0;
+
+        public ROI ToROI()
+        {
+            return new ROI(new LinxUniverse.Common.Rect<float>(Left, Top, Width, Height), ChannelIdx);
+        } 
+
     }
 }

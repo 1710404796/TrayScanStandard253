@@ -1,11 +1,21 @@
 ﻿
-using System.Data;
+using Humanizer;
 using LinxUniverse.Auth;
+using LinxUniverse.CST;
 using LinxUniverse.Utils;
+using LinxUniverse.VM;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MugenCodeDetecter;
+using RPDelectPallet.Meditor.Queries;
+using System.Data;
+using System.Text;
+using System.Windows;
 using TrayScanStandard.Attritubes;
+using TrayScanStandard.Data;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Service;
+using VMWebAIClient;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -15,11 +25,19 @@ namespace TrayScanStandard.Mediator.Handlers
     /// <param name="mediator"></param>
     /// <param name="logger"></param>
     /// <param name="role"></param>
-    public class InitMeCommandHandler(IMediator mediator, ILogger<InitMeCommandHandler> logger, RoleManager<LinxRole, LinxUser> role)
+    public class InitMeCommandHandler(IMediator mediator,
+        ILogger<InitMeCommandHandler> logger, 
+        RoleManager<LinxRole, LinxUser> role
+        , ScanCameraService scanCameraService
+        , LinxContext linxContext
+        , IVMWebAIClient vmWebAIClient
+        )
         : IRequestHandler<InitMeCommand>
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
         {
+            FilenameHelper.CreateDir("DataFrame");
+            FilenameHelper.CreateDir("InsertLog");
             FilenameHelper.CreateDir("Data2D");
 
             foreach (var item in Enum.GetValues<PowerEnum>())
@@ -37,19 +55,71 @@ namespace TrayScanStandard.Mediator.Handlers
                     }
                 }
             }
-
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
             foreach (var item in Enum.GetNames<RoleEnum>())
             {
 
                 await role.CreateAsync(new LinxRole { RoleName = item });
             }
-
+            scanCameraService.Init();
             // 通常这里要初始化一些硬件设备
 
             // 例如：相机、光源、CST等
 
             // 也需要注册一些任务等
+            MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
+                async s =>
+                {
+                    Enum.TryParse<SerialPortType>(s.Com, out var com);
+                    var g = await mediator.Send(new CreateCSTLightCommand(Com: com));
+                    return await mediator.Send(new GetLightQuery(g));
+                }).TraverseSerial(s => s!);
+            //var sol= CodeDetectExtensions
+            //    .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
+            //Console.WriteLine(sol);
+            //MainStorage.Algo = sol
+            //    .Bind(s => s.CreateAlgo(new DetectVMConfig("test", "legacy_detect")))
+            //    ;
+            //MainStorage.AlgoCnn = sol
+            //    .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
+            var algores = await vmWebAIClient.CreateAlgoAsync(FilenameHelper.AppPath + @"test.sol", LinxUniverse.Algo.Common.DetectType.VisionMaster);
+
+            logger.LogInformation("算法加载结果: {Result}", algores);
+
+
+            if (MainStorage.CST == null) 
+            { 
+                logger.LogError("光源初始化失败");
+                MessageBox.Show("光源初始化失败", "光源初始化失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            algores.IfLeft(
+                s =>
+                {
+                    logger.LogError(s);
+                    MessageBox.Show("算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            );
+            MainStorage.Algo.IfLeft(
+                s =>
+                {
+                    logger.LogError(s);
+                    MessageBox.Show("算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            );
+            MainStorage.AlgoCnn.IfLeft(
+              s =>
+              {
+                  logger.LogError(s);
+                  MessageBox.Show("cnn算法加载错误\n" + s, "算法加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                  return;
+              }
+          );
 
             //messageboxmanager
             //MainStorage.Cst[0] =

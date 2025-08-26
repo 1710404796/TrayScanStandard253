@@ -1,10 +1,9 @@
 ﻿global using LanguageExt;
 global using static LanguageExt.Prelude;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using LinxUniverse.Auth;
+using LinxUniverse.CST;
 using LinxUniverse.DI;
+using LinxUniverse.ProcessManager;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -15,13 +14,18 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using TrayScanStandard.Data;
 using TrayScanStandard.Jobs;
 using TrayScanStandard.Mediator.Behaviors;
+using TrayScanStandard.Service;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
 using TrayScanStandard.ViewModel.CZPallet;
+using VMWebAIClient;
 
 namespace TrayScanStandard
 {
@@ -63,11 +67,11 @@ namespace TrayScanStandard
                 return;
             }
             MainStorage.Init();
-            if (MainStorage.Saves.Stage == null)
-            {
-                MainStorage.Saves.Stage = new();
-                MainStorage.SaveManager.Save();
-            }
+            //if (MainStorage.Saves.Stage == null)
+            //{
+            //    MainStorage.Saves.Stage = new();
+            //    MainStorage.SaveManager.Save();
+            //}
             //DB.Database.Migrate();
             Host = Microsoft.Extensions.Hosting.Host.
                      CreateDefaultBuilder().
@@ -85,7 +89,16 @@ namespace TrayScanStandard
                              {
                                  trigger.ForJob(jobKey).WithCronSchedule("0 10 0 * * ?");
                              });
+
+                             JobKey jobKey1 = JobKey.Create(nameof(HourJobs));
+                             config.AddJob<HourJobs>(jobKey1).AddTrigger(trigger =>
+                             {
+                                 trigger.ForJob(jobKey1).WithCronSchedule("0 10 * * * ?");
+                             });
+
                          });
+
+
                          services.AddQuartzHostedService(config =>
                          {
                              config.WaitForJobsToComplete = true;
@@ -98,6 +111,8 @@ namespace TrayScanStandard
                          services.AddSingleton<MainViewModel>();
                          services.AddTransient<MainWindow>();
 
+                         services.AddTransient<PalletLogViewModel>();
+                         services.AddTransient<PalletLogView>();
 
                          services.AddSingleton<SettingViewModel>();
                          services.AddTransient<SettingView>();
@@ -105,10 +120,20 @@ namespace TrayScanStandard
                          services.AddSingleton<UserManagerViewModel>();
                          services.AddTransient<UserManagerView>();
 
+                         services.AddSingleton<BatteryManagerViewModel>();
+                         services.AddTransient<BatteryManager>();
 
                          services.AddTransient<WCSLogViewModel>();
                          services.AddTransient<WCSLogView>();
+                         
+                         services.AddTransient<LightManagerView>();
+                         services.AddTransient<LightManagerViewModel>();
 
+
+                         services.AddTransient<ImageDisplayView>();
+                         services.AddSingleton<ImageDisplayViewModel>();
+
+                         services.AddTransient<AllBcrListView>();
                          //services.AddSingleton<YWStageViewViewModels>();
                          services.AddTransient<YWStageView>();
 
@@ -119,14 +144,22 @@ namespace TrayScanStandard
                          services.AddSingleton<RichTextBox>();
                          services.AddSingleton<CacheService>();
 
+                         services.AddSingleton<ScanCameraService>();
+
                          services.AddTransient<StationSettingView>();
 
 
+                         services.AddCstService();
 
 
+                         services.AddVMWebAIClient(client =>
+                         {
+                             client.BaseAddress = new Uri("http://localhost:54567/");
+                             // other HttpClient configuration
+                         });
                          services.AddDbContext<LinxUserDBContext<LinxUser>, LinxContext>(option =>
                          {
-                             option.UseSqlServer(context.Configuration.GetConnectionString("LinxContextConnection"));
+                             option.UseSqlite(context.Configuration.GetConnectionString("LinxContextConnectionSqlite"));
                          }, ServiceLifetime.Transient, ServiceLifetime.Transient);
 
 
@@ -168,10 +201,10 @@ namespace TrayScanStandard
                              // Set the limit to 256 MB
                              options.MultipartBodyLengthLimit = 2684354560;
                          });
-                     }).
+                     })
+                     .
                      Build();
             InitContext();
-
             //Host.UseSwagger();
             //Host.UseSwaggerUI(options => {
             //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -197,8 +230,23 @@ namespace TrayScanStandard
             var logger = Host.Services.GetRequiredService<ILogger<App>>();
             logger.LogInformation("Host created.");
 
+            manager = ProcessManagerFactory.Create();
+            var config = ProcessManagerFactory.CreateProcessConfig(
+                id: "vmapi",
+                name: "vm算法api",
+                executablePath: @"vmapi\LinxUniverse.VM.Webapi.exe"
+            );
+
+            // 用系统指令启动@"vmapi\LinxUniverse.VM.Webapi.exe"
+
+
+
+            manager.RegisterProcess(config);
+
+            var res =  manager.StartProcessAsync("vmapi").Result;
             Host.Start();
         }
+        static ProcessManager manager;
         private static void InitContext()
         {
             LinxContext DB = GetService<LinxContext>();
@@ -243,6 +291,13 @@ namespace TrayScanStandard
             //    richTextBox.CaretPosition = position;
             //}
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+
+            manager?.Dispose();
+        }
     }
+    
 
 }

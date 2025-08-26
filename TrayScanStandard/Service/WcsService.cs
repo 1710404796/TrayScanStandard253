@@ -7,7 +7,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Azure;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
