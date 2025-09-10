@@ -162,8 +162,13 @@ namespace TrayScanStandard.View
             switch (CameraTypeCombo.SelectedIndex)
             {
                 case 0: // HikVision
-                default:
                     Setting.CameraAddresses = new HKAddress(connectAddress);
+                    break;
+                case 1: // HikVision
+                    Setting.CameraAddresses = new HuaruiAddress(connectAddress);
+                    break;
+
+                default:
                     break;
                 // Add more camera types as needed
             }
