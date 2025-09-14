@@ -1,4 +1,5 @@
-﻿using HKCamera.Fs.NET.Controls;
+﻿using HKCamera.Fs.NET;
+using HKCamera.Fs.NET.Controls;
 using LanguageExt;
 using LinxUniverse.DI;
 using MediatR;
@@ -57,11 +58,31 @@ namespace TrayScanStandard.Service
         {
             return s.CameraAddresses.Create()
                                 .Bind(MugenCameraExtensions.Connect)
-                                .Bind(s => s.SetControl(new AcquisitionControl
+                                .Bind(s =>
                                 {
-                                    TriggerMode = MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON,
-                                    TriggerSource = MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE
-                                }))
+                                    switch (s)
+                                    {
+                                        case HikVision:
+                                           return s.SetControl(new AcquisitionControl
+                                            {
+                                                TriggerMode = MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON,
+                                                TriggerSource = MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE
+                                            });
+                                        case HuaruiCam:
+                                            return s.SetControl(new HuaRui.Fs.NET.Controls.AcquisitionControl
+                                            {
+                                                TriggerMode = HuaRui.Fs.NET.Controls.TriggerModel.On,
+                                                TriggerSource = HuaRui.Fs.NET.Controls.TriggerSource.Software
+                                            });
+                                        default:
+                                        return Right(s);
+
+                                    }
+                                    ;
+
+
+                                    //return s.SetControl(c);
+                                })
                                 // 设置一下心跳
                                 .Bind(s => s.SetControl(new
                                 {
