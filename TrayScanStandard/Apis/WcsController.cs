@@ -19,7 +19,7 @@ namespace TrayScanStandard.Apis
         , MainViewModel mainViewModel
         ): ControllerBase
     {
-        [HttpGet("/CaptureImage")]
+        [HttpGet("/CaptureImage")] // 可以多搞几种协议支持
         public async Task<QRCodeResult> Delect()
         {
             while (!mainViewModel.IsWcsEnable)

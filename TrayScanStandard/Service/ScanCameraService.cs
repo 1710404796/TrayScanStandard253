@@ -19,8 +19,8 @@ namespace TrayScanStandard.Service
         CacheService cacheService)
     {
         public Option<MugenCamera.MugenCamera>[] MugenCameras { get; set; } = [];
-        public BcrBorderViewModel[] BcrBorderViewModels = [];
         private Thread _listenThread;
+        public BcrBorderViewModel[] BcrBorderViewModels = [];
         public Image2DViewModel[] Image2DViewModels = [];
         public void Init()
         {
