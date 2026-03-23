@@ -60,7 +60,7 @@
 Grid.Column="1"
 VerticalAlignment="Center"
 Margin="0,5,100,5"
-Source="Images/linx.png" HorizontalAlignment="Center"></Image>
+Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>
 
 
             <TextBlock

@@ -19,7 +19,8 @@ namespace TrayScanStandard.Apis
         , MainViewModel mainViewModel
         ): ControllerBase
     {
-        [HttpGet("/CaptureImage")]
+        private const string ERROR = "ERROR";
+        [HttpPost("/Photo")]
         public async Task<QRCodeResult> Delect()
         {
             while (!mainViewModel.IsWcsEnable)
@@ -28,7 +29,7 @@ namespace TrayScanStandard.Apis
             }
             logger.LogInformation("收到检测任务");
 
-            if (MainStorage.SelectBattery is null) return new QRCodeResult() { ErrorCode = ErrorType.SomeResultError };
+            if (MainStorage.SelectBattery is null) return new QRCodeResult() { ErrorCode = ErrorType.ERROR };
 
             var data = await mediator.Send(new DelectCCDCommand(MainStorage.SelectBattery));
             GC.Collect();
@@ -37,7 +38,7 @@ namespace TrayScanStandard.Apis
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
                     var batteryCodes = Enumerable.Range(1, MainStorage.SelectBattery.Count)
-                        .Select(s => codes.GetValueOrDefault(s, ""))
+                        .Select(s => codes.GetValueOrDefault(s, ERROR))
                         .ToList();
                     var log = new PalletLog
                     {
@@ -49,7 +50,7 @@ namespace TrayScanStandard.Apis
                             = batteryCodes.Map(s => new BatteryInfo
                             {
                                 BatteryCode = s,
-                                BatteryLevel = string.IsNullOrEmpty(s) ? Models.BatteryLevel.EMPTY : Models.BatteryLevel.OK
+                                BatteryLevel = string.IsNullOrEmpty(s) ? Models.BatteryLevel.ERROR : Models.BatteryLevel.OK
                             })
                             .ToList()
 
@@ -65,7 +66,7 @@ namespace TrayScanStandard.Apis
                 {
                     var codes = r.Channels.ToDictionary(s => s.Index, s => s.Code);
                     var batteryCodes = Enumerable.Range(1, MainStorage.SelectBattery.Count)
-                        .Select(s => codes.GetValueOrDefault(s, ""))
+                        .Select(s => codes.GetValueOrDefault(s, ERROR))
                         .ToList(); // Todo: 如何简化
                     return new QRCodeResult()
                     {
@@ -88,7 +89,7 @@ namespace TrayScanStandard.Apis
     {
         Successed,
         CameraError,
-        SomeResultError,
+        ERROR,
     }
 
     public class QRCodeResult
