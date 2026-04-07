@@ -43,7 +43,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     .Bind(c =>
                     //.BindAsync(c =>
                         c
-                        .AsParallel()
+                        //.AsParallel()
                         // .AsOrdered()
 
 

@@ -19,8 +19,10 @@ namespace TrayScanStandard.Apis
         , MainViewModel mainViewModel
         ): ControllerBase
     {
+        //[HttpGet("/CaptureImage")] 北京时代
+        //[HttpPost("/Photo")] 福鼎时代
         private const string ERROR = "ERROR";
-        [HttpPost("/Photo")]
+        [HttpGet("/CaptureImage")]
         public async Task<QRCodeResult> Delect()
         {
             while (!mainViewModel.IsWcsEnable)
