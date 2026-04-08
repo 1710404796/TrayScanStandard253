@@ -51,8 +51,9 @@ namespace TrayScanStandard.Mediator.Handlers
                         //.Apply(Task.WhenAll)
                         //.Map(s => s.Traverse(q => q))
 
-                        .Select(s => new Func<Either<string, Image2DResult[]>>(() => ProcessCaptureInfo(s)))
-                        .Map(s => s.Invoke())
+                        //.Select(s => new Func<Either<string, Image2DResult[]>>(() => ProcessCaptureInfo(s)))
+                        //.Map(s => s.Invoke())
+                        .Select(ProcessCaptureInfo)
                         .Traverse(s => s)
 
 
