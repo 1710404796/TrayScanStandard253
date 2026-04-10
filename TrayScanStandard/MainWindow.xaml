@@ -9,6 +9,7 @@
       Loaded="Window_Loaded"
        Closed="Window_Closed" 
         Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=local:MainWindow}"
       xmlns:view="clr-namespace:TrayScanStandard.View"
         xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -63,7 +64,7 @@ Margin="0,5,100,5"
 Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>
 
 
-            <TextBlock
+            <!--<TextBlock
     VerticalAlignment="Center"
     FontSize="15"
     Text="{x:Static lang:Resources.PLCStatus}"
@@ -77,7 +78,7 @@ Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>
     Foreground="{Binding ViewModel.PlcColor}"
     Margin="10,0,0,0"
 
-    ></TextBlock>
+    ></TextBlock>-->
             <TextBlock VerticalAlignment="Center"
            Margin="10,0,0,0"
     Text="{x:Static lang:Resources.CurrentOperator}"
