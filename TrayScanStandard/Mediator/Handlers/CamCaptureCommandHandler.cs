@@ -43,7 +43,7 @@ namespace TrayScanStandard.Mediator.Handlers
                     .Bind(c =>
                     //.BindAsync(c =>
                         c
-                        //.AsParallel()
+                        //.AsParallel()    //华睿相机并行拍照会有问题，暂时不使用
                         // .AsOrdered()
 
 

@@ -22,14 +22,15 @@ using VMWebAIClient;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
-    internal class DelectCCDCommandHander(ScanCameraService scanCameraService, ILogger<ScanCameraService> logger, IMediator mediator
-        , IVMWebAIClient vMWebAIClient,
-        ImageDisplayViewModel imageDisplayViewModel
-        )
-        : IRequestHandler<DelectCCDCommand, Either<string, DetectResult>>
+    internal class DetectCCDCommandHander
+        (ScanCameraService scanCameraService, 
+        ILogger<ScanCameraService> logger, 
+        IMediator mediator,
+        IVMWebAIClient vMWebAIClient,
+        ImageDisplayViewModel imageDisplayViewModel): IRequestHandler<DetectCCDCommand, Either<string, DetectResult>>
     // 这个就是默认全部的
     {
-        public async Task<Either<string, DetectResult>> Handle(DelectCCDCommand request, CancellationToken cancellationToken)
+        public async Task<Either<string, DetectResult>> Handle(DetectCCDCommand request, CancellationToken cancellationToken)
         {
 
             if (request.BatteryTypeInfo == null)
@@ -94,6 +95,7 @@ namespace TrayScanStandard.Mediator.Handlers
                                 .Map(s =>
                                 {
                                     logger.LogInformation("检测{idx}图片", s.s);
+                                    // 解析二维码
                                     return vMWebAIClient.DetectCodesV1Async(s.s, s.Item2);
                                 })
                                 .TraverseSerial(s => s)
