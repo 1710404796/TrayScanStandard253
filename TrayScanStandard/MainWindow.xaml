@@ -41,11 +41,11 @@
             </Border.Background>
         </Border>
 
-        <TextBlock VerticalAlignment="Center"
+        <TextBox VerticalAlignment="Center"
                    FontSize="20" 
-                   Text="CCD整盘扫码"
+                   Text="{Binding ViewModel.Saves.TrayScanStandardName, Mode=TwoWay}"
                    HorizontalAlignment="Center">
-        </TextBlock>
+        </TextBox>
         <!--<TextBlock Grid.Column="1"
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
