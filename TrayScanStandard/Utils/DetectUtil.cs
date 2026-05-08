@@ -42,7 +42,7 @@ namespace TrayScanStandard.Utils
             }
             finally
             {
-                // Ensure the light is turned off after the action
+                // 操作完成后务必关闭灯光。
                 ControlLights(false);
             }
         }
@@ -61,7 +61,7 @@ namespace TrayScanStandard.Utils
             }
             finally
             {
-                // Ensure the light is turned off after the action
+                // 操作完成后务必关闭灯光。
                 ControlLights(false);
             }
         }
@@ -72,9 +72,9 @@ namespace TrayScanStandard.Utils
         {
             mugenCamera.StopGrab();
             var camSession = mugenCamera.StartGrab();
-            // Execute the action only if StartGrab was successful
+            // 仅在 StartGrab 成功执行时执行该操作。
             var result = camSession.Bind(action);
-            // Ensure StopGrab is called if StartGrab succeeded, regardless of action result
+            // 无论操作结果如何，只要StartGrab成功执行，就必须调用StopGrab。
             camSession.Bind(s => s.StopGrab());
             return result;
         }
@@ -82,14 +82,14 @@ namespace TrayScanStandard.Utils
 
         public static Either<string, Image2DResult> CaptureOne(this MugenCamera.MugenCamera mugenCamera)
         {
-            // Define the specific action: Software Trigger then Capture
+            // 定义具体操作：软件触发后捕获
 
-            return 
+            return
                 UseCamera(mugenCamera, 
                     cam =>
-                    cam.SoftwareTrigger() // Assuming SoftwareTrigger returns Either<string, MugenCamera>
+                    cam.SoftwareTrigger() // 假设 SoftwareTrigger 返回的值为 string 或 MugenCamera。
                        .Bind(s => s.Capture(TimeSpan.FromSeconds(3)).Map(s => (s as Image2DResult)!)));
-            // Use the helper method to execute the action within a session
+            // 使用辅助方法在会话中执行该操作
             //return ;
         }
 

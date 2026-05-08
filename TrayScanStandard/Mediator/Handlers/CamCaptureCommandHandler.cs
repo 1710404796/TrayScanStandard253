@@ -14,7 +14,9 @@ using TrayScanStandard.Utils;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
-    // 此处用于处理相机拍照的命令
+    /// <summary>
+    /// 此处用于处理相机拍照的命令
+    /// </summary>
     public class CamCaptureCommandHandler : IRequestHandler<CamCaptureCommand, Either<string, IEnumerable<Image2DResult[]>>>
     {
         public Task<Either<string, IEnumerable<Image2DResult[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
@@ -41,25 +43,55 @@ namespace TrayScanStandard.Mediator.Handlers
                     .Map(s => s.ToEither("相机未初始化"))
                     .Traverse(s => s)
                     .Bind(c =>
+                    #region
                     //.BindAsync(c =>
-                        c
-                        //.AsParallel()    //华睿相机并行拍照会有问题，暂时不使用
-                        // .AsOrdered()
+                    //    c
+                    //    //.AsParallel()    //华睿相机并行拍照会有问题，暂时不使用
+                    //    // .AsOrdered()
+                    //
+                    //
+                    //    //.Select(s => Task.Run(() => ProcessCaptureInfo(s)))
+                    //    //.Apply(Task.WhenAll)
+                    //    //.Map(s => s.Traverse(q => q))
+                    //
+                    //    //.Select(s => new Func<Either<string, Image2DResult[]>>(() => ProcessCaptureInfo(s)))
+                    //    //.Map(s => s.Invoke())
+                    //    .Select(ProcessCaptureInfo)
+                    //    .Traverse(s => s)
+                    //
+                    //
+                    //    //.Select(ProcessCaptureInfo)
+                    //    //.Traverse(s =>s)
+                    //    )
+                    #endregion
+                    {
+                        var captureInfos = c.ToArray();
+                        var results = new Either<string, Image2DResult[]>[captureInfos.Length];
 
+                        // 海康与其他分支沿用原逻辑：顺序执行，保持既有行为不变。
+                        captureInfos
+                            .Select((info, idx) => (info, idx))
+                            .Where(x => x.info.Camera is not HuaruiCam)
+                            .AsParallel()
+                            .Iter(x =>
+                            {
+                                results[x.idx] = ProcessCaptureInfo(x.info);
+                            });
 
-                        //.Select(s => Task.Run(() => ProcessCaptureInfo(s)))
-                        //.Apply(Task.WhenAll)
-                        //.Map(s => s.Traverse(q => q))
+                        // 仅华睿分支并行拍照，再按原索引回填，避免图像槽位互换。
+                        captureInfos
+                            .Select((info, idx) => (info, idx))
+                            .Where(x => x.info.Camera is HuaruiCam)
+                            .AsParallel()
+                            .Select(x => (x.idx, result: ProcessCaptureInfo(x.info)))
+                            .ToArray()
+                            .Iter(x =>
+                            {
+                                results[x.idx] = x.result;
+                            });
 
-                        //.Select(s => new Func<Either<string, Image2DResult[]>>(() => ProcessCaptureInfo(s)))
-                        //.Map(s => s.Invoke())
-                        .Select(ProcessCaptureInfo)
-                        .Traverse(s => s)
-
-
-                        //.Select(ProcessCaptureInfo)
-                        //.Traverse(s =>s)
-                        )
+                        return results.Traverse(s => s);
+                    })
                     //.TraverseParallel(s => s)
                     )
                 .Apply(Task.FromResult)

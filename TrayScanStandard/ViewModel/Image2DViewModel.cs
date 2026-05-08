@@ -126,9 +126,7 @@ namespace TrayScanStandard.ViewModel
         //{
         //    get; set;
         //}
-        public required
-            ScanCameraService
-            Service { get; init; }
+        public required ScanCameraService Service { get; init; }
 
 
         public Image2DViewModel()

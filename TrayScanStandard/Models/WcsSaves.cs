@@ -55,7 +55,7 @@ namespace TrayScanStandard.Models
 
         public CameraSetting[] ConnectAddresses { get; set; } = Enumerable.Range(0,32).Select(s => new CameraSetting()).ToArray();
 
-        public int CameraCnt { get; set; } = 1;
+        public int CameraCount { get; set; } = 1;
 
         //public Dictionary<string, string> ApiUrlTable { get; set; } = new();
 

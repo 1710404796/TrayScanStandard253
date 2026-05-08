@@ -83,7 +83,7 @@ namespace TrayScanStandard.Mediator.Handlers
             var res = (await dataFilenames.BindAsync(
                     camImgs =>
                         camImgs
-                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCnt))
+                        .Zip(request.BatteryTypeInfo.Regions.Take(MainStorage.Saves.CameraCount))
                         .Map(
                             imgs => imgs.Item1
                                 .Map(s =>
