@@ -68,6 +68,7 @@ namespace TrayScanStandard.View
                 var imageVm = ViewModel.Image2DViewModel;
                 int cameraIdx = imageVm.CameraIdx;
 
+                // 调用重连方法并处理结果
                 var result = imageVm.Service.ReconnectCamera(cameraIdx);
                 result.Match(
                     success =>

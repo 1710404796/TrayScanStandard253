@@ -25,6 +25,8 @@ namespace TrayScanStandard.Mediator.Handlers
 
 
             //var a = request.CaptureInfos.Select(s => 1);
+
+            //  若 `CameraEnable=false`，不访问物理相机，直接读 `testImg\{i}.png`
             if (!MainStorage.Saves.CameraEnable)
             {
                 return Either<string, IEnumerable<Image2DResult[]>>.Right
@@ -38,6 +40,7 @@ namespace TrayScanStandard.Mediator.Handlers
                ]).Apply(Task.FromResult);
             }
 
+            // 启用相机拍照，使用 LightManagerViewModel 中的光源设置
             return DetectUtil.UseLight(
                 () => request.CaptureInfos
                     .Map(s => s.ToEither("相机未初始化"))
@@ -94,15 +97,16 @@ namespace TrayScanStandard.Mediator.Handlers
                     })
                     //.TraverseParallel(s => s)
                     )
-                .Apply(Task.FromResult)
-                ;
+                .Apply(Task.FromResult);
 
             // 本地函数：处理单个CaptureInfo
             Either<string, Image2DResult[]> ProcessCaptureInfo(CaptureInfo s)
             {
                 var aa = s.Exps.Map(e =>
                         s.Camera
+                        // 每路按曝光循环
                         .SetControl(new AcquisitionControl { ExposureTime = e })
+                        // 拍照并获取图像数据
                         .Bind(DetectUtil.CaptureOne)
                     )
                 .Traverse(s => s)

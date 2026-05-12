@@ -57,6 +57,8 @@ namespace TrayScanStandard.Mediator.Handlers
                 }
             }
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            // 读取当前电池类型
             MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
             foreach (var item in Enum.GetNames<RoleEnum>())
@@ -64,12 +66,18 @@ namespace TrayScanStandard.Mediator.Handlers
 
                 await role.CreateAsync(new LinxRole { RoleName = item });
             }
+
+            // 初始化相机服务
             scanCameraService.Init();
+
+
             // 通常这里要初始化一些硬件设备
 
             // 例如：相机、光源、CST等
 
             // 也需要注册一些任务等
+
+            // 初始化光源
             MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
                 async s =>
                 {
@@ -102,6 +110,8 @@ namespace TrayScanStandard.Mediator.Handlers
             //    ;
             //MainStorage.AlgoCnn = sol
             //    .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
+
+            // 算法加载
             var algores = await vmWebAIClient.CreateAlgoAsync(FilenameHelper.AppPath + @"test.sol", LinxUniverse.Algo.Common.DetectType.VisionMaster);
 
             logger.LogInformation("算法加载结果: {Result}", algores);

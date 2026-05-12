@@ -51,8 +51,7 @@ namespace TrayScanStandard.ViewModel
         [ObservableProperty]
         private ObservableCollection<LightType> _lightTypes = new ObservableCollection<LightType>();    // 可选光源类型列表
 
-        // 构造函数 - 假设 WcsSaves 是通过依赖注入（DI）注入或静态获取的
-        // 根据您实际的依赖注入配置进行调整
+        // 根据依赖注入配置进行调整
         public LightManagerViewModel()
         {
             LightInfos = new ObservableCollection<LightInfoViewModel>(
