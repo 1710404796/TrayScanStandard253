@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Camera.Fs.Common;
 using LinxUniverse.CST;
 using MugenCamera;
+using TrayScanStandard.Models.CZPallet;
 namespace TrayScanStandard.Utils
 {    public static class DetectUtil
     {
@@ -13,14 +14,72 @@ namespace TrayScanStandard.Utils
         // 还需要一个光源的中间件
 
         /// <summary>
+        /// 确保光源控制器数量与当前配置一致。
+        /// 说明：兼容启动时未初始化/数量不一致的场景，避免拍照时不亮灯。
+        /// </summary>
+        private static void EnsureLightControllersReady()
+        {
+            var infos = MainStorage.Saves.LightInfos ?? [];
+            var current = MainStorage.CST?.ToArray() ?? [];
+
+            // 已经和配置一致时，不重复创建连接。
+            if (infos.Length == current.Length)
+            {
+                return;
+            }
+
+            // 先关闭旧连接，避免串口占用。
+            foreach (var cst in current)
+            {
+                try
+                {
+                    cst?.Close();
+                }
+                catch
+                {
+                    // 这里是兜底清理，不抛出异常影响拍照流程。
+                }
+            }
+
+            var rebuilt = new List<LightCST>();
+            foreach (var info in infos)
+            {
+                if (!Enum.TryParse<SerialPortType>(info.Com, true, out var com))
+                {
+                    continue;
+                }
+
+                var cst = new LightCST();
+                // 沃德普明确固定 19200；康耐视沿用 DLL 串口初始化。
+                var ok = info.Type == LightType.Wordop
+                    ? cst.InitializeWordop((int)(com + 1), 19200)
+                    : cst.Initialize((int)(com + 1));
+
+                if (ok)
+                {
+                    rebuilt.Add(cst);
+                }
+            }
+
+            MainStorage.CST = rebuilt;
+        }
+
+        /// <summary>
         /// 控制光源的开启和关闭
         /// </summary>
         /// <param name="turnOn">true为开启光源，false为关闭光源</param>
         private static void ControlLights(bool turnOn)
         {
+            EnsureLightControllersReady();
             var lightInfos = MainStorage.Saves.LightInfos.Zip(MainStorage.CST);
             lightInfos.Iter(s =>
             {
+                // 防御性保护：若某路光源初始化失败导致控制器为空，则跳过该路，避免拍照时空引用崩溃。
+                if (s.Item2 == null || s.Item1.Values == null)
+                {
+                    return;
+                }
+
                 s.Item1.Values.Iter((i, v) =>
                 {
                     s.Item2.SetLight(i + 1, turnOn ? v : 0);

@@ -78,30 +78,44 @@ namespace TrayScanStandard.Mediator.Handlers
             // 也需要注册一些任务等
 
             // 初始化光源
-            MainStorage.CST = await MainStorage.Saves.LightInfos.Map(
+            var cstList = await MainStorage.Saves.LightInfos.Map(
                 async s =>
                 {
                     if (!Enum.TryParse<SerialPortType>(s.Com, true, out var com))
                     {
-                        throw new Exception($"光源地址 '{s.Com}' 不是有效的 COM 端口（支持 COM1-COM8）");
+                        logger.LogError($"光源地址 '{s.Com}' 不是有效的 COM 端口（支持 COM1-COM8）");
+                        return null;
                     }
 
                     // 根据光源类型选择底层驱动：
                     // Cognex -> CSTControllerDll
-                    // Wordop -> 串口 ASCII 协议
+                    // Wordop -> 串口 ASCII 协议（固定 19200）
                     var controllerType = s.Type == LightType.Wordop
                         ? LightControllerType.Wordop
                         : LightControllerType.Cognex;
-
-                    // Wordop: 19200, Cognex: 9600
                     var baudRate = s.Type == LightType.Wordop ? 19200 : 9600;
 
-                    var g = await mediator.Send(new CreateCSTLightCommand(
+                    // 注意：LoggingBehavior 出错时会返回 default；这里必须显式判空，避免后续 NRE。
+                    var guid = await mediator.Send(new CreateCSTLightCommand(
                         Com: com,
                         ControllerType: controllerType,
                         BaudRate: baudRate));
-                    return await mediator.Send(new GetLightQuery(g));
-                }).TraverseSerial(s => s!);
+                    if (string.IsNullOrWhiteSpace(guid))
+                    {
+                        logger.LogError($"光源初始化失败，已跳过 \n Type={s.Type}, Com={s.Com}, Baud={baudRate}");
+                        return null;
+                    }
+
+                    var cst = await mediator.Send(new GetLightQuery(guid));
+                    if (cst == null)
+                    {
+                        logger.LogError($"光源获取失败，已跳过 \n Type={s.Type}, Com={s.Com}, Guid={guid}");
+                    }
+                    return cst;
+                }).TraverseSerial(s => s);
+
+            // 仅保留初始化成功的光源控制器，避免拍照流程访问到空对象。
+            MainStorage.CST = cstList.Where(s => s != null).Select(s => s!);
             //var sol= CodeDetectExtensions
             //    .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
             //Console.WriteLine(sol);
