@@ -56,6 +56,8 @@ namespace TrayScanStandard.Mediator.Handlers
                     }
                 }
             }
+
+            // 让程序能够处理 GB2312、GBK 等中文编码（非 Unicode 编码）
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             // 读取当前电池类型

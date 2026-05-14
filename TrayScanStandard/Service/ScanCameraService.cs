@@ -41,7 +41,7 @@ namespace TrayScanStandard.Service
             var settings = MainStorage.Saves.ConnectAddresses.Take(MainStorage.Saves.CameraCount);
 
             // 初始化相机连接，并记录结果   按配置逐个连接相机
-            var cameras = settings.Map(s => InitCamera(s)).ToArray();
+            var cameras = settings.Map(setting => InitCamera(setting)).ToArray();
 
             // 保存连接结果
             // Either->Option，成功 Some(camera)，失败 None 存入 MugenCameras
@@ -166,8 +166,8 @@ namespace TrayScanStandard.Service
             {
                 MugenCameras = MugenCameras.Map((i, s) =>
                 {
-                    // 对每个 Some(camera) 调 CheckConnect()
-                    return s.Bind(s => s.CheckConnect().ToOption());
+                    // 对每个 Some(camera) 调检查连接 CheckConnect()
+                    return s.Bind(some => some.CheckConnect().ToOption());
                 }).ToArray();
 
                 MugenCameras = MugenCameras.Map((i, s) =>
@@ -182,11 +182,13 @@ namespace TrayScanStandard.Service
                             }
                             else
                             {
+                                // 若相机断开或当前是 `None`，调用 `InitCamera(address)` 重连
                                 return InitCamera(address);
                             }
                         },
                         None: () =>
-                        {   // 若相机断开或当前是 `None`，调用 `InitCamera(address)` 重连
+                        {   
+                            // 若相机断开或当前是 `None`，调用 `InitCamera(address)` 重连
                             return InitCamera(address);
                         }).ToOption();
                 }).ToArray();
