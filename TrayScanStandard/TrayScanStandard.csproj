@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
 	  <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
 	  <Platforms>AnyCPU;x64</Platforms>
-	  <ApplicationIcon>catl.ico</ApplicationIcon>
+	  <ApplicationIcon>灵西机器人原色.ico</ApplicationIcon>
 
   </PropertyGroup>
 
@@ -21,14 +21,16 @@
 
   <ItemGroup>
     <None Remove="Images\beier.png" />
-    <None Remove="Images\catl.png" />
-    <None Remove="Images\catl1.png" />
     <None Remove="Images\linx.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="catl.ico" />
+    <Content Include="灵西机器人原色.ico" />
   </ItemGroup>
+
+  
+
+ 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
@@ -84,8 +86,6 @@
 	  <Resource Include="Images\beier.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
-	  <Resource Include="Images\catl.png" />
-	  <Resource Include="Images\catl1.png" />
 	  <Resource Include="Images\linx.png" />
 	</ItemGroup>
 
