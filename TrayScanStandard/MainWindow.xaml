@@ -16,6 +16,7 @@
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="MainWindow" Height="800" Width="1440">
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -26,11 +27,8 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
+        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" ></Image>-->
 
-
-        <!--<Image  Source="Images/beier.png" Opacity="0.2" Grid.Column="1" Grid.Row="1" >
-    
-</Image>-->
         <Border CornerRadius="20" 
                 Visibility="{Binding ViewModel.HasBackGround}"
                 Margin="20" 
@@ -56,29 +54,30 @@
         </TextBlock>-->
       
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+
             <!-- <StackPanel></StackPanel> -->
             <!--<Image 
-Grid.Column="1"
-VerticalAlignment="Center"
-Margin="0,5,100,5"
-Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Margin="0,5,100,5"
+                Source="/Images/catl1.png" 
+                HorizontalAlignment="Center"></Image>-->
+
+            <!--<TextBlock 
+                VerticalAlignment="Center"
+                FontSize="15"
+                Text="{x:Static lang:Resources.PLCStatus}"
+                Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                ></TextBlock>
+
+            <TextBlock 
+                Text="{Binding ViewModel.PlcStatus}"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Foreground="{Binding ViewModel.PlcColor}"
+                Margin="10,0,0,0"></TextBlock>-->
 
 
-            <!--<TextBlock
-    VerticalAlignment="Center"
-    FontSize="15"
-    Text="{x:Static lang:Resources.PLCStatus}"
-    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-></TextBlock>
-            <TextBlock
-    Text="{Binding ViewModel.PlcStatus}"
-    
-    VerticalAlignment="Center"
-    FontWeight="Bold"
-    Foreground="{Binding ViewModel.PlcColor}"
-    Margin="10,0,0,0"
-
-    ></TextBlock>-->
             <TextBlock VerticalAlignment="Center"
                        Margin="10,0,0,0"
                        Text="{x:Static lang:Resources.CurrentOperator}"
@@ -139,45 +138,43 @@ Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
                          Cursor="Hand"
                          x:Name="ZPALgo"
                          Click="ZPALgo_Click">
-                组盘扫码日志
+                扫码日志界面
             </RadioButton>
 
-            <!--电芯种类管理-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="BatteryManager"
-                         Click="BatteryManager_Click"
-                         Content="{x:Static lang:Resources.ManagementOfBatteryCellTypes}">
+                         Click="BatteryManager_Click">
+                电芯种类管理
             </RadioButton>
 
-            <!--日志窗口-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="LogDash"
-                         Click="LogDash_Click"
-                         Content="{x:Static lang:Resources.LogWindow}">
+                         Click="LogDash_Click">
+                日志窗口
             </RadioButton>
 
-            <!--程序参数设定-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="Setting"
-                         Content="{x:Static lang:Resources.ParameterSettings}"
                          Click="Setting_Click">
+                程序参数设定
             </RadioButton>
 
-            <!--权限管理-->
             <RadioButton Style="{StaticResource MenuRadioButtonStyle}" 
                          Cursor="Hand"
                          x:Name="PowerManager"
-                         Content="{x:Static lang:Resources.AccessControl}"
                          Click="PowerManager_Click">
+                用户管理界面   
             </RadioButton>
+
             <!--<CheckBox HorizontalAlignment="Center" 
-              IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
-        Visibility="{Binding ViewModel.View2}"
-               Click="CheckBox_Click_1"
+                IsChecked="{Binding ViewModel.InsSaves.TestModel, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding ViewModel.View2}"
+                Click="CheckBox_Click_1"
               >测试模式</CheckBox>-->
+
         </StackPanel>
 
         <Frame Grid.Row="1"
@@ -192,7 +189,7 @@ Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
                              Grid.ColumnSpan="3" 
                              Grid.RowSpan="2">
         </view:LockScreenView>
-
+        
         <view:Busying Visibility="{Binding ViewModel.IsBusy}"
                       Opacity="0.5"
                       Progess="{Binding ViewModel.Progg}"
@@ -201,5 +198,6 @@ Source="/Images/catl1.png" HorizontalAlignment="Center"></Image>-->
                       Grid.ColumnSpan="2" 
                       Grid.RowSpan="2">
         </view:Busying>
+
     </Grid>
 </Window>

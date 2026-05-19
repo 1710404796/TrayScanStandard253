@@ -12,17 +12,18 @@ using TrayScanStandard.Mediator.Commands;
 namespace TrayScanStandard.Mediator.Handlers
 {
     class SaveDataFrameCommandHandler : IRequestHandler<SaveDataFrameCommand>
-    {        public Task Handle(SaveDataFrameCommand request, CancellationToken cancellationToken)
+    {
+        public Task Handle(SaveDataFrameCommand request, CancellationToken cancellationToken)
         {
             var folderPath = FilenameHelper.FileName + "_DataFrame";
             var fullPath = Path.Combine(FilenameHelper.AppPath + "DataFrame", folderPath);
-            
+
             EnsureDirectoryExists(fullPath);
-            
+
             var updatedDataFrame = ProcessImagesAndUpdatePaths(request.DataFrame, fullPath);
-            
+
             SaveDataFrameInfo(fullPath, updatedDataFrame);
-            
+
             return Task.CompletedTask;
         }
 
@@ -56,9 +57,9 @@ namespace TrayScanStandard.Mediator.Handlers
         {
             var newFileName = $"cam{cameraIndex:0000}-{serial}-exp{originalInfo.Exposure}.png";
             var newFilePath = Path.Combine(outputPath, newFileName);
-            
+
             File.Copy(originalInfo.Path, newFilePath, true);
-            
+
             return originalInfo with { Path = newFileName };
         }
 

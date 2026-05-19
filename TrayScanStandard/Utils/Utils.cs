@@ -35,14 +35,7 @@ namespace TrayScanStandard.Utils
         {
             return power switch
             {
-                PowerEnum.报警日志 => Properties.Resources.AlarmLog,
-                PowerEnum.WCS交互日志 => Properties.Resources.InteractionLog,
                 PowerEnum.用户管理界面 => Properties.Resources.AccessControl,
-
-
-
-
-
                 _ => power.ToString()
             };
         }

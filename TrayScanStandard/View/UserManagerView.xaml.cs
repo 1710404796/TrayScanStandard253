@@ -78,10 +78,10 @@ namespace TrayScanStandard.View
 
         }
 
-        private void Select_Click(object sender, RoutedEventArgs e)
-        {
+        //private void Select_Click(object sender, RoutedEventArgs e)
+        //{
 
-        }
+        //}
 
         private async void ScrollViewer_Loaded(object sender, RoutedEventArgs e)
         {
@@ -108,29 +108,29 @@ namespace TrayScanStandard.View
                 }
 
             }
-            ;
 
             ViewModel.Users = new(advUsers);
         }
 
-        private async void EditUser_Click(object sender, RoutedEventArgs e)
-        {
-            //var advuser = ddShow.SelectedItem as AdvUser;
-            //if (advuser != null)
-            //{
+        ///修改用户
+        //private async void EditUser_Click(object sender, RoutedEventArgs e)
+        //{
+        //var advuser = ddShow.SelectedItem as AdvUser;
+        //if (advuser != null)
+        //{
 
-            //    var newUser = new AddUser() { RFID = advuser.LinxUser.Password, RoleEnum }
+        //    var newUser = new AddUser() { RFID = advuser.LinxUser.Password, RoleEnum }
 
-            //if (newUser.ShowDialog() ?? false)
-            //    {
-            //        LinxUser user = new LinxUser
-            //        {
-            //            Password = newUser.RFID,
-            //            UserName = newUser.UserName,
-            //        };
+        //if (newUser.ShowDialog() ?? false)
+        //    {
+        //        LinxUser user = new LinxUser
+        //        {
+        //            Password = newUser.RFID,
+        //            UserName = newUser.UserName,
+        //        };
 
-            //    } 
-            //}
-        }
+        //    } 
+        //}
+        //}
     }
 }

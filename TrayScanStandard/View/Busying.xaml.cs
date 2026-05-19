@@ -9,9 +9,6 @@ namespace TrayScanStandard.View
     public partial class Busying : UserControl, IDisposable
     {
 
-
-
-
         public string BusyText
         {
             get { return (string)GetValue(BusyTextProperty); }
@@ -21,8 +18,6 @@ namespace TrayScanStandard.View
         // Using a DependencyProperty as the backing store for _busyText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BusyTextProperty =
             DependencyProperty.Register("BusyText", typeof(string), typeof(Busying), new PropertyMetadata(string.Empty, OnBusyTextChange));
-
-
 
         public int Progess
         {

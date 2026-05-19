@@ -39,12 +39,12 @@ namespace TrayScanStandard.Mediator.Handlers
                 MessageBoxOptions.ServiceNotification);
         }
     }
+
     /// <summary>
     /// 处理PLC数据校验返回的警告框
     /// </summary>
     /// <param name="mediator"></param>
     /// <param name="logger"></param>
-
     public class PlcDataWarningBoxCommandHandler(IMediator mediator, ILogger<PlcDataWarningBoxCommandHandler> logger) : IRequestHandler<PlcDataWarningBoxCommand, MessageBoxResult>
     {
         public Task<MessageBoxResult> Handle(PlcDataWarningBoxCommand request, CancellationToken cancellationToken)
@@ -53,6 +53,7 @@ namespace TrayScanStandard.Mediator.Handlers
 
         }
     }
+
     /// <summary>
     /// 处理WCS返回的警告框
     /// </summary>

@@ -7,5 +7,9 @@ using MediatR;
 
 namespace TrayScanStandard.Mediator.Commands
 {
+    /// <summary>
+    /// 操作日志
+    /// </summary>
+    /// <param name="Message"></param>
     public record OperationLogCommand(string Message) : IRequest;
 }

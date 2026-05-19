@@ -61,10 +61,10 @@ public partial class BatteryManagerViewModel : ObservableRecipient
         _battery.Remove(_selectedBattery);
     }
 
-//public void SelectPallet(Pallet pallet)
-//{
-//    _selectPallet = pallet;
-//}
+    //public void SelectPallet(Pallet pallet)
+    //{
+    //    _selectPallet = pallet;
+    //}
 
     [RelayCommand]
     public void SavePallet()
@@ -85,7 +85,6 @@ public partial class BatteryManagerViewModel : ObservableRecipient
     public void FilterBattery(string text)
     {
         Battery = new ObservableCollection<BatteryTypeInfo>(
-            _batterySource.Where(s => s.TypeName.Contains(text))
-        );
+            _batterySource.Where(s => s.TypeName.Contains(text)));
     }
 }

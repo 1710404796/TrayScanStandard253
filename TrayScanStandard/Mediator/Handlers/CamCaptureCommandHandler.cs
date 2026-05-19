@@ -21,9 +21,6 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public Task<Either<string, IEnumerable<Image2DResult[]>>> Handle(CamCaptureCommand request, CancellationToken cancellationToken)
         {
-
-
-
             //var a = request.CaptureInfos.Select(s => 1);
 
             //  若 `CameraEnable=false`，不访问物理相机，直接读 `testImg\{i}.png`

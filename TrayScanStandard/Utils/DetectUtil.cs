@@ -160,6 +160,7 @@ namespace TrayScanStandard.Utils
         //    cam = cam.Bind(s => s.StopGrab());
         //    return cam.Bind(s => img);
         //}
+
         public static Either<string, IEnumerable<Image2DResult>> Capture(MugenCamera.MugenCamera[] mugenCameras)
         {
             return UseLight(

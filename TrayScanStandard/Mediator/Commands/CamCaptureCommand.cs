@@ -13,10 +13,7 @@ namespace TrayScanStandard.Mediator.Commands
     /// </summary>
     /// <param name="Camera">相机对象</param>
     /// <param name="Exps">曝光参数数组</param>
-    public record CaptureInfo( 
-        MugenCamera.MugenCamera Camera
-        , int[] Exps
-        );
+    public record CaptureInfo(MugenCamera.MugenCamera Camera, int[] Exps);
     // 要有单相机拍照的最好 null
     public record CamCaptureCommand(Option< CaptureInfo>[] CaptureInfos) : IRequest<Either<string, IEnumerable<Image2DResult[]>>>;
 }

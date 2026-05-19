@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data.Models;
-using TrayScanStandard.ViewModel.CZPallet;
+using TrayScanStandard.ViewModel;
 
 namespace TrayScanStandard.View.CZPallet
 {
@@ -27,18 +27,17 @@ namespace TrayScanStandard.View.CZPallet
     {
 
         public PalletLogViewModel ViewModel { get; }
+
         public PalletLogView()
         {
             DataContext = this;
             ViewModel = App.GetService<PalletLogViewModel>();
-
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var palletLog = (sender as FrameworkElement)!.Tag as PalletLog;
-
             new PalletDetailWindow(palletLog!).ShowDialog();
 
         }

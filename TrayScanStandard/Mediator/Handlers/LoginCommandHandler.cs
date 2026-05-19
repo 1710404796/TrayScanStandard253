@@ -14,7 +14,10 @@ namespace TrayScanStandard.Mediator.Handlers
     /// </summary>
     /// <param name="authenticationStateProvider"></param>
     /// <param name="mediator"></param>
-    public class LoginCommandHandler(LinxAuthenticationStateProvider authenticationStateProvider, IMediator mediator, LinxUniverse.Auth.UserManager<LinxUser> userManager) : IRequestHandler<LoginCommand, bool>
+    public class LoginCommandHandler(
+                LinxAuthenticationStateProvider authenticationStateProvider, 
+                IMediator mediator, 
+                LinxUniverse.Auth.UserManager<LinxUser> userManager) : IRequestHandler<LoginCommand, bool>
     {
         public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {

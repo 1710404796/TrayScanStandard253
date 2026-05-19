@@ -5,16 +5,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:TrayScanStandard.View"
         d:DesignHeight="450" d:DesignWidth="800"
-      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-        mc:Ignorable="d"
-        >
+        xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+        mc:Ignorable="d">
+
     <Grid Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+
         <StackPanel VerticalAlignment="Center">
+
             <TextBlock FontSize="40" VerticalAlignment="Center"
                   HorizontalAlignment="Center" x:Name="BusyText1">正在处理中...</TextBlock>
-            <ProgressBar x:Name="PP" Maximum="100"></ProgressBar>
-        </StackPanel>
 
+            <ProgressBar x:Name="PP" Maximum="100"></ProgressBar>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

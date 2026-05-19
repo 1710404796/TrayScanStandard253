@@ -25,7 +25,6 @@ using TrayScanStandard.Service;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.ViewModel;
-using TrayScanStandard.ViewModel.CZPallet;
 using VMWebAIClient;
 
 namespace TrayScanStandard
@@ -130,8 +129,8 @@ namespace TrayScanStandard
                          services.AddSingleton<BatteryManagerViewModel>();
                          services.AddTransient<BatteryManager>();
 
-                         services.AddTransient<WCSLogViewModel>();
-                         services.AddTransient<WCSLogView>();
+                         //services.AddTransient<WCSLogViewModel>();
+                         //services.AddTransient<WCSLogView>();
                          
                          services.AddTransient<LightManagerView>();
                          services.AddTransient<LightManagerViewModel>();
@@ -142,7 +141,7 @@ namespace TrayScanStandard
 
                          services.AddTransient<AllBcrListView>();
                          //services.AddSingleton<YWStageViewViewModels>();
-                         services.AddTransient<YWStageView>();
+                         //services.AddTransient<YWStageView>();
 
 
                          services.AddTransient<LogDashBoardView>();
@@ -153,7 +152,7 @@ namespace TrayScanStandard
 
                          services.AddSingleton<ScanCameraService>();
 
-                         services.AddTransient<StationSettingView>();
+                         //services.AddTransient<StationSettingView>();
 
 
                          services.AddCstService();

@@ -59,7 +59,6 @@ namespace TrayScanStandard.View.CZPallet
                 Text = (id + 1).ToString(),
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(-30, 0, 0, 0),
-
                 FontSize = 18
             };
             textBlock1.SetResourceReference(TextBlock.ForegroundProperty, "SystemControlPageTextBaseHighBrush");
@@ -80,12 +79,11 @@ namespace TrayScanStandard.View.CZPallet
             {
                 Source = Station,
                 Mode = BindingMode.OneWay,
-
             });
 
             // 还需要有点击修改事件
-            if (ClickAvaliable)
-                res.MouseDown += (sender, e) => Res_MouseDown(sender, e, id);
+            //if (ClickAvaliable)
+            //    res.MouseDown += (sender, e) => Res_MouseDown(sender, e, id);
 
             grid.Children.Add(textBlock1);
             grid.Children.Add(textBlock2);
@@ -98,20 +96,20 @@ namespace TrayScanStandard.View.CZPallet
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void Res_MouseDown(object sender, MouseButtonEventArgs e, int id)
-        {
-            //App.Current.MainWindow.IsEnabled= false;
-            var zqd = new ChannelModify(Station, id);
-            zqd.ShowDialog();
+        //private void Res_MouseDown(object sender, MouseButtonEventArgs e, int id)
+        //{
+        //    //App.Current.MainWindow.IsEnabled= false;
+        //    var zqd = new ChannelModify(Station, id);
+        //    zqd.ShowDialog();
 
 
-            //App.Current.MainWindow.IsEnabled = true;
+        //    //App.Current.MainWindow.IsEnabled = true;
 
 
 
-            // 双击编辑
-            //throw new NotImplementedException();
-        }
+        //    // 双击编辑
+        //    //throw new NotImplementedException();
+        //}
 
         private void InitBorder()
         {
@@ -135,20 +133,13 @@ namespace TrayScanStandard.View.CZPallet
 
                         stackPanel.Children.Add(_borders[border1Id]);
                     }
-
                 }
                 PalletBorder.Height = (_borders.Length * 64 / Station.Column + 40) * 1;
                 PalletBorder.Width = (Station.Column * 430 + 60) * 1;
-
-
-
-
-
             }
             else
             {
                 _logger.LogError("试图显示null托盘");
-
             }
         }
 

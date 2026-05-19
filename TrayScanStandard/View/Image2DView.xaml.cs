@@ -18,16 +18,12 @@ namespace TrayScanStandard.View
     /// <summary>
     /// Image2DView.xaml 的交互逻辑
     /// </summary>
-    [PowerView(PowerEnum.扫码枪设置)]
     public partial class Image2DView : UserControl
     {
 
         public Image2DViewModel ViewModel { get; set; }
 
         private List<(Border, BarCodeRegionInfo)> _rois = [];
-
-
-
 
         Border _nowBorder;
 
@@ -87,11 +83,9 @@ namespace TrayScanStandard.View
                             };
                             img2d.ResultCanvas.Children.Add(border);
                             resultRects.Add(border);
-                        }
-                        );
+                        });
                  
                 });
-
 
             });
         }
@@ -128,11 +122,11 @@ namespace TrayScanStandard.View
            
         }
 
-        private void Capture_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// 设置参数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SetCam_Click(object sender, RoutedEventArgs e)
         {
             if ( ViewModel.CameraSetting is not null)
@@ -143,6 +137,11 @@ namespace TrayScanStandard.View
             }
         }
 
+        /// <summary>
+        /// 添加选定框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddBorder_Click(object sender, RoutedEventArgs e)
         {
             Border border = CreateBorder();
@@ -150,22 +149,26 @@ namespace TrayScanStandard.View
             BarCodeRegionInfo barCodeRegionInfo = new();
 
             var lastBordor = _rois.LastOrDefault().Item2;
-            if (lastBordor is not null) {
+            if (lastBordor is not null) 
+            {
                 barCodeRegionInfo.Width = lastBordor.Width;
                 barCodeRegionInfo.Height = lastBordor.Height;
                 border.Width = lastBordor.Width;
                 border.Height = lastBordor.Height;
             }
 
-
             border.Tag = barCodeRegionInfo;
             barCodeRegionInfo.ChannelIdx = (_rois.LastOrDefault().Item2?.ChannelIdx + 1) ?? + 1;
             (border.Child as TextBlock).Text = barCodeRegionInfo.ChannelIdx.ToString();
             UpdateBorderThickness(border);
             _rois.Add((border, barCodeRegionInfo));
-        }       
-        
-        
+        }
+
+        /// <summary>
+        /// 保存设定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.SelectBattery is null)
@@ -184,6 +187,11 @@ namespace TrayScanStandard.View
             ViewModel.MarkAsSaved();
         }
 
+        /// <summary>
+        /// 电池方案
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // 记得保存一下
@@ -217,9 +225,6 @@ namespace TrayScanStandard.View
 
                 _rois.Add((border, regionInfo));
             }
-
-           
-
         }
 
 
@@ -341,7 +346,14 @@ namespace TrayScanStandard.View
                     break;
                 }
             }
-        }        private async void TopBox_TextChanged(object sender, TextChangedEventArgs e)
+        }        
+        
+        /// <summary>
+        /// 上
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void TopBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (ViewModel.SelectBarCodeRegionInfo is null)
             {
@@ -361,7 +373,14 @@ namespace TrayScanStandard.View
             
             // 标记有未保存的修改
             ViewModel.MarkAsChanged();
-        }        private async void ChannelBox_TextChanged(object sender, TextChangedEventArgs e)
+        }       
+        
+        /// <summary>
+        /// 通道
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ChannelBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (ViewModel.SelectBarCodeRegionInfo is null)
             {
@@ -376,13 +395,25 @@ namespace TrayScanStandard.View
             
             // 标记有未保存的修改
             ViewModel.MarkAsChanged();
-        }private void Delete_Border_Click(object sender, RoutedEventArgs e)
+        }
+
+        /// <summary>
+        /// 删除该选定框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Delete_Border_Click(object sender, RoutedEventArgs e)
         {
             DeleteBorder(_nowBorder);
             _nowBorder = null!;
             ViewModel.SelectBarCodeRegionInfo = null;
-        }     
-        
+        }
+
+        /// <summary>
+        /// 清理所有选定框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClearAllBoxes_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("确定要清理所有选定框吗？此操作将删除所有ROI选择框。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -403,6 +434,7 @@ namespace TrayScanStandard.View
             ViewModel.SelectBarCodeRegionInfo = null;
         }
 
+       
         private void DeleteBorder(Border border)
         {
             if (border is null)
@@ -467,17 +499,23 @@ namespace TrayScanStandard.View
             ViewModel.ColorUpdate -= ViewModel_ColorUpdate;
             ViewModel.ResultUpdate -= ViewModel_ResultUpdate;
         }
+
+        /// <summary>
+        /// 清除调试数据  暂时不用
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             //MainStorage.Saves.ScanRatios[ViewModel.CameraIdx - 1].OkCnt = MainStorage.Saves.ScanRatios[ViewModel.CameraIdx - 1].ScanCnt = 0;
             //ViewModel.UpdateRatio();
         }
 
-        private void Capture_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// 自动框定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void AutoRoi_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("确定要自动生成ROI吗？此操作将覆盖当前所有ROI设置。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -489,6 +527,11 @@ namespace TrayScanStandard.View
             RefreshBorder();
         }
 
+        /// <summary>
+        /// 自动排序整理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void SortRoi_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("确定要自动排序ROI吗？此操作将根据当前设置的通道顺序重新排列所有ROI。", "确认操作", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -498,7 +541,14 @@ namespace TrayScanStandard.View
             }
             await ViewModel.AutoSortROI();
             RefreshBorder();
-        }        private void ApplyBatchSize_Click(object sender, RoutedEventArgs e)
+        }
+
+        /// <summary>
+        /// 应用到所有边框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ApplyBatchSize_Click(object sender, RoutedEventArgs e)
         {
             // 批量应用宽高到所有边框
             foreach (var (border, regionInfo) in _rois)

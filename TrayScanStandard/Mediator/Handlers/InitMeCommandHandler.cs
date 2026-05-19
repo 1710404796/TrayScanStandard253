@@ -28,12 +28,11 @@ namespace TrayScanStandard.Mediator.Handlers
     /// <param name="role"></param>
     public class InitMeCommandHandler(IMediator mediator,
         ILogger<InitMeCommandHandler> logger, 
-        RoleManager<LinxRole, LinxUser> role
-        , ScanCameraService scanCameraService
-        , LinxContext linxContext
-        , IVMWebAIClient vmWebAIClient
-        )
-        : IRequestHandler<InitMeCommand>
+        RoleManager<LinxRole, LinxUser> role, 
+        ScanCameraService scanCameraService, 
+        LinxContext linxContext, 
+        IVMWebAIClient vmWebAIClient
+        ): IRequestHandler<InitMeCommand>
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
         {

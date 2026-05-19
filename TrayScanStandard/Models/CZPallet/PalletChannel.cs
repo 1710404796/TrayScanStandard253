@@ -9,7 +9,6 @@ namespace TrayScanStandard.Models
     public static class BatteryLevelHelper
     {
 
-        //
         public static bool IsNG(this string code)
             => string.IsNullOrEmpty(code) || code.StartsWith("noread", StringComparison.CurrentCultureIgnoreCase);
 

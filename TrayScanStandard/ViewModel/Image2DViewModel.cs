@@ -451,41 +451,40 @@ namespace TrayScanStandard.ViewModel
             //    }
             //}
 
-            // 撕烤一下更新
 
             #endregion
             Update();
         }
 
-        public void DrawAImage()
-        {
+        //public void DrawAImage()
+        //{
 
-            //if (SelectBattery == null)
-            //{
-            //    MessageBox.Show("未选择托盘类型");
-            //    return;
-            //}
-            //using var ms = new MemoryStream(File.ReadAllBytes(ResultImg));
-            //using var nImage = Image.FromStream(ms);
-            //using var g = Graphics.FromImage(nImage);
+        //    if (SelectBattery == null)
+        //    {
+        //        MessageBox.Show("未选择托盘类型");
+        //        return;
+        //    }
+        //    using var ms = new MemoryStream(File.ReadAllBytes(ResultImg));
+        //    using var nImage = Image.FromStream(ms);
+        //    using var g = Graphics.FromImage(nImage);
 
-            //System.Drawing.Font font = new("Aria", 100);
-            //System.Drawing.Font font1 = new("Aria", 30);
-            //foreach (var region in SelectBattery.Regions[CameraIdx - 1])
-            //{
-            //    var c = Colors[region.ChannelIdx] == Brushes.Red ? Brushes1.Red : Brushes1.Green;
-            //    g.DrawRectangle(new System.Drawing.Pen(c, 10), new System.Drawing.Rectangle(region.Left, region.Top, region.Width, region.Height));
-            //    g.DrawString(region.ChannelIdx.ToString(), font, c, new System.Drawing.Point(region.Left, region.Top + region.Height / 2 - 70));
+        //    System.Drawing.Font font = new("Aria", 100);
+        //    System.Drawing.Font font1 = new("Aria", 30);
+        //    foreach (var region in SelectBattery.Regions[CameraIdx - 1])
+        //    {
+        //        var c = Colors[region.ChannelIdx] == Brushes.Red ? Brushes1.Red : Brushes1.Green;
+        //        g.DrawRectangle(new System.Drawing.Pen(c, 10), new System.Drawing.Rectangle(region.Left, region.Top, region.Width, region.Height));
+        //        g.DrawString(region.ChannelIdx.ToString(), font, c, new System.Drawing.Point(region.Left, region.Top + region.Height / 2 - 70));
 
-            //    if (Codes[region.ChannelIdx].Length > 14)
-            //    {
-            //        g.DrawString(Codes[region.ChannelIdx][..14], font1, Brushes1.LightGreen, new System.Drawing.Point(region.Left - 10, region.Top + region.Height + 10));
-            //        g.DrawString(Codes[region.ChannelIdx][14..], font1, Brushes1.LightGreen, new System.Drawing.Point(region.Left - 10, region.Top + region.Height + 50));
-            //    }
+        //        if (Codes[region.ChannelIdx].Length > 14)
+        //        {
+        //            g.DrawString(Codes[region.ChannelIdx][..14], font1, Brushes1.LightGreen, new System.Drawing.Point(region.Left - 10, region.Top + region.Height + 10));
+        //            g.DrawString(Codes[region.ChannelIdx][14..], font1, Brushes1.LightGreen, new System.Drawing.Point(region.Left - 10, region.Top + region.Height + 50));
+        //        }
 
 
-            //}
-            //nImage.Save(ResultImg.Replace(".jpg", "-Result.jpg"));
-        }
+        //    }
+        //    nImage.Save(ResultImg.Replace(".jpg", "-Result.jpg"));
+        //}
     }
 }

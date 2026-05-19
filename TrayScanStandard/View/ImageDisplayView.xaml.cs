@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.ViewModel;
 
@@ -22,6 +23,7 @@ namespace TrayScanStandard.View
     /// <summary>
     /// ImageDisplayView.xaml 的交互逻辑
     /// </summary>
+    //[PowerView(PowerEnum.电芯条码显示)]
     public partial class ImageDisplayView : Page
     {
         private IMediator _meditor;
@@ -60,11 +62,7 @@ namespace TrayScanStandard.View
                     await _meditor.Send(new InformationBoxCommand("检测完成"));
                     return LanguageExt.Unit.Default;
 
-                }
-                
-                
-
-                );
+                });
 
             ////Dispatcher.Invoke(() => btn.IsEnabled = true);
             btn.IsEnabled = true;

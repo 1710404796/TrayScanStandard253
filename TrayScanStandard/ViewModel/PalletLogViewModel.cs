@@ -12,8 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using TrayScanStandard.Data;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Models.CZPallet;
+using TrayScanStandard.ViewModel.CZPallet;
 
-namespace TrayScanStandard.ViewModel.CZPallet
+namespace TrayScanStandard.ViewModel
 {
     public partial class PalletLogViewModel(LinxContext context) : ObservableRecipient
     {
@@ -24,7 +25,7 @@ namespace TrayScanStandard.ViewModel.CZPallet
         public DateTime EndTime { get; set; } = DateTime.Today.AddDays(1);
 
         public string Code { get; set; } = string.Empty;
-        public int LogNum { get; set; } = 100;
+        public int LogNum { get; set; } = 1000;
 
 
         public void RefreshContext()
@@ -97,9 +98,7 @@ namespace TrayScanStandard.ViewModel.CZPallet
                 afterFilter = afterFilter.Where(s => s.PalletCode.Contains(Code, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            PalletLogs = new(
-                 afterFilter.Take(LogNum).Select(s => new PalletLogExt(s))
-             );
+            PalletLogs = new( afterFilter.Take(LogNum).Select(s => new PalletLogExt(s)));
         }
     }
 }

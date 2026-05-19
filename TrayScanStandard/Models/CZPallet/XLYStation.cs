@@ -56,12 +56,8 @@ namespace TrayScanStandard.Models
         public int ChannelNum { get; set; } = 24;
         public int Column { get; set; } = 1;
 
-
-
-
         public ObservableCollection<StationChannel> Channels { get; set; } = new ObservableCollection<StationChannel>(
-            Enumerable.Range(0, 256).Select(s => new StationChannel() { Location = s })
-            );
+            Enumerable.Range(0, 256).Select(s => new StationChannel() { Location = s }));
 
         [ObservableProperty]
         bool _isEnable;
@@ -118,14 +114,10 @@ namespace TrayScanStandard.Models
 
         private async ValueTask<bool> SetChannelCode(int id, string code, bool force = false, BatteryLevel batteryLevel = BatteryLevel.OK)
         {
-            if (CheckBatteryUnique(code)
-                || force
-                )
+            if (CheckBatteryUnique(code) || force)
             {
                 // 目前只需校验当前的重复性 无需管理其他托盘
-                if (CheckBatterySerial(code)
-                    || force
-                    )
+                if (CheckBatterySerial(code) || force)
                 {
                     SetChanelStage(id, code, batteryLevel);
                     //OnSuccess?.Invoke(this, "绑定成功!");

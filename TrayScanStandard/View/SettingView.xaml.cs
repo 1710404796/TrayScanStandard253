@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommunityToolkit.Mvvm.ComponentModel;
+using TrayScanStandard.Attritubes;
 using TrayScanStandard.View.CZPallet;
 using TrayScanStandard.View.User;
 using TrayScanStandard.ViewModel;
@@ -22,6 +23,7 @@ namespace TrayScanStandard.View
     /// <summary>
     /// SettingView.xaml 的交互逻辑
     /// </summary>
+    [PowerView(PowerEnum.程序参数设定)]
     public partial class SettingView : Page
     {
 
@@ -44,20 +46,18 @@ namespace TrayScanStandard.View
             SaveButton.IsEnabled = false;
             await Task.Delay(1000);
             SaveButton.Content = "保存设定";
-
             SaveButton.IsEnabled = true;
         }
 
+        /// <summary>
+        /// 权限配置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SetPower_Click(object sender, RoutedEventArgs e)
         {
             new PowerSettingWindows().ShowDialog();
-
         }
 
-        private void StationSetting_Click(object sender, RoutedEventArgs e)
-        {
-            App.GetService<StationSettingView>().ShowDialog();
-
-        }
     }
 }

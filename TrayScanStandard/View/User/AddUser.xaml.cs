@@ -9,6 +9,7 @@ namespace TrayScanStandard.View.User
     /// <summary>
     /// AddUser.xaml 的交互逻辑
     /// </summary>
+    //[PowerView(PowerEnum.用户管理界面)]
     public partial class AddUser : Window
     {
         public IEnumerable<string> RoleList { get; set; }

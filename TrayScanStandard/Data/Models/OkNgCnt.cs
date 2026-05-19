@@ -35,31 +35,31 @@ namespace TrayScanStandard.Data.Models
         /// Ok新增并通知
         /// </summary>
         /// <param name="value"></param>
-        public void AddOk(int value)
-        {
-            OKCnt += value;
-            App.GetService<DataDisplayViewModel>().Update();
-        }
+        //public void AddOk(int value)
+        //{
+        //    OKCnt += value;
+        //    App.GetService<DataDisplayViewModel>().Update();
+        //}
 
         /// <summary>
         /// NG1新增并通知
         /// </summary>
         /// <param name="value"></param>
 
-        public void AddNG1(int value)
-        {
-            NG1Cnt += value;
-            App.GetService<DataDisplayViewModel>().Update();
-        }
+        //public void AddNG1(int value)
+        //{
+        //    NG1Cnt += value;
+        //    App.GetService<DataDisplayViewModel>().Update();
+        //}
         /// <summary>
         /// NG2新增并通知
         /// </summary>
         /// <param name="value"></param>
 
-        public void AddNG2(int value)
-        {
-            NG2Cnt += value;
-            App.GetService<DataDisplayViewModel>().Update();
-        }
+        //public void AddNG2(int value)
+        //{
+        //    NG2Cnt += value;
+        //    App.GetService<DataDisplayViewModel>().Update();
+        //}
     }
 }

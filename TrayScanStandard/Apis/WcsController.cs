@@ -15,8 +15,8 @@ namespace TrayScanStandard.Apis
     public class WcsController(
         LinxContext linxContext, 
         IMediator mediator, 
-        ILogger<WcsController> logger
-        , MainViewModel mainViewModel
+        ILogger<WcsController> logger, 
+        MainViewModel mainViewModel
         ): ControllerBase
     {
         //[HttpGet("/CaptureImage")] 北京时代
@@ -59,8 +59,7 @@ namespace TrayScanStandard.Apis
                     };
                     linxContext.PalletLogs.Add(log);
                     linxContext.SaveChanges();
-                }
-                );
+                });
 
             //retry<>
             return data.Match(

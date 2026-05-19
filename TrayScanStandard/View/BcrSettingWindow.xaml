@@ -12,7 +12,7 @@
         Title="相机设置" Height="640" Width="800">
     <Grid>
         <StackPanel Margin="10">
-            <TextBlock FontSize="24" Text="{x:Static lang:Resources.CodeReaderConfiguration}"/>
+            <TextBlock FontSize="24" Text="相机设置"/>
             
             <!-- Camera Type Selection -->
             <StackPanel 
@@ -25,13 +25,11 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="相机类型"
-                    >:</TextBlock>
+                    Text="相机类型">:</TextBlock>
                 <ComboBox
                     Name="CameraTypeCombo"
                     Width="250"
-                    SelectionChanged="CameraType_SelectionChanged"
-                    >
+                    SelectionChanged="CameraType_SelectionChanged">
                     <ComboBoxItem Content="HikVision"/>
                     <ComboBoxItem Content="Huarui"/>
                     <!-- Add other camera types here -->
@@ -49,13 +47,11 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="连接方式"
-                    >:</TextBlock>
+                    Text="连接方式">:</TextBlock>
                 <ComboBox
                     Name="ConnectionTypeCombo"
                     Width="250"
-                    SelectionChanged="ConnectionType_SelectionChanged"
-                    >
+                    SelectionChanged="ConnectionType_SelectionChanged">
                     <ComboBoxItem Content="Key"/>
                     <ComboBoxItem Content="IP"/>
                     <ComboBoxItem Content="Serial"/>
@@ -73,12 +69,10 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="连接值"
-                    >:</TextBlock>
+                    Text="连接值">:</TextBlock>
                 <ui:AutoSuggestBox
                     Name="ConnectionValueBox"
-                    Width="250"
-                    >
+                    Width="250">
                 </ui:AutoSuggestBox>
             </StackPanel>
             
@@ -92,8 +86,7 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="{x:Static lang:Resources.Exposure}"
-                >:</TextBlock>
+                    Text="曝光:"/>
                 <TextBox 
                     Width="250"
                     Height="150"
@@ -113,8 +106,7 @@
                     VerticalAlignment="Center"
                     FontSize="20"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                    Text="备用曝光"
-                >:</TextBlock>
+                    Text="备用曝光">:</TextBlock>
                 <TextBox 
                     Width="250"
                     Height="150"
@@ -127,10 +119,10 @@
             <!-- Save Button -->
             <Button Width="100" 
                     Margin="0,15,0,0" 
-                    Content="{x:Static lang:Resources.Save}"
                     Click="ButtonBase_OnClick" 
-                    HorizontalAlignment="Center">
-            </Button>
+                    HorizontalAlignment="Center"
+                    Content="保存"/>
+
         </StackPanel>
     </Grid>
 </Window>

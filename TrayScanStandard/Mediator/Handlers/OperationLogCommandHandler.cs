@@ -11,6 +11,11 @@ using TrayScanStandard.Mediator.Commands;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
+    /// <summary>
+    /// 操作日志
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="authenticationStateProvider"></param>
     internal class OperationLogCommandHandler(ILogger<OperationLogCommand> logger, LinxAuthenticationStateProvider authenticationStateProvider) : IRequestHandler<OperationLogCommand>
     {
         public async Task Handle(OperationLogCommand request, CancellationToken cancellationToken)

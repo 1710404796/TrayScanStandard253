@@ -27,8 +27,7 @@ namespace TrayScanStandard.View.CZPallet
             System.Collections.ObjectModel.ObservableCollection<Models.StationChannel> stationChannels = new(palletLog.BatteryInfo.Select(s => new Models.StationChannel() { Code = s.BatteryCode, BatteryLevel = s.BatteryLevel }).ToList());
             palletv.Station = new Models.XYLStation
             {
-                Channels = stationChannels
-                ,
+                Channels = stationChannels,
                 Column = palletLog.Column,
                 ChannelNum = stationChannels.Count
             };

@@ -146,23 +146,6 @@ namespace TrayScanStandard
             }
         }
 
-
-        private void LogDash_Click(object sender, RoutedEventArgs e)
-        {
-            NageTo<LogDashBoardView>();
-        }
-
-        private void Setting_Click(object sender, RoutedEventArgs e)
-        {
-            NageTo<SettingView>();
-
-        }
-
-        private void PowerManager_Click(object sender, RoutedEventArgs e)
-        {
-            NageTo<UserManagerView>();
-
-        }
         private void Window_Closed(object sender, EventArgs e)
         {
             // 清理虚拟机资源
@@ -234,39 +217,84 @@ namespace TrayScanStandard
             }
         }
 
-        private void StationView_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 电芯条码显示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            NageTo<YWStageView>();
-
+            NageTo<ImageDisplayView>();
         }
 
-        private void LightBtn_Click(object sender, RoutedEventArgs e)
-        {
-            NageTo<LightManagerView>();
-
-        }
-
+        /// <summary>
+        /// 相机管理界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CameraList_Click(object sender, RoutedEventArgs e)
         {
             NageTo<AllBcrListView>();
-
         }
 
-        private void BatteryManager_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 光源管理界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LightBtn_Click(object sender, RoutedEventArgs e)
         {
-            NageTo<BatteryManager>();
-
+            NageTo<LightManagerView>();
         }
 
+        /// <summary>
+        /// 扫码日志界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ZPALgo_Click(object sender, RoutedEventArgs e)
         {
             NageTo<PalletLogView>();
         }
 
-        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 电芯种类管理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BatteryManager_Click(object sender, RoutedEventArgs e)
         {
-            NageTo<ImageDisplayView>();
+            NageTo<BatteryManager>();
+        }
 
+        /// <summary>
+        /// 日志窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LogDash_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<LogDashBoardView>();
+        }
+
+        /// <summary>
+        /// 程序参数设定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<SettingView>();
+        }
+
+        /// <summary>
+        /// 用户管理界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PowerManager_Click(object sender, RoutedEventArgs e)
+        {
+            NageTo<UserManagerView>();
         }
     }
 }

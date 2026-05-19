@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TrayScanStandard.Attritubes;
 
 namespace TrayScanStandard.View
 {
     /// <summary>
     /// LogDashBoardView.xaml 的交互逻辑
     /// </summary>
+    // [PowerView(PowerEnum.扫码日志)]
     public partial class LogDashBoardView : Page
     {
         public LogDashBoardView()

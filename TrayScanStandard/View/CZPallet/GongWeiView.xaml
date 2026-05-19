@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:TrayScanStandard.View.CZPallet" 
              d:DataContext="{d:DesignInstance Type=local:GongWeiView}"
              mc:Ignorable="d" 
-      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-             
+             xmlns:lang="clr-namespace:TrayScanStandard.Properties"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Border CornerRadius="10" BorderThickness="2" 
@@ -18,17 +17,19 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock 
-                TextWrapping="Wrap"
-                FontSize="30"
-                x:Name="GongweiTitle"
-                HorizontalAlignment="Center"
-                Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}" 
-                       Text="{Binding Title}"></TextBlock>
-                <Viewbox Grid.Row="1" >
-                    <local:PalletView x:Name="Pallet1" IsEnabled="False">
 
-                    </local:PalletView>
+                <TextBlock 
+                    TextWrapping="Wrap"
+                    FontSize="30"
+                    x:Name="GongweiTitle"
+                    HorizontalAlignment="Center"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}" 
+                    Text="{Binding Title}"/>
+
+                <Viewbox Grid.Row="1" >
+
+                    <local:PalletView x:Name="Pallet1" IsEnabled="False"/>
+
                 </Viewbox>
 
             </Grid>

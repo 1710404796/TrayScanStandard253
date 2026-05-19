@@ -10,9 +10,15 @@ using TrayScanStandard.Mediator.Queries;
 
 namespace TrayScanStandard.Mediator.Commands
 {
-    public record DetectResult(
-        Arr<CodeInfo> Channels
-        //, string[] Imgs
-        );
+    /// <summary>
+    /// 检测结果
+    /// </summary>
+    /// <param name="Channels"></param>
+    public record DetectResult(Arr<CodeInfo> Channels);
+
+    /// <summary>
+    /// 检测CCD命令
+    /// </summary>
+    /// <param name="BatteryTypeInfo"></param>
     public record DetectCCDCommand(BatteryTypeInfo? BatteryTypeInfo): IRequest<Either<string, DetectResult>>;
 }

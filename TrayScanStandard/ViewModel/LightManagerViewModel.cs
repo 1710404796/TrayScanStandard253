@@ -55,8 +55,7 @@ namespace TrayScanStandard.ViewModel
         public LightManagerViewModel()
         {
             LightInfos = new ObservableCollection<LightInfoViewModel>(
-                _wcsSaves.LightInfos.Select(li => new LightInfoViewModel(li))
-            );
+                _wcsSaves.LightInfos.Select(li => new LightInfoViewModel(li)));
             LightTypes = new ObservableCollection<LightType>(Enum.GetValues<LightType>());
             // 初始化可用的 COM 端口
             RefreshAvailableComPorts();

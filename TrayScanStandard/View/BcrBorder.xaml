@@ -8,52 +8,45 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Border CornerRadius="10" 
+        <Border 
+            CornerRadius="10" 
              BorderThickness="2" 
              Padding="10"
-                Background="Transparent"
-             BorderBrush="{Binding ViewModel.BorderBrush}"
-             >
+             Background="Transparent"
+             BorderBrush="{Binding ViewModel.BorderBrush}">
+
             <!-- BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}" -->
 
-            <StackPanel VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                       
-         >
-                <StackPanel 
-                     Orientation="Horizontal"
-                    >
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <StackPanel Orientation="Horizontal">
+
                     <TextBlock HorizontalAlignment="Center"
                             FontSize="20"
                             Margin="5"
                             Text="{Binding ViewModel.ConnectText}"
-                            Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-                 ></TextBlock>
+                            Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
 
                     <TextBlock HorizontalAlignment="Center"
-           FontSize="20"
-           Margin="5"
-           Text="{Binding ViewModel.Code}"
-           Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-></TextBlock>
+                               FontSize="20"
+                               Margin="5"
+                               Text="{Binding ViewModel.Code}"
+                               Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>  
                 </StackPanel>
+
                 <Viewbox 
                     IsHitTestVisible="False"
                     x:Name="camview"
                     Width="200" Height="200">
                     
                 </Viewbox>
-                <StackPanel Orientation="Horizontal"
-                         Margin="0,20,0,0">
-                    <Button Click="Reset_Click" Width="100"
-                         Name="Reset"
-                         HorizontalAlignment="Center"
-                        Content="重连"
-                 ></Button>
-                    <Button Click="Button_Click" Width="100"
-                         HorizontalAlignment="Center"
-                            Content="设置"
-                 ></Button>
+
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+
+                    <Button Click="Reset_Click" Width="100" Name="Reset" HorizontalAlignment="Center" Content="重连"/>
+
+                    <Button Click="Button_Click" Width="100" HorizontalAlignment="Center" Content="设置"/>
+
                 </StackPanel>
 
             </StackPanel>

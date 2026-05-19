@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrayScanStandard.View.User"
-      xmlns:lang="clr-namespace:TrayScanStandard.Properties"
+        xmlns:lang="clr-namespace:TrayScanStandard.Properties"
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
@@ -12,38 +12,36 @@
         Title="添加用户" Height="400" Width="400">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center"
-                       FontSize="22"
-                       Margin="0,100,0,0"
-                       Text="{x:Static lang:Resources.AddUserInformation}"></TextBlock>
+
+            <TextBlock HorizontalAlignment="Center" FontSize="22" Margin="0,100,0,0" Text="新增用户信息"/>
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
-                <TextBlock Width="100" VerticalAlignment="Center"
-                           Text="{x:Static lang:Resources.Username}"
-                           >:</TextBlock>
-                <TextBox Width="150" Height="30" x:Name="UName" VerticalContentAlignment="Center"></TextBox>
+
+                <TextBlock Width="100" VerticalAlignment="Center" Text="用户名:"/>
+                <TextBox Width="150" Height="30" x:Name="UName" VerticalContentAlignment="Center"/>
+
             </StackPanel>
+
             <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
                 <TextBlock Width="100" VerticalAlignment="Center">RFID:</TextBlock>
                 <TextBox Width="150" Height="30" x:Name="RF"  VerticalContentAlignment="Center"></TextBox>
             </StackPanel>-->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                <TextBlock Width="100" VerticalAlignment="Center">RFID:</TextBlock>
-                <PasswordBox Width="150" Height="30" x:Name="mm" VerticalContentAlignment="Center"></PasswordBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                <TextBlock Width="100" VerticalAlignment="Center"
-                          Text="{x:Static lang:Resources.Permissions}" 
-                           >:</TextBlock>
-                <ComboBox 
-                    ItemsSource="{Binding RoleList}"
-                    Width="150" 
-                          Height="30"
-                          x:Name="MType"
-                          VerticalContentAlignment="Center" SelectedIndex="0" >
 
-                </ComboBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+
+                <TextBlock Width="100" VerticalAlignment="Center" Text="RFID:"/>
+                <PasswordBox Width="150" Height="30" x:Name="mm" VerticalContentAlignment="Center"/>
+
             </StackPanel>
-            <Button Width="100" Margin="150,30,10,0" Click="Button_Click" Height="30">添加</Button>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+
+                <TextBlock Width="100" VerticalAlignment="Center" Text="权限:" />
+                <ComboBox ItemsSource="{Binding RoleList}" Width="150" Height="30" x:Name="MType" VerticalContentAlignment="Center" SelectedIndex="0"/>
+
+            </StackPanel>
+
+            <Button Width="100" Margin="150,30,10,0" Click="Button_Click" Height="30" Content="添加"/>
 
         </StackPanel>
     </Grid>

@@ -4,20 +4,24 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TrayScanStandard.View"
-      xmlns:model="clr-namespace:TrayScanStandard.Data.Models" xmlns:czpallet="clr-namespace:TrayScanStandard.View.CZPallet"
+      xmlns:model="clr-namespace:TrayScanStandard.Data.Models" 
+      xmlns:czpallet="clr-namespace:TrayScanStandard.View.CZPallet"
       mc:Ignorable="d" 
       d:DataContext="{d:DesignInstance Type=local:ImageDisplayView}"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ImageDisplayView">
+      Title="电芯条码显示">
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="50px"></RowDefinition>
             <RowDefinition Height="50px"></RowDefinition>
             <RowDefinition Height="{Binding ElementName=zqd, Path=Height}"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
+
         <StackPanel Orientation="Horizontal">
+
             <Button Width="150" 
                     Margin="5"
                     Command="{Binding ViewModel.RefreshCommand}">
@@ -125,6 +129,7 @@
 
         </WrapPanel>
         <Grid Grid.Row="3">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="19*"/>
                 <ColumnDefinition Width="581*"/>

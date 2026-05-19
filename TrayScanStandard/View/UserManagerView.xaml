@@ -10,41 +10,50 @@
       Title="UserManagerView">
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
         <StackPanel Orientation="Horizontal">
+
             <Button Name="AddUser" Click="AddUser_Click" Margin="10">添加用户</Button>
+
             <Button Name="DelUser" Click="DelUser_Click" Margin="10">删除用户</Button>
-            <!--<Button Name="EditUser" Click="EditUser_Click" Margin="10">删除用户</Button>-->
+
+            <!--<Button Name="EditUser" Click="EditUser_Click" Margin="10">修改用户</Button>-->
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
+
+        <!--<StackPanel Orientation="Horizontal">
             <TextBlock Width="120" VerticalAlignment="Center" Margin="205,10,5,10" Foreground="Black">用户名：</TextBlock>
             <TextBox x:Name="UserInfo" Height="30" Width="100" Margin="5,10,10,10"></TextBox>
-            <Button x:Name="Select"
-                Content="{x:Static lang:Resources.Query}" Width="150"
-                Click="Select_Click"></Button>
-            <!--<Button Click="Button_Click">踢啊</Button>-->
-        </StackPanel>
+            <Button x:Name="Select" Content="查询" Width="150" Click="Select_Click"/>
+        </StackPanel>-->
+
         <ScrollViewer Grid.Row="1" Loaded="ScrollViewer_Loaded" >
-            <DataGrid   
-        Name="ddShow"
-        AutoGenerateColumns="False" 
-        CanUserAddRows="False" 
-         IsReadOnly="True"
-        RowHeaderWidth="0"
-        ColumnWidth="*" 
-      ItemsSource="{Binding ViewModel.Users}"
-        RowEditEnding="ddShow_RowEditEnding"
-        LoadingRow="ddShow_LoadingRow"
-        HeadersVisibility ="Column">
+            <DataGrid 
+            Name="ddShow"
+            AutoGenerateColumns="False" 
+            CanUserAddRows="False" 
+            IsReadOnly="True"
+            RowHeaderWidth="0"
+            ColumnWidth="*" 
+            ItemsSource="{Binding ViewModel.Users}"
+            RowEditEnding="ddShow_RowEditEnding"
+            LoadingRow="ddShow_LoadingRow"
+            HeadersVisibility ="Column">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="{x:Static lang:Resources.Username}" Width="150"  Binding="{Binding LinxUser.UserName, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="{x:Static lang:Resources.Identity}" Width="150"  Binding="{Binding Role, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="RFID" IsReadOnly="True" Width="150"  Binding="{Binding PassStar}"></DataGridTextColumn>
+                
+                    <DataGridTextColumn Header="用户名" Width="150"  Binding="{Binding LinxUser.UserName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <DataGridTextColumn Header="身份" Width="150"  Binding="{Binding Role, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <DataGridTextColumn Header="RFID" IsReadOnly="True" Width="150"  Binding="{Binding PassStar}"/>
+
                 </DataGrid.Columns>
+
             </DataGrid>
         </ScrollViewer>
     </Grid>

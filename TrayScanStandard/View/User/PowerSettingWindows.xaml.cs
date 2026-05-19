@@ -7,6 +7,7 @@ using XCZZJC2024.Utils;
 
 namespace TrayScanStandard.View.User
 {
+    [PowerView(PowerEnum.权限设置)]
     public partial class PowerSettingWindows : Window
     {
         public PowerSettingWindows()
@@ -68,14 +69,16 @@ namespace TrayScanStandard.View.User
             }
         }
 
+        /// <summary>
+        /// 保存权限配置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            // 鏅�氬寲
             var aa = Enum.GetValues<RoleEnum>().SkipLast(1).ToList();
             foreach (var keyValuePair in _checkBoxesMap)
             {
-
-
                 for (var i = 0; i < keyValuePair.Value.Count; i++)
                 {
                     MainStorage.Saves.PowerTable[keyValuePair.Key][aa[i]] = keyValuePair.Value[i].IsChecked ?? false;

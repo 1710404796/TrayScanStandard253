@@ -14,13 +14,12 @@ namespace TrayScanStandard.Models.CZPallet
         public int PalletId { get; set; }
         public PalletType Type { get; set; }
 
-        public bool CheckCodeRegular(string? code = null)
-        {
-            code ??= PalletCode;
-
-            if (code.Length < 2) return false;
-            return MainStorage.Saves.PalletTypeRules.Any(s => s.CheckOk(code));
-        }
+        //public bool CheckCodeRegular(string? code = null)
+        //{
+        //    code ??= PalletCode;
+        //    if (code.Length < 2) return false;
+        //    return MainStorage.Saves.PalletTypeRules.Any(s => s.CheckOk(code));
+        //}
 
 
     }
