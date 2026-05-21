@@ -32,7 +32,27 @@ namespace TrayScanStandard.Models
             set;
         }
 
-         public string TrayScanStandardName { get; set; }= "整盘扫码";
+        /// <summary>
+        /// 系统编号
+        /// </summary>
+        public string SystemCode { get; set; }
+
+        /// <summary>
+        /// 库位号
+        /// </summary>
+        public string HouseCode { get; set; }
+
+        /// <summary>
+        /// 设备号
+        /// </summary>
+        public string DeviceCode { get; set; }
+
+        /// <summary>
+        /// WCS BatteryCheck接口地址
+        /// </summary>
+        public string WcsBatteryCheckUrl { get; set; } = "http://IP:Port/restful/API/V3/Wcs2Wms/batteryCheck";
+
+        public string TrayScanStandardName { get; set; }= "整盘扫码";
 
         /// <summary>
         /// 工位
@@ -53,11 +73,6 @@ namespace TrayScanStandard.Models
         // public List<PalletTypeRule> PalletTypeRules { get; set; } = [];
         public bool TestMode { get; set; }
         public Dictionary<PowerEnum, Dictionary<RoleEnum, bool>> PowerTable { get; set; } = [];
-
-        /// <summary>
-        /// API使能表
-        /// </summary>
-       // public ApiEnableTable ApiEnableTable { get; set; } = new();
 
         /// <summary>
         /// 相机连接地址
@@ -83,6 +98,8 @@ namespace TrayScanStandard.Models
         //public StageSetting StageSetting { get; set; } = new();        
         public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
+
+        public string PLCIP { get; set; }
 
         /// <summary>
         /// 拍照命令是否真的走物理相机
@@ -131,113 +148,6 @@ namespace TrayScanStandard.Models
         //    );
     }
 
-    //public class ApiEnableTable
-    //{
-    //    /// <summary>
-    //    /// 托盘物料等级校验/获取
-    //    /// </summary>
-    //    public bool CheckPalletMaterialEnable
-    //    {
-    //        get; set;
-    //    } = true;
-
-    //    /// <summary>
-    //    /// 拆组盘开始使能
-    //    /// </summary>
-    //    public bool GrabActionInsertEnable
-    //    {
-    //        get; set;
-    //    } = true;
-
-    //    /// <summary>
-    //    /// 拆组盘结束使能
-    //    /// </summary>
-    //    public bool GrabActionRemoveEnable
-    //    {
-    //        get; set;
-    //    } = true;
-    //    /// <summary>
-    //    /// 申请电芯使能
-    //    /// </summary>
-    //    public bool ApplyMaterialEnable
-    //    {
-    //        get; set;
-    //    } = true;
-    //    /// <summary>
-    //    /// 托盘到达使能
-    //    /// </summary>
-    //    public bool PalletArrivedEnable { get; set; }
-    //    /// <summary>
-    //    /// 托盘离开使能
-    //    /// </summary>
-    //    public bool PalletOutEnable { get; set; }
-    //    /// <summary>
-    //    /// 入料校验使能
-    //    /// </summary>
-    //    public bool CheckMaterialEnable { get; set; }
-
-    //    /// <summary>
-    //    /// 组盘完成上传FMS使能
-    //    /// </summary>
-    //    public bool UploadFmsDataEnable { get; set; }
-    //    /// <summary>
-    //    /// 抓取数据上传MES使能
-    //    /// </summary>
-    //    public bool UploadMesDataEnable { get; set; }
-    //    /// <summary>
-    //    /// 高温进站使能
-    //    /// </summary>
-    //    public bool HighTempEnable { get; set; }
-    //    /// <summary>
-    //    /// 化成进站使能
-    //    /// </summary>
-    //    public bool HCInStationEnable { get; set; }
-    //    /// <summary>
-    //    /// 分选挡位查询接口
-    //    /// </summary>
-    //    public bool FXQueryEnable { get; set; }
-    //    public bool GrabDataUploadEnable { get; set; }
-    //}
-
-    //public class StageSetting
-    //{
-    //    /// <summary>
-    //    /// 设备号
-    //    /// </summary>
-    //    public string DeviceCode { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 系统号
-    //    /// </summary>
-    //    public string SystemCode { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 仓库号
-    //    /// </summary>
-    //    public string HouseCode { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 位置号
-    //    /// </summary>
-    //    public string LocationCode { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 库位号
-    //    /// </summary>
-    //    public string SeatId { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 工序号
-    //    /// </summary>
-    //    public string ProcessCode { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// FMS地址
-    //    /// </summary>
-    //    public string FMSAddress { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// APP名称
-    //    /// </summary>
-    //    public string AppName { get; set; } = string.Empty;
-    //    /// <summary>
-    //    /// 等待假电池时间
-    //    /// </summary>
-    //    public double WaitFakeTime { get; set; }
-    //}
 
     public class BcrInfo
     {

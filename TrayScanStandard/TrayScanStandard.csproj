@@ -70,6 +70,8 @@
 	  <ProjectReference Include="..\lxuv\LinxUniverse.CST\LinxUniverse.CST.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.FP\LinxUniverse.FP.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Mediator\LinxUniverse.Mediator.csproj" />
+	  <ProjectReference Include="..\lxuv\LinxUniverse.PLC\LinxUniverse.PLC.csproj" />
+	  <ProjectReference Include="..\lxuv\LinxUniverse.PLCProtos\LinxUniverse.PLCProtos.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.ProcessManager\LinxUniverse.ProcessManager.csproj" />
 	  <ProjectReference Include="..\lxuv\LinxUniverse.Utils\LinxUniverse.Utils.csproj" />
 	  <ProjectReference Include="..\lxuv\MugenCamera\MugenCamera.csproj" />

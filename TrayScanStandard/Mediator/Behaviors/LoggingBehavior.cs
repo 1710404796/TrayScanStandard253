@@ -8,9 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinxUniverse.Mediator;
 using MediatR;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
-using Serilog.Core;
 
 
 namespace TrayScanStandard.Mediator.Behaviors
@@ -23,12 +21,10 @@ namespace TrayScanStandard.Mediator.Behaviors
     public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-        private readonly IMediator _mediator;
 
-        public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger, IMediator mediator)
+        public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
         {
             _logger = logger;
-            _mediator = mediator;
         }
 
 
@@ -56,13 +52,9 @@ namespace TrayScanStandard.Mediator.Behaviors
             }
             catch (Exception ex)
             {
-                _logger.LogError("处理请求发生错误: {request}", typeof(TRequest).Name);
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
-
+                _logger.LogError(ex, "处理请求发生错误: {Request}", typeof(TRequest).Name);
+                throw;
             }
-            return default;
-
         }
     }
 }

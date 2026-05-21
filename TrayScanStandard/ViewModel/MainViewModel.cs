@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Models;
+using TrayScanStandard.Service;
 
 namespace TrayScanStandard.ViewModel
 {
@@ -76,21 +77,49 @@ namespace TrayScanStandard.ViewModel
 
             Task.Run(async () =>
             {
+                bool initSuccess = false;
+                try
+                {
+                    // 初始化命令
+                    await mediator.Send(new InitMeCommand());
+                    initSuccess = true;
+                    //await Task.WhenAll(mediator.Send(new ChangeCstAllCommand(30)));
 
-                // 初始化命令
-                await mediator.Send(new InitMeCommand());
-                //await Task.WhenAll(mediator.Send(new ChangeCstAllCommand(30)));
+                    //await codeReaderService.Init();
+                    Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                    // 考虑这个位置
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "系统初始化失败,请逐一检查相机、光源、PLC、WCS连接状态");
 
-                //await codeReaderService.Init();
-                Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                // 考虑这个位置
-
-
-            }).ContinueWith(_ => MainStorage.IsWcsEnable = IsWcsEnable = true);
+                    // 兜底：若相机已初始化成功，则允许进入“可用”状态，避免页面被整体阻断。
+                    try
+                    {
+                        var scanCameraService = App.GetService<ScanCameraService>();
+                        if (scanCameraService.BcrBorderViewModels.Length > 0)
+                        {
+                            initSuccess = true;
+                            logger.LogWarning("系统初始化部分失败，但相机模块已就绪，进入部分可用状态");
+                        }
+                    }
+                    catch (Exception innerEx)
+                    {
+                        logger.LogError(innerEx, "初始化失败后检查相机就绪状态时发生错误");
+                    }
+                }
+                finally
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MainStorage.IsWcsEnable = IsWcsEnable = initSuccess;
+                    });
+                }
+            });
             authenticationStateProvider.AuthenticationStateChanged += task =>
             {
                 // 需要根据类型嗼
-                Dispatcher.CurrentDispatcher.Invoke<Task>(async () =>
+                Application.Current.Dispatcher.Invoke(async () =>
                 {
                     System.Security.Claims.ClaimsPrincipal user = (await task).User;
                     IsLock = user.Identity.IsAuthenticated ? Visibility.Collapsed : Visibility.Visible;

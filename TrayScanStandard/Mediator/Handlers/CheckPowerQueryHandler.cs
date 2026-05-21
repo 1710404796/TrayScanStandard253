@@ -1,11 +1,9 @@
-﻿using Humanizer;
+using Humanizer;
 using LinxUniverse.Auth;
 using MediatR;
-using System.Windows;
 using TrayScanStandard;
 using TrayScanStandard.Attritubes;
 using TrayScanStandard.Mediator.Queries;
-
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -19,19 +17,32 @@ namespace TrayScanStandard.Mediator.Handlers
         {
             string aa = (await authenticationStateProvider.GetAuthenticationStateAsync()).User.GetUserRole();
 
-            if (aa == "admin") return true;
-
-            RoleEnum roleEnum = aa.DehumanizeTo<RoleEnum>();
-
-            if (roleEnum == RoleEnum.SuperAdmin || (MainStorage.Saves.PowerTable.ContainsKey(request.PowerEnum) &&
-                MainStorage.Saves.PowerTable[request.PowerEnum][roleEnum]))
+            if (string.Equals(aa, "admin", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
-            else
+
+            RoleEnum roleEnum;
+            try
+            {
+                roleEnum = aa.DehumanizeTo<RoleEnum>();
+            }
+            catch
             {
                 return false;
             }
+
+            if (roleEnum == RoleEnum.SuperAdmin)
+            {
+                return true;
+            }
+
+            if (!MainStorage.Saves.PowerTable.TryGetValue(request.PowerEnum, out var roleMap))
+            {
+                return false;
+            }
+
+            return roleMap.TryGetValue(roleEnum, out var granted) && granted;
         }
     }
 }

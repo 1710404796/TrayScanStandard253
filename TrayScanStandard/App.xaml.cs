@@ -3,6 +3,7 @@ global using static LanguageExt.Prelude;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
 using LinxUniverse.DI;
+using LinxUniverse.PLC.Extenisons;
 using LinxUniverse.ProcessManager;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,7 @@ using System.Windows.Documents;
 using TrayScanStandard.Data;
 using TrayScanStandard.Jobs;
 using TrayScanStandard.Mediator.Behaviors;
+using TrayScanStandard.PLC;
 using TrayScanStandard.Service;
 using TrayScanStandard.View;
 using TrayScanStandard.View.CZPallet;
@@ -48,7 +50,7 @@ namespace TrayScanStandard
             //var a = typeof(T);
             if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
             {
-                throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
+                throw new ArgumentException($"{typeof(T)} 需要在 App.xaml.cs 的 ConfigureServices 中进行注册.");
             }
 
             return service;
@@ -154,6 +156,8 @@ namespace TrayScanStandard
 
                          //services.AddTransient<StationSettingView>();
 
+                         // 注册PLC上下文与任务服务（InitMeCommandHandler依赖 PLCTaskService<CCDContext>）
+                         services.AddPLCContext<CCDContext>();
 
                          services.AddCstService();
 

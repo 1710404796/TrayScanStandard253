@@ -38,10 +38,10 @@ namespace TrayScanStandard.Service
         public void Init()
         {
             // 读取相机配置，初始化相机连接  按 相机总数 截取配置
-            var settings = MainStorage.Saves.ConnectAddresses.Take(MainStorage.Saves.CameraCount);
+            var settings = MainStorage.Saves.ConnectAddresses.Take(MainStorage.Saves.CameraCount).ToArray();
 
             // 初始化相机连接，并记录结果   按配置逐个连接相机
-            var cameras = settings.Map(setting => InitCamera(setting)).ToArray();
+            var cameras = settings.Map((i, setting) => InitCameraWithLog(setting, i + 1, "startup")).ToArray();
 
             // 保存连接结果
             // Either->Option，成功 Some(camera)，失败 None 存入 MugenCameras
@@ -56,10 +56,18 @@ namespace TrayScanStandard.Service
 
             // 初始化边框视图模型，绑定相机连接状态
             BcrBorderViewModels = [.. Image2DViewModels.Map(s => new BcrBorderViewModel() { Image2DViewModel = s })];
+            MugenCameras.Iter((i, camera) => BcrBorderViewModels[i].IsConnect = camera.Match(Some: c => c.IsConnect(), None: () => false));
+
+            int successCount = cameras.Count(c => c.IsRight);
+            int failCount = cameras.Length - successCount;
+            logger.LogInformation($"[相机初始化] 完成: 总数={cameras.Length}, 成功={successCount}, 失败={failCount}");
 
             // 启动监听线程，定期检查相机连接状态并尝试重连
-            _listenThread = new Thread(Listen);
-            _listenThread.Start();
+            if (_listenThread == null || !_listenThread.IsAlive)
+            {
+                _listenThread = new Thread(Listen);
+                _listenThread.Start();
+            }
 
             //MugenCameras = cameras.Match
         }

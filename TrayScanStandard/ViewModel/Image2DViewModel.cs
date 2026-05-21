@@ -106,10 +106,10 @@ namespace TrayScanStandard.ViewModel
 
         // 批量配置边框尺寸的属性
         [ObservableProperty]
-        private int _batchWidth = 600;
+        private int _batchWidth = 200;
 
         [ObservableProperty]
-        private int _batchHeight = 600;
+        private int _batchHeight = 200;
 
         // 跟踪是否有未保存的修改
         [ObservableProperty]

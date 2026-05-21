@@ -2,6 +2,8 @@
 using Humanizer;
 using LinxUniverse.Auth;
 using LinxUniverse.CST;
+using LinxUniverse.DI;
+using LinxUniverse.PLCProtos;
 using LinxUniverse.Utils;
 using LinxUniverse.VM;
 using MediatR;
@@ -15,6 +17,8 @@ using TrayScanStandard.Attritubes;
 using TrayScanStandard.Data;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Models.CZPallet;
+using TrayScanStandard.PLC;
+using TrayScanStandard.PLC.Tasks;
 using TrayScanStandard.Service;
 using VMWebAIClient;
 
@@ -31,8 +35,10 @@ namespace TrayScanStandard.Mediator.Handlers
         RoleManager<LinxRole, LinxUser> role, 
         ScanCameraService scanCameraService, 
         LinxContext linxContext, 
-        IVMWebAIClient vmWebAIClient
-        ): IRequestHandler<InitMeCommand>
+        IVMWebAIClient vmWebAIClient,
+        PLCTaskService<CCDContext> pLCTaskService,
+        CacheService cacheService
+        ) : IRequestHandler<InitMeCommand>
     {
         public async Task Handle(InitMeCommand request, CancellationToken cancellationToken)
         {
@@ -62,14 +68,17 @@ namespace TrayScanStandard.Mediator.Handlers
             // 读取当前电池类型
             MainStorage.SelectBattery = linxContext.BatteryTypeInfos.FirstOrDefault(s => s.Id == MainStorage.Saves.SelectBatteryId);
 
+            // 优先初始化相机，避免 PLC 初始化卡住导致相机页面无法显示。
+            scanCameraService.Init();
+
+            // PLC 初始化改为异步超时执行，不阻塞相机/页面初始化。
+            _ = InitPlcSafelyAsync();
+
             foreach (var item in Enum.GetNames<RoleEnum>())
             {
 
                 await role.CreateAsync(new LinxRole { RoleName = item });
             }
-
-            // 初始化相机服务
-            scanCameraService.Init();
 
 
             // 通常这里要初始化一些硬件设备
@@ -84,7 +93,6 @@ namespace TrayScanStandard.Mediator.Handlers
                 {
                     if (!Enum.TryParse<SerialPortType>(s.Com, true, out var com))
                     {
-                        logger.LogError($"光源地址 '{s.Com}' 不是有效的 COM 端口（支持 COM1-COM8）");
                         return null;
                     }
 
@@ -103,20 +111,26 @@ namespace TrayScanStandard.Mediator.Handlers
                         BaudRate: baudRate));
                     if (string.IsNullOrWhiteSpace(guid))
                     {
-                        logger.LogError($"光源初始化失败，已跳过 \n Type={s.Type}, Com={s.Com}, Baud={baudRate}");
+                        logger.LogError($"[光源连接] 失败，Type={s.Type}, Com={s.Com}, Baud={baudRate}");
                         return null;
                     }
 
                     var cst = await mediator.Send(new GetLightQuery(guid));
                     if (cst == null)
                     {
-                        logger.LogError($"光源获取失败，已跳过 \n Type={s.Type}, Com={s.Com}, Guid={guid}");
+                        logger.LogError($"[光源连接] 获取实例失败，Type={s.Type}, Com={s.Com}, Guid={guid}");
+                        return null;
                     }
+
+                    logger.LogInformation($"[光源连接] 成功，Type={s.Type}, Com={s.Com}, Guid={guid}");
                     return cst;
                 }).TraverseSerial(s => s);
 
             // 仅保留初始化成功的光源控制器，避免拍照流程访问到空对象。
             MainStorage.CST = cstList.Where(s => s != null).Select(s => s!);
+            var lightSuccess = cstList.Count(s => s != null);
+            var lightFail = MainStorage.Saves.LightInfos.Length - lightSuccess;
+            logger.LogInformation($"[光源初始化] 完成，成功={lightSuccess}，失败={lightFail}");
             //var sol= CodeDetectExtensions
             //    .LoadSolution(new VMSolutionInfo(@"test.sol", ""));
             //Console.WriteLine(sol);
@@ -125,6 +139,8 @@ namespace TrayScanStandard.Mediator.Handlers
             //    ;
             //MainStorage.AlgoCnn = sol
             //    .Bind(s => s.CreateAlgo(new DetectVMCnnConfig("test", "cnn_detect")));
+
+
 
             // 算法加载
             var algores = await vmWebAIClient.CreateAlgoAsync(FilenameHelper.AppPath + @"test.sol", LinxUniverse.Algo.Common.DetectType.VisionMaster);
@@ -164,6 +180,7 @@ namespace TrayScanStandard.Mediator.Handlers
               }
           );
 
+            #region
             //messageboxmanager
             //MainStorage.Cst[0] =
             //    await mediator.Send(new CreateCSTLightCommand(Com: SerialPortType.COM1));
@@ -193,7 +210,42 @@ namespace TrayScanStandard.Mediator.Handlers
             //}
             //MainStorage.Cst[1] =
             //await mediator.Send(new CreateCSTLightCommand(Com: SerialPortType.COM2));
+            #endregion
+        }
 
+        private async Task InitPlcSafelyAsync()
+        {
+            const int plcInitTimeoutMs = 5000;
+            try
+            {
+                var initTask = pLCTaskService.Init(
+                    new LinxUniverse.PLC.Meditor.Commands.S7CreatePlcCommand(
+                        S7.Net.CpuType.S71200,
+                        MainStorage.Saves.PLCIP,
+                        0,
+                        1),
+                    cacheService.Token);
+
+                var completed = await Task.WhenAny(initTask, Task.Delay(plcInitTimeoutMs, cacheService.Token));
+                if (completed != initTask)
+                {
+                    logger.LogWarning($"[PLC初始化] 超时({plcInitTimeoutMs}ms)，地址={MainStorage.Saves.PLCIP}，后续可手动重试");
+                    return;
+                }
+
+                await initTask;
+                pLCTaskService.RegisterTask<ScanTheCodeTask>();
+                pLCTaskService.RegisterTask<ScanEndTask>();
+                logger.LogInformation($"[PLC初始化] 完成，地址={MainStorage.Saves.PLCIP}");
+            }
+            catch (OperationCanceledException) when (cacheService.Token.IsCancellationRequested)
+            {
+                logger.LogInformation($"[PLC初始化] 已取消，地址={MainStorage.Saves.PLCIP}");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"[PLC初始化] 失败，地址={MainStorage.Saves.PLCIP}");
+            }
         }
     }
 }

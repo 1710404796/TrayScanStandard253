@@ -15,6 +15,9 @@
   <Project Path="lxuv/LinxUniverse.FP/LinxUniverse.FP.csproj" />
   <Project Path="lxuv/LinxUniverse.Logger/LinxUniverse.Logger.csproj" />
   <Project Path="lxuv/LinxUniverse.Mediator/LinxUniverse.Mediator.csproj" />
+  <Project Path="lxuv/LinxUniverse.PLC.Models/LinxUniverse.PLC.Common.csproj" />
+  <Project Path="lxuv/LinxUniverse.PLC/LinxUniverse.PLC.csproj" />
+  <Project Path="lxuv/LinxUniverse.PLCProtos/LinxUniverse.PLCProtos.csproj" />
   <Project Path="lxuv/LinxUniverse.ProcessManager/LinxUniverse.ProcessManager.csproj" />
   <Project Path="lxuv/LinxUniverse.Utils/LinxUniverse.Utils.csproj" />
   <Project Path="lxuv/LinxUniverse.VM.Webapi/LinxUniverse.VM.Webapi.csproj" />

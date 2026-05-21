@@ -32,6 +32,7 @@ namespace TrayScanStandard.View
     public partial class AllBcrListView : Page
     {
         List<BcrBorder> _borderList = [];
+        private BcrBorderViewModel[] _displayBorderViewModels = [];
         public ScanCameraService CRService { get; }
 
         private readonly IMediator meditor;
@@ -57,17 +58,34 @@ namespace TrayScanStandard.View
             InitializeComponent();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateRatio();
+            
+            if (CRService.BcrBorderViewModels.Length == 0)
+            {
+                const int maxWaitMs = 30000;
+                const int stepMs = 200;
+                int waitedMs = 0;
+                while (waitedMs < maxWaitMs && CRService.BcrBorderViewModels.Length == 0)
+                {
+                    await Task.Delay(stepMs);
+                    waitedMs += stepMs;
+                }
+            }
 
+            _displayBorderViewModels = CRService.BcrBorderViewModels.Length > 0
+                ? CRService.BcrBorderViewModels
+                : CreateFallbackBorderViewModels();
+
+            
             int idx = 0;
             double x = 10, y = 10; // 初始位置
             int itemsPerRow = 3; // 每行显示3个
             double itemWidth = 320, itemHeight = 320;
             double spacing = 10;
 
-            foreach (var item in CRService.BcrBorderViewModels)
+            foreach (var item in _displayBorderViewModels)
             {
                 int i = idx;
                 var bborder = new BcrBorder(item) { Width = itemWidth, Height = itemHeight };
@@ -249,7 +267,10 @@ namespace TrayScanStandard.View
             // 双击事件，只有在非拖拽状态下才触发
             if (!_isDragging)
             {
-                MainWindow.NageTo(new Image2DView(CRService.Image2DViewModels[idx]));
+                if (idx >= 0 && idx < _borderList.Count)
+                {
+                    MainWindow.NageTo(new Image2DView(_borderList[idx].ViewModel.Image2DViewModel));
+                }
             }
         }
 
@@ -363,6 +384,32 @@ namespace TrayScanStandard.View
             GC.Collect();
             //MainStorage.Saves.OkCnt = MainStorage.Saves.ScanCnt = 0;    
             UpdateRatio();
+        }
+
+        private BcrBorderViewModel[] CreateFallbackBorderViewModels()
+        {
+            int count = Math.Max(0, MainStorage.Saves.CameraCount);
+            return Enumerable.Range(0, count)
+                .Select(i =>
+                {
+                    var setting = MainStorage.Saves.ConnectAddresses.Length > i
+                        ? MainStorage.Saves.ConnectAddresses[i]
+                        : new CameraSetting();
+
+                    var imageVm = new Image2DViewModel
+                    {
+                        CameraIdx = i + 1,
+                        CameraSetting = setting,
+                        Service = CRService
+                    };
+
+                    return new BcrBorderViewModel
+                    {
+                        Image2DViewModel = imageVm,
+                        IsConnect = false
+                    };
+                })
+                .ToArray();
         }
     }
 }

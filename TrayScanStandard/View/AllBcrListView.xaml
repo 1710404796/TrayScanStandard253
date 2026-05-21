@@ -43,7 +43,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1">
 
-            <Button  x:Name="Clear" Click="Clear_Click" Content="清楚调试数据"/>
+            <Button  x:Name="Clear" Click="Clear_Click" Content="清除调试数据"/>
 
             <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" x:Name="Ratio" FontSize="24"/>
 

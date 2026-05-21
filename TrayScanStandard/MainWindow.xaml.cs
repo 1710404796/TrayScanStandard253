@@ -88,8 +88,6 @@ namespace TrayScanStandard
                 else
                 {
                     MessageBox.Show("当前没有权限访问此页面!");
-                    DisposeCurrentContent(mainWindow);
-                    mainWindow.ContentFrame.Content = null;
                     return;
                 }
             }
@@ -114,8 +112,6 @@ namespace TrayScanStandard
                 else
                 {
                     MessageBox.Show("当前没有权限访问此页面!");
-                    DisposeCurrentContent(mainWindow);
-                    mainWindow.ContentFrame.Content = null;
                     return;
                 }
             }
