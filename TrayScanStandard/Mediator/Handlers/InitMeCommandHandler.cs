@@ -83,8 +83,6 @@ namespace TrayScanStandard.Mediator.Handlers
 
             // 通常这里要初始化一些硬件设备
 
-            // 例如：相机、光源、CST等
-
             // 也需要注册一些任务等
 
             // 初始化光源

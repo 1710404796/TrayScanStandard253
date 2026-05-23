@@ -1,4 +1,5 @@
-﻿using Camera.Fs.Common;
+﻿using Basler.Fs.NET;
+using Camera.Fs.Common;
 using HKCamera.Fs.NET;
 using HKCamera.Fs.NET.Controls;
 using LanguageExt;
@@ -26,6 +27,9 @@ namespace TrayScanStandard.Service
         ILogger<ScanCameraService> logger, 
         CacheService cacheService)
     {
+        // 新增说明：把巡检间隔抽成常量，便于统一配置与后续调优。
+        private static readonly TimeSpan MonitorInterval = TimeSpan.FromSeconds(10);
+
         public Option<MugenCamera.MugenCamera>[] MugenCameras { get; set; } = [];
         private Thread _listenThread;
         private readonly object _initLock = new();
@@ -62,19 +66,49 @@ namespace TrayScanStandard.Service
             int failCount = cameras.Length - successCount;
             logger.LogInformation($"[相机初始化] 完成: 总数={cameras.Length}, 成功={successCount}, 失败={failCount}");
 
-            // 启动监听线程，定期检查相机连接状态并尝试重连
-            if (_listenThread == null || !_listenThread.IsAlive)
-            {
-                _listenThread = new Thread(Listen);
-                _listenThread.Start();
-            }
+            EnsureMonitorThreadStarted();
 
             //MugenCameras = cameras.Match
+        }
+
+        private void EnsureMonitorThreadStarted()
+        {
+            // 原有逻辑说明：初始化完成后启动一个后台线程，周期性执行连接维护任务。
+            // 新增说明：抽成独立方法，避免 Init() 里职责过多，也便于后续替换为 Task 模式。
+            if (_listenThread == null || !_listenThread.IsAlive)
+            {
+                _listenThread = new Thread(Listen)
+                {
+                    IsBackground = true,
+                    Name = "ScanCameraService.Listen"
+                };
+                _listenThread.Start();
+            }
         }
 
         // 获取指定索引的相机实例
         public Option< MugenCamera.MugenCamera> GetMugen(int idx) => MugenCameras[idx - 1];
         
+        private void TryDestroyCamera(Option<MugenCamera.MugenCamera> cameraOption, int cameraIdx, string stage)
+        {
+            cameraOption.Match(
+                Some: cam =>
+                {
+                    cam.Destroy().Match(
+                        Right: _ =>
+                        {
+                            logger.LogInformation($"相机[{cameraIdx}]资源释放成功，阶段: {stage}");
+                            return 0;
+                        },
+                        Left: err =>
+                        {
+                            logger.LogWarning($"相机[{cameraIdx}]资源释放失败，阶段: {stage}，错误: {err}");
+                            return 0;
+                        });
+                    return 0;
+                },
+                None: () => 0);
+        }
 
         private static Either<string, MugenCamera.MugenCamera> InitCamera(TrayScanStandard.Models.CameraSetting s)
         {
@@ -98,8 +132,14 @@ namespace TrayScanStandard.Service
                                                 TriggerMode = HuaRui.Fs.NET.Controls.TriggerModel.On,
                                                 TriggerSource = HuaRui.Fs.NET.Controls.TriggerSource.Software
                                             });
+                                        case BaslerCam:
+                                            return s.SetControl(new Basler.Fs.NET.Controls.AcquisitionControl
+                                            {
+                                                TriggerMode = Basler.Fs.NET.Controls.TriggerModel.On,
+                                                TriggerSource = Basler.Fs.NET.Controls.TriggerSource.Software
+                                            });
                                         default:
-                                        return Right(s);
+                                        return Right<string, MugenCamera.MugenCamera>(s);
 
                                     };
 
@@ -129,6 +169,10 @@ namespace TrayScanStandard.Service
                 int arrayIdx = cameraIdx - 1;
 
                 var setting = MainStorage.Saves.ConnectAddresses[arrayIdx];
+                if (arrayIdx < MugenCameras.Length)
+                {
+                    TryDestroyCamera(MugenCameras[arrayIdx], cameraIdx, "manual_reconnect_cleanup");
+                }
 
                 var result = InitCameraWithLog(setting, cameraIdx, "manual_reconnect");
                 return result.Match(
@@ -168,61 +212,63 @@ namespace TrayScanStandard.Service
         /// <summary>
         ///  连接状态维护与自动重连
         /// </summary>
-        async void Listen()
+        void Listen()
         {
             while (!cacheService.Token.IsCancellationRequested)
             {
-                MugenCameras = MugenCameras.Map((i, s) =>
+                try
                 {
-                    // 对每个 Some(camera) 调检查连接 CheckConnect()
-                    return s.Bind(some => some.CheckConnect().ToOption());
-                }).ToArray();
-
-                MugenCameras = MugenCameras.Map((i, s) =>
+                    RunMonitorCycle();
+                }
+                catch (Exception ex)
                 {
-                    var address = MainStorage.Saves.ConnectAddresses[i];
-                    return s.Match(
-                        Some: s =>
-                        {
-                            if (s.IsConnect())
-                            {
-                                return Right(s);
-                            }
-                            else
-                            {
-                                // 若相机断开或当前是 `None`，调用 `InitCamera(address)` 重连
-                                return InitCamera(address);
-                            }
-                        },
-                        None: () =>
-                        {   
-                            // 若相机断开或当前是 `None`，调用 `InitCamera(address)` 重连
-                            return InitCamera(address);
-                        }).ToOption();
-                }).ToArray();
+                    logger.LogError(ex, "相机监听线程异常");
+                }
 
-                MugenCameras.Iter((i, s) =>
+                // 原有逻辑说明：每 10 秒巡检一次，收到取消信号时退出线程。
+                if (cacheService.Token.WaitHandle.WaitOne(MonitorInterval))
                 {
-                    // 把结果映射到 `BcrBorderViewModels[i].IsConnect`
-                    var vm = BcrBorderViewModels[i];
-
-                    vm.IsConnect = s.Match(
-                        Some: s =>
-                        {   // IsConnect=true 显示绿色边框和“Connected”，
-                            return s.IsConnect();
-                        },
-                        None: () =>
-                        {   
-                            // IsConnect = false显示红色边框和“Disconnected”
-                            return false;
-                        });
-                });
-
-                // 每 10 秒巡检一次
-                await Task.Delay(10000);
+                    break;
+                }
             }
         }
 
+        private void RunMonitorCycle()
+        {
+            lock (_initLock)
+            {
+              
+                // for 循环完成检查、重连和 UI 状态回写，减少数组分配和多次遍历。
+                for (var i = 0; i < MugenCameras.Length; i++)
+                {
+                    var checkedCamera = MugenCameras[i]
+                        .Bind(cam => cam.CheckConnect().ToOption());
+
+                    var address = MainStorage.Saves.ConnectAddresses[i];
+                    var finalCamera = checkedCamera.Match(
+                        Some: cam =>
+                        {
+                            if (cam.IsConnect())
+                            {
+                                return Some(cam);
+                            }
+
+                            TryDestroyCamera(Some(cam), i + 1, "auto_reconnect_cleanup");
+                            return InitCamera(address).ToOption();
+                        },
+                        None: () => InitCamera(address).ToOption());
+
+                    MugenCameras[i] = finalCamera;
+
+                    if (i < BcrBorderViewModels.Length)
+                    {
+                        BcrBorderViewModels[i].IsConnect = finalCamera.Match(
+                            Some: cam => cam.IsConnect(),
+                            None: () => false);
+                    }
+                }
+            }
+        }
 
         private Either<string, MugenCamera.MugenCamera> InitCameraWithLog(TrayScanStandard.Models.CameraSetting setting, int cameraIdx, string stage)
         {
@@ -261,6 +307,13 @@ namespace TrayScanStandard.Service
                     _ => string.Empty
                 },
                 HuaruiAddress hr => hr.ConnectAddress switch
+                {
+                    Camera.Fs.Common.Key key => key.Value,
+                    Camera.Fs.Common.IPAddress ip => ip.Value,
+                    Camera.Fs.Common.Serial serial => serial.Value,
+                    _ => string.Empty
+                },
+                BaslerAddress basler => basler.ConnectAddress switch
                 {
                     Camera.Fs.Common.Key key => key.Value,
                     Camera.Fs.Common.IPAddress ip => ip.Value,

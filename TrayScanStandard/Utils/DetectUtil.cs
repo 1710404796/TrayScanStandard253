@@ -125,17 +125,33 @@ namespace TrayScanStandard.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="mugenCamera"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static Either<string, TResult> UseCamera<TResult>(
             MugenCamera.MugenCamera mugenCamera,
             Func<MugenCamera.MugenCamera, Either<string, TResult>> action)
         {
-            mugenCamera.StopGrab();
-            var camSession = mugenCamera.StartGrab();
-            // 仅在 StartGrab 成功执行时执行该操作。
-            var result = camSession.Bind(action);
-            // 无论操作结果如何，只要StartGrab成功执行，就必须调用StopGrab。
-            camSession.Bind(s => s.StopGrab());
-            return result;
+            var camSession = mugenCamera
+                .StopGrab()
+                .Bind(_ => mugenCamera.StartGrab());
+
+            return camSession.Bind(cam =>
+            {
+                var actionResult = action(cam);
+                var stopResult = cam.StopGrab();
+
+                return actionResult.Match(
+                    Right: value => stopResult.Map(_ => value),
+                    Left: actionErr => stopResult.Match(
+                        Right: _ => LanguageExt.Prelude.Left<string, TResult>(actionErr),
+                        Left: stopErr => LanguageExt.Prelude.Left<string, TResult>($"{actionErr}; 停止采集失败: {stopErr}")
+                    ));
+            });
         }
 
 

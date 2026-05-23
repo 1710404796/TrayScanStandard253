@@ -31,6 +31,7 @@ namespace TrayScanStandard.ViewModel
                 {
                     HKAddress hk => hk.ConnectAddress as Key,
                     HuaruiAddress hr => hr.ConnectAddress as Key,
+                    BaslerAddress basler => basler.ConnectAddress as Key,
                     _ => null
                 })?.Value;
                 return c?? "";

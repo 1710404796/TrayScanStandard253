@@ -30,6 +30,7 @@
                     Name="CameraTypeCombo"
                     Width="250"
                     SelectionChanged="CameraType_SelectionChanged">
+                    <ComboBoxItem Content="Basler"/>
                     <ComboBoxItem Content="HikVision"/>
                     <ComboBoxItem Content="Huarui"/>
                     <!-- Add other camera types here -->
