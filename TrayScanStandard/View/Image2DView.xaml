@@ -128,7 +128,7 @@
                         BorderBrush="{DynamicResource SystemControlPageTextBaseHighBrush}"
                         BorderThickness="0,2,0,0" />
 
-                    <TextBlock Width="40"
+                    <!--<TextBlock Width="40"
                         Margin="0,19.02,0,0"
                         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
                         HorizontalAlignment="Left"
@@ -145,7 +145,7 @@
                     <TextBox  x:Name="LeftBox" 
                         TextChanged="TopBox_TextChanged"
                         Text="{Binding ViewModel.SelectBarCodeRegionInfo.Left, 
-                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
 
                     <TextBlock Margin="0,19.02,0,0"
                         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"

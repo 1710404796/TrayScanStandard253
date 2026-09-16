@@ -22,7 +22,7 @@
 
             <Button Content="保存电池" Command="{Binding ViewModel.SavePalletCommand}"/>
 
-            <TextBlock
+            <!--<TextBlock
                 VerticalAlignment="Center"
                 FontSize="15"
                 Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
@@ -30,7 +30,7 @@
                 Margin="10,0,0,0"
                 >产品型号过滤:</TextBlock>
 
-            <TextBox Width="100" Height="30" TextChanged="TextBoxBase_OnTextChanged"/>
+            <TextBox Width="100" Height="30" TextChanged="TextBoxBase_OnTextChanged"/>-->
         </StackPanel>
         
         <DataGrid Grid.Row="1" 
