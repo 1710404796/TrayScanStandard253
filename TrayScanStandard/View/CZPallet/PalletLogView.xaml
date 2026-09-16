@@ -32,7 +32,7 @@
 
             <DatePicker SelectedDate="{Binding ViewModel.EndTime}" Margin="10,0,0,0"/>
 
-            <TextBlock 
+            <!--<TextBlock 
                 VerticalAlignment="Center" 
                 Margin="10,0,0,0"
                 Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
@@ -41,9 +41,9 @@
                 Width="150"
                 Margin="10,0,0,0" 
                 Text="{Binding ViewModel.Code}"
-                VerticalContentAlignment="Center"/>
+                VerticalContentAlignment="Center"/>-->
 
-            <TextBlock 
+            <!--<TextBlock 
                 VerticalAlignment="Center" 
                 Margin="10,0,0,0"
                 Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
@@ -52,7 +52,7 @@
                 Width="150" 
                 Margin="10,0,0,0" 
                 Text="{Binding ViewModel.LogNum}"
-                VerticalContentAlignment="Center"/>
+                VerticalContentAlignment="Center"/>-->
 
             <Button 
                 Content="{x:Static lang:Resources.DeriveCVS}" 
@@ -76,7 +76,7 @@
 
                 <DataGridCheckBoxColumn Header="勾选" Binding="{Binding IsSelect}" IsReadOnly="False"/>
 
-                <DataGridTextColumn Header="托盘条码" Binding="{Binding PalletCode}"/>
+                <!--<DataGridTextColumn Header="托盘条码" Binding="{Binding PalletCode}"/>-->
                 
                 <DataGridTextColumn Header="扫码时间" Binding="{Binding ZuPanTime}"/>
                 
