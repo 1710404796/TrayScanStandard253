@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TrayScanStandard.View"
       mc:Ignorable="d" 
       xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-      d:DesignHeight="850" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance Type=local:SettingView}"
       Title="程序参数设定">
     <ScrollViewer>
