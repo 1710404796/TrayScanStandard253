@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using TrayScanStandard.Models;
 using TrayScanStandard.Data.Models;
 using TrayScanStandard.Data;
@@ -22,6 +23,7 @@ using MediatR;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 using LinxUniverse.Algo.Common;
+using TrayScanStandard.Utils;
 using Microsoft.Extensions.Logging;
 using MugenCodeDetecter;
 using VMWebAIClient;
@@ -36,6 +38,9 @@ namespace TrayScanStandard.ViewModel
         [ObservableProperty]
         string _resultImg = Environment.CurrentDirectory + @"/Images/black.jpg";
         //string _resultImg = @"D:\wcsrepo\XCCCD2024\XCCCD2024\bin\Debug\net8.0-windows\Images\mio.jpg";
+
+        [ObservableProperty]
+        ImageSource? _resultImageSource;
 
         [ObservableProperty]
         int _selectIdx = 0;
@@ -141,6 +146,7 @@ namespace TrayScanStandard.ViewModel
             _mediator = App.GetService<IMediator>();
             _logger = App.GetService<ILogger<Image2DViewModel>>();
             _vmClient = App.GetService<IVMWebAIClient>();
+            ResultImageSource = LoadResultImageSource(ResultImg);
         }
         public LinxContext LinxContext;
         public void RefreshBatteryInfos()
@@ -152,7 +158,14 @@ namespace TrayScanStandard.ViewModel
 
         partial void OnSelectIdxChanged(int oldValue, int newValue)
         {
-            MainStorage.Saves.SelectBatteryId = newValue < 0 ? 0 : BatteryInfos[newValue].Id;
+            if (newValue < 0 || newValue >= BatteryInfos.Length)
+            {
+                MainStorage.Saves.SelectBatteryId = 0;
+                MainStorage.SelectBattery = null;
+                return;
+            }
+
+            MainStorage.Saves.SelectBatteryId = BatteryInfos[newValue].Id;
             MainStorage.SelectBattery = SelectBattery;
 
             //MainStorage.SaveManager.Save();
@@ -162,6 +175,25 @@ namespace TrayScanStandard.ViewModel
         {
             OnPropertyChanged(nameof(SelectBarCodeRegionInfo));
         }
+
+        public List<BarCodeRegionInfo>? GetCurrentRegions()
+        {
+            var battery = SelectBattery;
+            if (battery is null || CameraIdx <= 0)
+            {
+                return null;
+            }
+
+            battery.Regions ??= [];
+            while (battery.Regions.Count < CameraIdx)
+            {
+                battery.Regions.Add([]);
+            }
+
+            battery.Regions[CameraIdx - 1] ??= [];
+            return battery.Regions[CameraIdx - 1];
+        }
+
         [ObservableProperty]
         private string _ratioText = string.Empty;
 
@@ -175,11 +207,47 @@ namespace TrayScanStandard.ViewModel
         /// </summary>
         public void UpdateResult() => ResultUpdate?.Invoke();
 
+        public void SetResultImage(string imagePath)
+        {
+            ResultImg = imagePath;
+            ResultImageSource = LoadResultImageSource(imagePath);
+        }
+
+        private static ImageSource? LoadResultImageSource(string imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath) || !File.Exists(imagePath)) return null;
+
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(Path.GetFullPath(imagePath), UriKind.Absolute);
+            bitmap.EndInit();
+            bitmap.Freeze();
+            return bitmap;
+        }
+
+
+        private static string GetImageExtension(byte[] data)
+        {
+            if (data.Length >= 8
+                && data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47
+                && data[4] == 0x0D && data[5] == 0x0A && data[6] == 0x1A && data[7] == 0x0A)
+            {
+                return ".png";
+            }
+
+            if (data.Length >= 2 && data[0] == 0x42 && data[1] == 0x4D) return ".bmp";
+            if (data.Length >= 3 && data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF) return ".jpg";
+            if (data.Length >= 4 && data[0] == 0x49 && data[1] == 0x49 && data[2] == 0x2A && data[3] == 0x00) return ".tif";
+            if (data.Length >= 4 && data[0] == 0x4D && data[1] == 0x4D && data[2] == 0x00 && data[3] == 0x2A) return ".tif";
+
+            return ".bin";
+        }
         public CancellationTokenSource Cts
         {
             get; set;
         }
-        public BatteryTypeInfo? SelectBattery => SelectIdx < 0 ? null : BatteryInfos[SelectIdx];
+        public BatteryTypeInfo? SelectBattery => SelectIdx < 0 || SelectIdx >= BatteryInfos.Length ? null : BatteryInfos[SelectIdx];
         public IMediator _mediator { get; }
 
         private ILogger<Image2DViewModel> _logger;
@@ -226,7 +294,7 @@ namespace TrayScanStandard.ViewModel
         public async Task Detect()
         {
             var data = await _mediator.Send(new DetectCodeCommand([new ROIDetectParam(tempImg, 
-                SelectBattery?.Regions[CameraIdx - 1]
+                GetCurrentRegions()
                 .Map(s => s.ToROI())
                 .ToArray() ?? [])])
                 );
@@ -237,15 +305,21 @@ namespace TrayScanStandard.ViewModel
 
                     _logger.LogInformation(r.ToArr().ToString());
 
+                    if (r.Length > 0)
+                    {
+                        SaveError2DataImage(r[0].Codes);
+                    }
 
                 },
                 Left: l =>
                 {
+                    SaveError2DataImage([]);
                     _mediator.Send (new WarningBoxCommand(l)).Wait();
 
                 },
                 Bottom: () => 
                 {
+                    SaveError2DataImage([]);
                     _mediator.Send(new WarningBoxCommand("Detect failed")).Wait();
                     _logger.LogError("Detect failed");
                 }
@@ -255,6 +329,28 @@ namespace TrayScanStandard.ViewModel
             UpdateResult();
             Update();
         }
+
+        private void SaveError2DataImage(IEnumerable<CodeInfo> codes)
+        {
+            var regions = GetCurrentRegions();
+            if (regions == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (Error2DataImageSaver.SaveIfHasMissingCodes(ResultImg, regions, codes))
+                {
+                    _logger.LogWarning("二维码识别失败图片已保存: {ImagePath}", ResultImg);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "保存二维码识别失败图片失败: {ImagePath}", ResultImg);
+            }
+        }
+
         public byte[] tempImg = [];
         private Option<CodeDetectResult> _tempResult = None;
 
@@ -267,7 +363,7 @@ namespace TrayScanStandard.ViewModel
                 await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
                 return;
             }
-            var regions = SelectBattery.Regions[CameraIdx - 1];
+            var regions = GetCurrentRegions();
             if (regions == null || regions.Count == 0)
                 return;
             // 容忍度（像素）
@@ -303,7 +399,8 @@ namespace TrayScanStandard.ViewModel
             {
                 sorted[i].ChannelIdx = i + 1;
             }
-            SelectBattery.Regions[CameraIdx - 1] = sorted;
+            regions.Clear();
+            regions.AddRange(sorted);
             LinxContext.SaveChanges();
             Update();
         }        
@@ -316,29 +413,38 @@ namespace TrayScanStandard.ViewModel
                 await _mediator.Send(new WarningBoxCommand("未选择电池类型"));
                 return ;
             }
+            var regions = GetCurrentRegions();
+            if (regions is null)
+            {
+                await _mediator.Send(new WarningBoxCommand("相机索引无效"));
+                return;
+            }
             
             //var data = MainStorage.Algo.Bind(s => s.GetROIList(tempImg, RoiPadding));
 
             var data = await _vmClient.GetROIListAsync(ResultImg, RoiPadding);
-            SelectBattery.Regions[CameraIdx - 1] =
-                data.Match(
-                    Right: r =>
+            data.Match(
+                Right: r =>
+                {
+                    var newRegions = r.Map(s => new BarCodeRegionInfo()
                     {
-                        return r.Map(s => new BarCodeRegionInfo() {
-                            Left = (int)s.Rect.X,
-                            Top = (int)s.Rect.Y,
-                            Width = (int)s.Rect.Width,
-                            Height = (int)s.Rect.Height,
-                            ChannelIdx = s.Index
+                        Left = (int)s.Rect.X,
+                        Top = (int)s.Rect.Y,
+                        Width = (int)s.Rect.Width,
+                        Height = (int)s.Rect.Height,
+                        ChannelIdx = s.Index
 
-                        }).ToList(); 
-                    }
-                    , Left: l =>
-                    {
-                        _mediator.Send(new WarningBoxCommand(l)).Wait();
-                        return SelectBattery.Regions[CameraIdx - 1];
-                    }
-                    );
+                    }).ToList();
+
+                    regions.Clear();
+                    regions.AddRange(newRegions);
+                    return 0;
+                },
+                Left: l =>
+                {
+                    _mediator.Send(new WarningBoxCommand(l)).Wait();
+                    return 0;
+                });
             await AutoSortROI();
             //Update();
         }
@@ -357,10 +463,10 @@ namespace TrayScanStandard.ViewModel
             data.Match(
                 Right: r =>
                 {
-                    var img = tempImg  = r.First().First().Data; // 对结果要验证一下 加个验证器
-                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}.png";
+                    var img = tempImg = r.First().First().Data; // 对结果要验证一下 加个验证器
+                    var name = $"Data2d/single-{CameraIdx}-{FilenameHelper.FileName}{GetImageExtension(img)}";
                     File.WriteAllBytes(name, img);
-                    ResultImg = FilenameHelper.AppPath + "/" + name;
+                    SetResultImage(FilenameHelper.AppPath + "/" + name);
                 },
                 Left: l =>
                 {

@@ -27,6 +27,10 @@ namespace TrayScanStandard.Mediator.Handlers
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 确保目录存在
+        /// </summary>
+        /// <param name="path"></param>
         private static void EnsureDirectoryExists(string path)
         {
             if (!Directory.Exists(path))
@@ -35,6 +39,12 @@ namespace TrayScanStandard.Mediator.Handlers
             }
         }
 
+        /// <summary>
+        /// 处理图像并更新路径
+        /// </summary>
+        /// <param name="dataFrame"></param>
+        /// <param name="outputPath"></param>
+        /// <returns></returns>
         private static DataFrame ProcessImagesAndUpdatePaths(DataFrame dataFrame, string outputPath)
         {
             var updatedImages = dataFrame.Images
@@ -44,6 +54,13 @@ namespace TrayScanStandard.Mediator.Handlers
             return dataFrame with { Images = updatedImages };
         }
 
+        /// <summary>
+        /// 处理单个图像并更新路径
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="cameraIndex"></param>
+        /// <param name="outputPath"></param>
+        /// <returns></returns>
         private static CamImages ProcessSingleImage(CamImages image, int cameraIndex, string outputPath)
         {
             var updatedImagesPaths = image.ImagesPath
@@ -53,9 +70,19 @@ namespace TrayScanStandard.Mediator.Handlers
             return image with { ImagesPath = updatedImagesPaths };
         }
 
+        /// <summary>
+        /// 复制图像并创建新路径
+        /// </summary>
+        /// <param name="originalInfo"></param>
+        /// <param name="serial"></param>
+        /// <param name="cameraIndex"></param>
+        /// <param name="outputPath"></param>
+        /// <returns></returns>
         private static ImageInfo CopyImageAndCreateNewPath(ImageInfo originalInfo, string serial, int cameraIndex, string outputPath)
         {
-            var newFileName = $"cam{cameraIndex:0000}-{serial}-exp{originalInfo.Exposure}.png";
+            var extension = Path.GetExtension(originalInfo.Path);
+            if (string.IsNullOrWhiteSpace(extension)) extension = ".png";
+            var newFileName = $"cam{cameraIndex:0000}-{serial}-exp{originalInfo.Exposure}{extension}";
             var newFilePath = Path.Combine(outputPath, newFileName);
 
             File.Copy(originalInfo.Path, newFilePath, true);
@@ -63,6 +90,11 @@ namespace TrayScanStandard.Mediator.Handlers
             return originalInfo with { Path = newFileName };
         }
 
+        /// <summary>
+        /// 保存DataFrame信息
+        /// </summary>
+        /// <param name="outputPath"></param>
+        /// <param name="dataFrame"></param>
         private static void SaveDataFrameInfo(string outputPath, DataFrame dataFrame)
         {
             var jsonContent = JsonSerializer.Serialize(dataFrame);

@@ -176,15 +176,57 @@ namespace TrayScanStandard.View
                 return;
             }
 
-            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].Clear();
-            //_context.SaveChanges();
-            ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1].AddRange(_rois.Select(s => s.Item2).ToList());
-            var cnt = ViewModel.LinxContext.SaveChanges();
+            var regions = ViewModel.GetCurrentRegions();
+            if (regions is null)
+            {
+                MessageBox.Show("当前相机索引无效，无法保存ROI设置。", "保存失败", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-            MainStorage.SelectBattery = ViewModel.SelectBattery;
-            
-            // 标记已保存
-            ViewModel.MarkAsSaved();
+            try
+            {
+                SyncRoisFromBorders();
+                regions.Clear();
+                regions.AddRange(_rois.Select(s => CloneRegion(s.Item2)).ToList());
+                var cnt = ViewModel.LinxContext.SaveChanges();
+
+                MainStorage.SelectBattery = ViewModel.SelectBattery;
+                
+                // 标记已保存
+                ViewModel.MarkAsSaved();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"保存ROI设置失败：{ex.Message}", "保存失败", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static BarCodeRegionInfo CloneRegion(BarCodeRegionInfo region)
+        {
+            return new BarCodeRegionInfo
+            {
+                Top = region.Top,
+                Left = region.Left,
+                Width = region.Width,
+                Height = region.Height,
+                ChannelIdx = region.ChannelIdx
+            };
+        }
+
+        private void SyncRoisFromBorders()
+        {
+            foreach (var (border, region) in _rois)
+            {
+                if (border is null || region is null)
+                {
+                    continue;
+                }
+
+                region.Top = Math.Max(0, (int)Math.Round(border.Margin.Top));
+                region.Left = Math.Max(0, (int)Math.Round(border.Margin.Left));
+                region.Width = Math.Max(1, (int)Math.Round(border.Width));
+                region.Height = Math.Max(1, (int)Math.Round(border.Height));
+            }
         }
 
         /// <summary>
@@ -204,11 +246,16 @@ namespace TrayScanStandard.View
             {
                 return;
             }
+            var regions = ViewModel.GetCurrentRegions();
+            if (regions is null)
+            {
+                return;
+            }
 
             img2d.BorderCanvas.Children.Clear();
             CreateBorder();
             _rois.Clear();
-            foreach (var regionInfo in ViewModel.SelectBattery.Regions[ViewModel.CameraIdx - 1])
+            foreach (var regionInfo in regions)
             {
                 var border = CreateBorder();
 
@@ -355,21 +402,23 @@ namespace TrayScanStandard.View
         /// <param name="e"></param>
         private async void TopBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ViewModel.SelectBarCodeRegionInfo is null)
+            var region = ViewModel.SelectBarCodeRegionInfo;
+            var border = _nowBorder;
+            if (region is null || border is null)
             {
                 return;
             }
 
-            if (_nowBorder is null)
+            await Task.Delay(20);
+            if (!IsLoaded || border.Parent is null || border.Tag != region)
             {
                 return;
-            }   
-            await Task.Delay(20);
-            _nowBorder.Margin = new Thickness(ViewModel.SelectBarCodeRegionInfo.Left, ViewModel.SelectBarCodeRegionInfo.Top, 0, 0);
+            }
 
-            _nowBorder.Width = ViewModel.SelectBarCodeRegionInfo.Width;
-            _nowBorder.Height = ViewModel.SelectBarCodeRegionInfo.Height;
-            UpdateBorderThickness(_nowBorder);
+            border.Margin = new Thickness(region.Left, region.Top, 0, 0);
+            border.Width = Math.Max(1, region.Width);
+            border.Height = Math.Max(1, region.Height);
+            UpdateBorderThickness(border);
             
             // 标记有未保存的修改
             ViewModel.MarkAsChanged();
@@ -382,16 +431,25 @@ namespace TrayScanStandard.View
         /// <param name="e"></param>
         private async void ChannelBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (ViewModel.SelectBarCodeRegionInfo is null)
+            var region = ViewModel.SelectBarCodeRegionInfo;
+            var border = _nowBorder;
+            if (region is null || border is null)
             {
                 return;
             }
-            if (_nowBorder is null)
-            {
-                return;
-            }
+
             await Task.Delay(20);
-            (_nowBorder.Child as TextBlock).Text = ViewModel.SelectBarCodeRegionInfo.ChannelIdx.ToString();
+            if (!IsLoaded || border.Parent is null || border.Tag != region)
+            {
+                return;
+            }
+
+            if (border.Child is not TextBlock textBlock)
+            {
+                return;
+            }
+
+            textBlock.Text = region.ChannelIdx.ToString();
             
             // 标记有未保存的修改
             ViewModel.MarkAsChanged();

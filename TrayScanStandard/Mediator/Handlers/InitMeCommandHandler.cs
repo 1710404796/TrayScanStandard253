@@ -218,7 +218,7 @@ namespace TrayScanStandard.Mediator.Handlers
             {
                 var initTask = pLCTaskService.Init(
                     new LinxUniverse.PLC.Meditor.Commands.S7CreatePlcCommand(
-                        S7.Net.CpuType.S71200,
+                        S7.Net.CpuType.S71500,
                         MainStorage.Saves.PLCIP,
                         0,
                         1),

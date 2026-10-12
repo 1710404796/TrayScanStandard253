@@ -23,7 +23,8 @@ namespace TrayScanStandard.ViewModel
     public class AdvUser
     {
         public LinxUser LinxUser { get; set; }
-        public string RoleName => Utils.Utils.GetRoleName(Role);
+        public string RoleName => RoleDisplayOverride ?? Utils.Utils.GetRoleName(Role);
+        public string? RoleDisplayOverride { get; set; }
         public RoleEnum Role { get; set; }
         public string PassStar => LinxUser.Password.Truncate(5, "****", Truncator.FixedLength);
 

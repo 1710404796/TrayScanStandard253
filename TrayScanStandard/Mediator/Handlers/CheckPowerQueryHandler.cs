@@ -1,4 +1,3 @@
-using Humanizer;
 using LinxUniverse.Auth;
 using MediatR;
 using TrayScanStandard;
@@ -15,19 +14,15 @@ namespace TrayScanStandard.Mediator.Handlers
     {
         public async Task<bool> Handle(CheckPowerQuery request, CancellationToken cancellationToken)
         {
-            string aa = (await authenticationStateProvider.GetAuthenticationStateAsync()).User.GetUserRole();
+            string? roleName = (await authenticationStateProvider.GetAuthenticationStateAsync()).User.GetUserRole();
 
-            if (string.Equals(aa, "admin", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(roleName, "admin", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            RoleEnum roleEnum;
-            try
-            {
-                roleEnum = aa.DehumanizeTo<RoleEnum>();
-            }
-            catch
+            if (!Enum.TryParse(roleName, ignoreCase: true, out RoleEnum roleEnum)
+                || !Enum.IsDefined(typeof(RoleEnum), roleEnum))
             {
                 return false;
             }

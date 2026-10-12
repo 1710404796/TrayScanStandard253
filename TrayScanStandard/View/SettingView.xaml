@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TrayScanStandard.View"
       mc:Ignorable="d" 
       xmlns:lang="clr-namespace:TrayScanStandard.Properties"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="850" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance Type=local:SettingView}"
       Title="程序参数设定">
     <ScrollViewer>
@@ -70,6 +70,37 @@
                     FontSize="15"
                     Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
                     Margin="0,15,0,0">
+                    PLC地址设置
+                </TextBlock>
+                <TextBlock
+                    FontSize="13"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,8,0,0">
+                    起始DB块（反馈块为起始块+1）
+                </TextBlock>
+                <TextBox
+                    x:Name="PlcWriteDbBaseTextBox"
+                    Width="200"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Left"
+                    Text="{Binding ViewModel.Saves.PlcWriteDbBase, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+                <TextBlock
+                    FontSize="13"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,8,0,0">
+                    字节偏移（例如 1）
+                </TextBlock>
+                <TextBox
+                    x:Name="PlcWriteByteOffsetTextBox"
+                    Width="200"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Left"
+                    Text="{Binding ViewModel.Saves.PlcWriteByteOffset, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+
+                <TextBlock
+                    FontSize="15"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,15,0,0">
                     系统编号
                 </TextBlock>
                 <TextBox
@@ -102,6 +133,51 @@
                     HorizontalAlignment="Left"
                     Text="{Binding ViewModel.Saves.DeviceCode,Mode=TwoWay}"/>        
 
+                <!--手动写入PLC任务（起始DB块+1，同一字节偏移）：测试用，正式生产不使用-->
+                <!--<TextBlock
+                    FontSize="15"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,25,0,0">
+                    当前任务（按上方PLC地址设置读取）
+                </TextBlock>
+                <TextBox
+                    x:Name="DB500ActionTextBox"
+                    Width="200"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    MaxLength="3"
+                    TextChanged="DbValue_TextChanged"/>
+                <TextBlock
+                    x:Name="DB500TaskNameTextBlock"
+                    FontSize="13"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,5,0,0"/>
+                <Button
+                    x:Name="DB500WriteButton"
+                    Width="90"
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Click="WriteDB500_Click">写入PLC</Button>
+
+                <TextBlock
+                    FontSize="15"
+                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                    Margin="0,15,0,0">
+                    任务反馈（起始DB块+1，同一字节偏移）
+                </TextBlock>
+                <TextBox
+                    x:Name="DB501FeedbackTextBox"
+                    Width="200"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    MaxLength="3"
+                    TextChanged="DbValue_TextChanged"/>
+                <Button
+                    x:Name="DB501WriteButton"
+                    Width="90"
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Click="WriteDB501_Click">写入PLC</Button>-->
             </StackPanel>
 
             <StackPanel Grid.Column="3">

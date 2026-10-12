@@ -62,7 +62,7 @@ namespace TrayScanStandard.ViewModel
         }
 
 
-        public string PlcStatus => PlcIsRunning ? Properties.Resources.Run : Properties.Resources.Stop;
+        public string PlcStatus => PlcIsRunning ? Properties.Resources.Connected : Properties.Resources.Disconnect;
         public SolidColorBrush PlcColor => PlcIsRunning ? Brushes.Green : Brushes.Red;
 
         [NotifyPropertyChangedFor(nameof(PlcStatus))]
@@ -74,6 +74,8 @@ namespace TrayScanStandard.ViewModel
                 LinxAuthenticationStateProvider authenticationStateProvider,
                 ILogger<MainViewModel> logger, CacheService cacheService)
         {
+            MainStorage.PlcConnectionStatusChanged += OnPlcConnectionStatusChanged;
+            PlcIsRunning = MainStorage.IsPlcConnected;
 
             Task.Run(async () =>
             {
@@ -155,12 +157,18 @@ namespace TrayScanStandard.ViewModel
             }
         }
 
+        private void OnPlcConnectionStatusChanged(bool isConnected)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => PlcIsRunning = isConnected));
+        }
+
         /// <summary>
         /// 用于停止后台线程并防止内存泄漏的清理方法
         /// </summary>
         public void Cleanup()
         {
             _shouldStopThread = true;
+            MainStorage.PlcConnectionStatusChanged -= OnPlcConnectionStatusChanged;
 
             if (_someThread != null && _someThread.IsAlive)
             {

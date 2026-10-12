@@ -145,5 +145,23 @@
 	<ItemGroup>
 	  <Folder Include="testImg\" />
 	</ItemGroup>
+  <PropertyGroup>
+    <PylonRuntimeDir Condition="'$(PylonRuntimeDir)' == '' and Exists('$(MSBuildProjectDirectory)\..\lxuv\Basler.Pylon\Basler pylon 8.0.1-16188\Runtime\x64\')">$(MSBuildProjectDirectory)\..\lxuv\Basler.Pylon\Basler pylon 8.0.1-16188\Runtime\x64\</PylonRuntimeDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PylonRuntimeDir)' != '' and Exists('$(PylonRuntimeDir)')">
+    <BaslerPylonRuntimeFiles Include="$(PylonRuntimeDir)*.dll;$(PylonRuntimeDir)*.cti;$(PylonRuntimeDir)*.sig" />
+    <BaslerPylonRuntimePluginFiles Include="$(PylonRuntimeDir)pylonDataProcessingPlugins\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="CopyBaslerPylonRuntimeFilesToOutput" AfterTargets="Build" Condition="'@(BaslerPylonRuntimeFiles)' != ''">
+    <Copy SourceFiles="@(BaslerPylonRuntimeFiles)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(BaslerPylonRuntimePluginFiles)" DestinationFiles="@(BaslerPylonRuntimePluginFiles-&gt;'$(TargetDir)pylonDataProcessingPlugins\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyBaslerPylonRuntimeFilesToPublish" AfterTargets="Publish" Condition="'@(BaslerPylonRuntimeFiles)' != '' and '$(PublishDir)' != ''">
+    <Copy SourceFiles="@(BaslerPylonRuntimeFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(BaslerPylonRuntimePluginFiles)" DestinationFiles="@(BaslerPylonRuntimePluginFiles-&gt;'$(PublishDir)pylonDataProcessingPlugins\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

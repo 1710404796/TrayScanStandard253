@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TrayScanStandard.Mediator.Commands;
 using TrayScanStandard.Service;
 
@@ -16,10 +17,16 @@ namespace TrayScanStandard.Mediator.Handlers
         {
             for (int i = 0; i < request.Imgs.Length; i++)
             {
-                scanCameraService.Image2DViewModels[i].ResultImg = request.Imgs[i];
-                scanCameraService.Image2DViewModels[i].tempImg = File.ReadAllBytes(request.Imgs[i]);
-                scanCameraService.Image2DViewModels[i].Update();
-                scanCameraService.Image2DViewModels[i].UpdateResult();
+                var viewModel = scanCameraService.Image2DViewModels[i];
+                var imagePath = request.Imgs[i];
+                viewModel.tempImg = File.ReadAllBytes(imagePath);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    viewModel.SetResultImage(imagePath);
+                    viewModel.Update();
+                    viewModel.UpdateResult();
+                });
             }
             return Task.CompletedTask;
         }

@@ -9,16 +9,19 @@ using MugenCamera;
 using MugenCodeDetecter;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using TrayScanStandard.Mediator.Commands;
+using TrayScanStandard.Data.Models;
 using TrayScanStandard.Mediator.Queries;
 using TrayScanStandard.Service;
 using TrayScanStandard.ViewModel;
 using VMWebAIClient;
+using TrayScanStandard.Utils;
 
 namespace TrayScanStandard.Mediator.Handlers
 {
@@ -37,6 +40,7 @@ namespace TrayScanStandard.Mediator.Handlers
             {
                 return Either<string, DetectResult>.Left("电池信息为空");
             }
+            var scanStopwatch = Stopwatch.StartNew();
             var captureInfos = scanCameraService.MugenCameras       // 将“相机对象”和“每路曝光参数”打包     Zip:数据配对
                 .Zip(scanCameraService.Image2DViewModels.Select(s => s.CameraSetting))          // 从Image2DViewModels提取CameraSetting,生成结果(MugenCameras,CameraSetting)元组序列
                 .Map(s => s.Item1.Map(c => new CaptureInfo(c, s.Item2.Exposure))).ToArray();    // 外层的Map对每个配对的元组进行转换，内层的s.Iteml.Map对单个相机设备进行转换
@@ -59,7 +63,7 @@ namespace TrayScanStandard.Mediator.Handlers
                                             (ci, s) =>         // ci-Camera Index相机索引代表第几个相机，s是该相机的多张图片
                                                 s.Map((ei, s1) =>       // ei-Exposure Index 曝光索引代表第几次曝光索引，s1是单张图片
                                                 {
-                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}_{ci}_{ei}.png";
+                                                    var name = $"{FilenameHelper.AppPath}Data2D\\{FilenameHelper.FileName}_{ci}_{ei}{GetImageExtension(s1.Data)}";
                                                     File.WriteAllBytes(name, s1.Data);
                                                     return name;
                                                 }).ToArray()
@@ -126,6 +130,12 @@ namespace TrayScanStandard.Mediator.Handlers
                     })
             );
             logger.LogInformation("推送完成 获取结果");
+
+            dataFilenames.IfRight(f =>
+            {
+                res.IfRight(cameraCodes =>
+                    SaveError2DataImages(f, request.BatteryTypeInfo, cameraCodes));
+            });
 
             var res1 = res.Map(r =>
                 r.SelectMany(s => s)
@@ -209,6 +219,8 @@ namespace TrayScanStandard.Mediator.Handlers
             {
                 item.Update();
             }
+            scanStopwatch.Stop();
+            LogScanSummary(request.BatteryTypeInfo.Count, res1, scanStopwatch.Elapsed);
             //dataFilenames.IfRight(f =>
             //{
             //    var d = f.Select(s => s.First());
@@ -219,6 +231,87 @@ namespace TrayScanStandard.Mediator.Handlers
             return res1;
             //).Traverse(s => s)
             //    ));
+        }
+
+        private void LogScanSummary(int totalCount, Either<string, DetectResult> result, TimeSpan elapsed)
+        {
+            var successCount = result.Match(
+                Right: r => r.Channels
+                    .Where(c => c.Index >= 1 && c.Index <= totalCount && !string.IsNullOrWhiteSpace(c.Code))
+                    .DistinctBy(c => c.Index)
+                    .Count(),
+                Left: _ => 0);
+            var failCount = Math.Max(totalCount - successCount, 0);
+
+            logger.LogInformation(
+                "本次扫码任务共【{TotalCount}】个，解码成功【{SuccessCount}】个，未成功【{FailCount}】个，共耗时【{Elapsed}】",
+                totalCount,
+                successCount,
+                failCount,
+                FormatElapsed(elapsed));
+        }
+
+        private static string FormatElapsed(TimeSpan elapsed)
+        {
+            return elapsed.TotalSeconds >= 1
+                ? $"{elapsed.TotalSeconds:F3}s"
+                : $"{elapsed.TotalMilliseconds:F0}ms";
+        }
+
+        private void SaveError2DataImages(
+            IEnumerable<IEnumerable<string>> imageFilesByCamera,
+            BatteryTypeInfo batteryTypeInfo,
+            IEnumerable<IEnumerable<CodeInfo>> codesByCamera)
+        {
+            var cameraImages = imageFilesByCamera.Select(s => s.ToArray()).ToArray();
+            var cameraCodes = codesByCamera.Select(s => s.ToArray()).ToArray();
+            var cameraRegions = batteryTypeInfo.Regions.Take(cameraImages.Length).ToArray();
+            var count = Math.Min(cameraImages.Length, Math.Min(cameraCodes.Length, cameraRegions.Length));
+
+            for (var i = 0; i < count; i++)
+            {
+                foreach (var imagePath in cameraImages[i])
+                {
+                    if (string.IsNullOrWhiteSpace(imagePath))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        if (Error2DataImageSaver.SaveIfHasMissingCodes(imagePath, cameraRegions[i], cameraCodes[i]))
+                        {
+                            logger.LogWarning("二维码识别失败图片已保存: {ImagePath}", imagePath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "保存二维码识别失败图片失败: {ImagePath}", imagePath);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取图像扩展名
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static string GetImageExtension(byte[] data)
+        {
+            if (data.Length >= 8
+                && data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47
+                && data[4] == 0x0D && data[5] == 0x0A && data[6] == 0x1A && data[7] == 0x0A)
+            {
+                return ".png";
+            }
+
+            if (data.Length >= 2 && data[0] == 0x42 && data[1] == 0x4D) return ".bmp";
+            if (data.Length >= 3 && data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF) return ".jpg";
+            if (data.Length >= 4 && data[0] == 0x49 && data[1] == 0x49 && data[2] == 0x2A && data[3] == 0x00) return ".tif";
+            if (data.Length >= 4 && data[0] == 0x4D && data[1] == 0x4D && data[2] == 0x00 && data[3] == 0x2A) return ".tif";
+
+            return ".bin";
         }
     }
 }

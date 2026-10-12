@@ -22,7 +22,7 @@
  
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
-                <local:ResizeAbleImage x:Name="img2d" Source="{Binding ViewModel.ResultImg}"/>
+                <local:ResizeAbleImage x:Name="img2d" Source="{Binding ViewModel.ResultImageSource}"/>
 
             </ScrollViewer>
 

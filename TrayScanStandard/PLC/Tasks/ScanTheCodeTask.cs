@@ -31,13 +31,14 @@ namespace TrayScanStandard.PLC.Tasks
 
         public override async Task<bool> DoSth()
         {
-            if (MainStorage.SelectBattery == null)
+            var batteryType = MainStorage.SelectBattery;
+            if (batteryType == null)
             {
                 Logger?.LogError("扫码任务失败: 未选择电池配方");
                 return false;
             }
 
-            var detectResult = await Context.Mediator.Send(new DetectCCDCommand(MainStorage.SelectBattery), CTS.Token);
+            var detectResult = await Context.Mediator.Send(new DetectCCDCommand(batteryType), CTS.Token);
             if (detectResult.IsLeft)
             {
                 detectResult.IfLeft(err => Logger?.LogError($"扫码任务失败: {err}"));
@@ -48,6 +49,21 @@ namespace TrayScanStandard.PLC.Tasks
                 Right: r => r.Channels.ToDictionary(c => c.Index, c => c.Code ?? string.Empty),
                 Left: _ => new Dictionary<int, string>());
 
+            // 扫码完成即保存历史，上报WCS失败时也保留本次识别结果。
+            try
+            {
+                await Context.Mediator.Send(new SaveScanLogCommand(
+                    batteryType.Count, batteryType.Column, DateTime.Now, channelCodeMap), CTS.Token);
+            }
+            catch (OperationCanceledException) when (CTS.Token.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(ex, "保存扫码历史失败，本次扫码结果继续上报WCS");
+            }
+
             var request = new BatteryCheckRequest
             {
                 SystemCode = MainStorage.Saves.SystemCode,
@@ -55,7 +71,7 @@ namespace TrayScanStandard.PLC.Tasks
                 DeviceCode = MainStorage.Saves.DeviceCode,
                 ContainerCode = string.Empty,
                 Parameters = new { },
-                BatteryList = Enumerable.Range(1, MainStorage.SelectBattery.Count)
+                BatteryList = Enumerable.Range(1, batteryType.Count)
                     .Select(i => new BatteryCheckRequest.BatteryItem
                     {
                         Channel = i.ToString(),
@@ -154,7 +170,7 @@ namespace TrayScanStandard.PLC.Tasks
             {
                 builder.Port = port;
             }
-            builder.Path = "restful/API/V3/Wcs2Wms/batteryCheck";
+            builder.Path = "/wcs/restful/API/V3/Wcs2Wms/batteryCheck";
             return builder.Uri.ToString();
         }
     }

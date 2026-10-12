@@ -50,7 +50,7 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// WCS BatteryCheck接口地址
         /// </summary>
-        public string WcsBatteryCheckUrl { get; set; } = "http://IP:Port/restful/API/V3/Wcs2Wms/batteryCheck";
+        public string WcsBatteryCheckUrl { get; set; } = "http://IP:Port/wcs/restful/API/V3/Wcs2Wms/batteryCheck";
 
         public string TrayScanStandardName { get; set; }= "整盘扫码";
 
@@ -99,12 +99,18 @@ namespace TrayScanStandard.Models
         public int SelectBatteryId { get; set; } = 0;
         public LightInfo[] LightInfos { get; set; } = [];
 
+        /// <summary>
+        /// 物流线ip地址
+        /// </summary>
         public string PLCIP { get; set; }
+
+        public int PlcWriteDbBase { get; set; } = 500;
+        public int PlcWriteByteOffset { get; set; } = 1;
 
         /// <summary>
         /// 拍照命令是否真的走物理相机
         /// </summary>
-        public bool CameraEnable { get; set; } = false;
+        public bool CameraEnable { get; set; } = true;
         
         /// <summary>
         /// BcrBorder控件的位置信息
@@ -129,7 +135,7 @@ namespace TrayScanStandard.Models
         /// <summary>
         /// 相机地址Key
         /// </summary>
-        public CameraAddress CameraAddresses { get; set; } = new HKAddress(new Key(""));
+        public CameraAddress CameraAddresses { get; set; } = new BaslerAddress(new Key(""));
 
         /// <summary>
         /// 曝光

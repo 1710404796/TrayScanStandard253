@@ -20,20 +20,32 @@ namespace TrayScanStandard.ViewModel
     {
         //public ObservableCollection<PalletLogViewModel> Log { get; set; } = [];
         [ObservableProperty] private ObservableCollection<PalletLogExt> _palletLogs = [];
-        private IEnumerable<PalletLog> _logs = [];
+        private IQueryable<PalletLog>? _query;
+        public const int PageSize = 100;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PageSummary))]
+        [NotifyCanExecuteChangedFor(nameof(PreviousPageCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NextPageCommand))]
+        private int _currentPage = 1;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalPages))]
+        [NotifyPropertyChangedFor(nameof(PageSummary))]
+        [NotifyCanExecuteChangedFor(nameof(PreviousPageCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NextPageCommand))]
+        private int _totalCount;
+
+        public int TotalPages => Math.Max(1, (int)Math.Ceiling(TotalCount / (double)PageSize));
+        public string PageSummary => $"第 {CurrentPage} / {TotalPages} 页，共 {TotalCount} 条，每页 {PageSize} 条";
         public DateTime StartTime { get; set; } = DateTime.Today.AddDays(-30);
         public DateTime EndTime { get; set; } = DateTime.Today.AddDays(1);
 
         public string Code { get; set; } = string.Empty;
-        public int LogNum { get; set; } = 1000;
 
 
         public void RefreshContext()
         {
-            _logs = context
-                .PalletLogs.AsNoTracking()
-                .OrderByDescending(s => s.Id)
-                .Where(s => s.PalletType == PalletType.组盘).Take(LogNum).ToArray();
             Search();
         }
 
@@ -51,7 +63,12 @@ namespace TrayScanStandard.ViewModel
 
             sb.AppendLine(string.Join(",", titles));
 
-            foreach (var log in PalletLogs)
+            PalletLog[] logs;
+            lock (context)
+            {
+                logs = (_query ?? CreateQuery()).OrderByDescending(s => s.Id).ToArray();
+            }
+            foreach (var log in logs)
             {
                 //sb.AppendLine($"{log.PalletCode},{log.ZuPanTime},{log.ChannelCount},[{string.Join("|", log.BatteryInfo.Select(s => s.BatteryCode))}]");
                 sb.AppendLine($"{log.PalletCode},{log.ZuPanTime.ToString("yyyy-MM-dd HH:mm:ss")},{log.ChannelCount},[{string.Join("|", log.BatteryInfo.Select(s => s.BatteryCode))}]");
@@ -88,17 +105,47 @@ namespace TrayScanStandard.ViewModel
         {
             lock (context)
             {
-                _logs = context.PalletLogs.AsNoTracking().Where(s => s.PalletType == PalletType.组盘).OrderByDescending(s => s.Id);
-
+                _query = CreateQuery();
+                LoadPage(1);
             }
-            var afterFilter = _logs.Where(s => s.ZuPanTime >= StartTime && s.ZuPanTime <= EndTime);
+        }
 
+        private IQueryable<PalletLog> CreateQuery()
+        {
+            var startTime = StartTime;
+            var endTime = EndTime;
+            var query = context.PalletLogs.AsNoTracking()
+                .Where(s => s.PalletType == PalletType.组盘
+                    && s.ZuPanTime >= startTime && s.ZuPanTime <= endTime);
             if (!string.IsNullOrEmpty(Code))
             {
-                afterFilter = afterFilter.Where(s => s.PalletCode.Contains(Code, StringComparison.InvariantCultureIgnoreCase));
+                var code = Code.ToUpperInvariant();
+                query = query.Where(s => s.PalletCode.ToUpper().Contains(code));
             }
+            return query;
+        }
 
-            PalletLogs = new( afterFilter.Take(LogNum).Select(s => new PalletLogExt(s)));
+        private bool CanPreviousPage() => CurrentPage > 1;
+        private bool CanNextPage() => CurrentPage < TotalPages;
+
+        [RelayCommand(CanExecute = nameof(CanPreviousPage))]
+        private void PreviousPage() => LoadPage(CurrentPage - 1);
+
+        [RelayCommand(CanExecute = nameof(CanNextPage))]
+        private void NextPage() => LoadPage(CurrentPage + 1);
+
+        private void LoadPage(int page)
+        {
+            lock (context)
+            {
+                _query ??= CreateQuery();
+                TotalCount = _query.Count();
+                CurrentPage = Math.Clamp(page, 1, TotalPages);
+                var logs = _query.OrderByDescending(s => s.Id)
+                    .Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize).ToArray();
+                PalletLogs = new(logs.Select(s => new PalletLogExt(s)));
+            }
         }
     }
 }

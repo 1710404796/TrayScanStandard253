@@ -16,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5">
@@ -105,5 +106,11 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,10">
+            <Button Content="上一页" Command="{Binding ViewModel.PreviousPageCommand}" Padding="12,4"/>
+            <TextBlock Text="{Binding ViewModel.PageSummary}" VerticalAlignment="Center" Margin="15,0"
+                       Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+            <Button Content="下一页" Command="{Binding ViewModel.NextPageCommand}" Padding="12,4"/>
+        </StackPanel>
     </Grid>
 </Page>

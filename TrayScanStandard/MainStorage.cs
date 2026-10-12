@@ -16,11 +16,23 @@ namespace TrayScanStandard
     {
         public static SaveManager<WcsSaves> SaveManager = new();
         public static WcsSaves Saves => SaveManager.SaveFile;
+        public static event Action<bool>? PlcConnectionStatusChanged;
+        public static bool IsPlcConnected { get; private set; }
 
         /// <summary>
         /// 启用WCS功能，启用后会显示相关UI并允许使用WCS功能
         /// </summary>
         public static bool IsWcsEnable { get; set; }
+
+        public static void SetPlcConnectionStatus(bool isConnected)
+        {
+            if (IsPlcConnected == isConnected)
+                return;
+
+            IsPlcConnected = isConnected;
+            PlcConnectionStatusChanged?.Invoke(isConnected);
+        }
+
         public static Either<string, CodeDetecter> Algo { get; set; }
         public static Either<string, CodeDetecter> AlgoCnn { get; set; }
         public static int[] DefaultExp = [7500, 15000, 22500, 30000];

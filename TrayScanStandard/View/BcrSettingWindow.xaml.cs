@@ -53,22 +53,22 @@ namespace TrayScanStandard.View
         /// </summary>
         private void InitializeCameraTypeSelection()
         {
-            // 若当前类型为 HikVision，则默认使用 HikVision。
-            if (Setting.CameraAddresses is HKAddress)
+            // 下拉框顺序来自 XAML: Basler, HikVision, Huarui。
+            if (Setting.CameraAddresses is BaslerAddress)
             {
-                CameraTypeCombo.SelectedIndex = 0; // HikVision
+                CameraTypeCombo.SelectedIndex = 0; // Basler
+            }
+            else if (Setting.CameraAddresses is HKAddress)
+            {
+                CameraTypeCombo.SelectedIndex = 1; // HikVision
             }
             else if (Setting.CameraAddresses is HuaruiAddress)
             {
-                CameraTypeCombo.SelectedIndex = 1; // Huarui
-            }
-            else if (Setting.CameraAddresses is BaslerAddress)
-            {
-                CameraTypeCombo.SelectedIndex = 2;  // Basler
+                CameraTypeCombo.SelectedIndex = 2; // Huarui
             }
             else
             {
-                CameraTypeCombo.SelectedIndex = 2; // Default to Basler
+                CameraTypeCombo.SelectedIndex = 0; // Default to Basler
             }
             // 根据需要添加更多相机类型的初始化。
         }
@@ -78,59 +78,28 @@ namespace TrayScanStandard.View
         /// </summary>
         private void InitializeConnectionSettings()
         {
-            if (Setting.CameraAddresses is HKAddress hkAddress)
+            var connectAddress = Setting.CameraAddresses switch
             {
-                if (hkAddress.ConnectAddress is Camera.Fs.Common.Key key)
-                {
+                HKAddress hk => hk.ConnectAddress,
+                HuaruiAddress hr => hr.ConnectAddress,
+                BaslerAddress basler => basler.ConnectAddress,
+                _ => new Camera.Fs.Common.Key(string.Empty)
+            };
+
+            switch (connectAddress)
+            {
+                case Camera.Fs.Common.Key key:
                     ConnectionTypeCombo.SelectedIndex = 0; // Key
                     ConnectionValueBox.Text = key.Value;
-                }
-                else if (hkAddress.ConnectAddress is Camera.Fs.Common.IPAddress ipAddress)
-                {
+                    break;
+                case Camera.Fs.Common.IPAddress ipAddress:
                     ConnectionTypeCombo.SelectedIndex = 1; // IP
                     ConnectionValueBox.Text = ipAddress.Value;
-                }
-                else if (hkAddress.ConnectAddress is Camera.Fs.Common.Serial serial)
-                {
+                    break;
+                case Camera.Fs.Common.Serial serial:
                     ConnectionTypeCombo.SelectedIndex = 2; // Serial
                     ConnectionValueBox.Text = serial.Value;
-                }
-            }
-            else if (Setting.CameraAddresses is HuaruiAddress hrAddress)
-            {
-                if (hrAddress.ConnectAddress is Camera.Fs.Common.Key key)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 0; // Key
-                    ConnectionValueBox.Text = key.Value;
-                }
-                else if (hrAddress.ConnectAddress is Camera.Fs.Common.IPAddress ipAddress)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 1; // IP
-                    ConnectionValueBox.Text = ipAddress.Value;
-                }
-                else if (hrAddress.ConnectAddress is Camera.Fs.Common.Serial serial)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 2; // Serial
-                    ConnectionValueBox.Text = serial.Value;
-                }
-            }
-            else if (Setting.CameraAddresses is BaslerAddress blAddress)
-            {
-                if (blAddress.ConnectAddress is Camera.Fs.Common.Key key)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 0; // Key
-                    ConnectionValueBox.Text = key.Value;
-                }
-                else if (blAddress.ConnectAddress is Camera.Fs.Common.IPAddress ipAddress)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 1; // IP
-                    ConnectionValueBox.Text = ipAddress.Value;
-                }
-                else if (blAddress.ConnectAddress is Camera.Fs.Common.Serial serial)
-                {
-                    ConnectionTypeCombo.SelectedIndex = 2; // Serial
-                    ConnectionValueBox.Text = serial.Value;
-                }
+                    break;
             }
         }
 
@@ -139,7 +108,7 @@ namespace TrayScanStandard.View
         /// </summary>
         private void CameraType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // 目前我们仅支持HikVision，但未来可扩展支持更多品牌。
+            // 当前支持 Basler、HikVision、Huarui，保存时按 XAML 顺序映射。
         }
 
         /// <summary>
@@ -209,16 +178,17 @@ namespace TrayScanStandard.View
             // 根据相机类型选择设置相机地址
             switch (CameraTypeCombo.SelectedIndex)
             {
-                case 0: // HikVision
-                    Setting.CameraAddresses = new HKAddress(connectAddress);
-                    break;
-                case 1: // HikVision
-                    Setting.CameraAddresses = new HuaruiAddress(connectAddress);
-                    break;
-                case 2: // Basler
+                case 0: // Basler
                     Setting.CameraAddresses = new BaslerAddress(connectAddress);
                     break;
+                case 1: // HikVision
+                    Setting.CameraAddresses = new HKAddress(connectAddress);
+                    break;
+                case 2: // Huarui
+                    Setting.CameraAddresses = new HuaruiAddress(connectAddress);
+                    break;
                 default:
+                    Setting.CameraAddresses = new BaslerAddress(connectAddress);
                     break;
                     // 根据需要添加更多类型的摄像头
             }

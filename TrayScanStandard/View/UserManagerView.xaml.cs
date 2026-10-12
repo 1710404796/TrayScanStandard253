@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Humanizer;
+using LinxUniverse.Auth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Humanizer;
-using LinxUniverse.Auth;
 using TrayScanStandard.Attritubes;
+using TrayScanStandard.Data.Models;
 using TrayScanStandard.View.User;
 using TrayScanStandard.ViewModel;
 
@@ -85,28 +86,47 @@ namespace TrayScanStandard.View
 
         private async void ScrollViewer_Loaded(object sender, RoutedEventArgs e)
         {
-
-            IEnumerable<LinxUser> enumerable = (await _userManager.GetAllUserAsync());
+            IEnumerable<LinxUser> enumerable = await _userManager.GetAllUserAsync();
             List<AdvUser> advUsers = [];
+
             foreach (LinxUser user in enumerable)
             {
+                string? roleName;
                 try
                 {
-                    var aa = (await _userManager.GetUserRolesAsync(user)).First().DehumanizeTo<RoleEnum>();
-
+                    var roles = await _userManager.GetUserRolesAsync(user);
+                    roleName = roles.FirstOrDefault();
+                }
+                catch
+                {
                     advUsers.Add(new AdvUser
                     {
                         LinxUser = user,
-                        Role = aa
+                        RoleDisplayOverride = "读取角色失败"
+                    });
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(roleName)
+                    && Enum.TryParse<RoleEnum>(roleName, ignoreCase: true, out var role)
+                    && Enum.IsDefined(typeof(RoleEnum), role))
+                {
+                    advUsers.Add(new AdvUser
+                    {
+                        LinxUser = user,
+                        Role = role
                     });
                 }
-
-                catch
+                else
                 {
-                    // 删除用户
-                    await _userManager.DeleteAsync(user);
+                    advUsers.Add(new AdvUser
+                    {
+                        LinxUser = user,
+                        RoleDisplayOverride = string.IsNullOrWhiteSpace(roleName)
+                            ? "未分配角色"
+                            : roleName
+                    });
                 }
-
             }
 
             ViewModel.Users = new(advUsers);

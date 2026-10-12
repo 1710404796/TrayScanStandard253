@@ -16,10 +16,12 @@ namespace TrayScanStandard.PLC
         public DB500()
         {
             Db = 500;
-            Length = 1;
+            Length = 2;
         }
 
-        [S7Offset(0)]
+        [S7Offset(1)]
         public byte Action { get; set; }
+
+        public int GetActionsOffset(int idx) => MainStorage.Saves.PlcWriteByteOffset;
     }
 }

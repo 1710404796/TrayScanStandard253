@@ -48,7 +48,7 @@
                 
                     <DataGridTextColumn Header="用户名" Width="150"  Binding="{Binding LinxUser.UserName, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <DataGridTextColumn Header="身份" Width="150"  Binding="{Binding Role, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="身份" Width="150"  Binding="{Binding RoleName, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <DataGridTextColumn Header="RFID" IsReadOnly="True" Width="150"  Binding="{Binding PassStar}"/>
 

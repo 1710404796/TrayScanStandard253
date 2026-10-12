@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Quartz;
+using LinxUniverse.Utils;
+using TrayScanStandard.Utils;
 
 namespace TrayScanStandard.Jobs
 {
@@ -39,6 +41,7 @@ namespace TrayScanStandard.Jobs
                 }
             }
 
+            DeleteExpiredFiles(Path.Combine(FilenameHelper.AppPath, Error2DataImageSaver.DirectoryName));
 
             //foreach (var file in files.Skip(50))
             //{
@@ -68,6 +71,24 @@ namespace TrayScanStandard.Jobs
                 }
             }
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 删除过期文件
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        private static void DeleteExpiredFiles(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+                return;
+            }
+
+            foreach (var file in new DirectoryInfo(directoryPath).GetFiles())
+            {
+                if (DateTime.Now - file.CreationTime > TimeSpan.FromDays(MainStorage.Saves.LogDeleteDay)) File.Delete(file.FullName);
+            }
         }
     }
 }

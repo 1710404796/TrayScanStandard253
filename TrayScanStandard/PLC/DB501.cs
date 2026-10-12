@@ -16,12 +16,14 @@ namespace TrayScanStandard.PLC
         public DB501()
         {
             Db = 501;
-            Length = 1;
+            Length = 2;
         }
 
-        [S7Offset(0)]
+        [S7Offset(1)]
         public byte ToFeedback { get; set; }
 
         public byte ToFeedbacks(int idx) => ToFeedback;
+
+        public int GetFeedbacksOffset(int idx) => MainStorage.Saves.PlcWriteByteOffset;
     }
 }

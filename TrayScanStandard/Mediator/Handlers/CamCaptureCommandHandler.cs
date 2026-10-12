@@ -102,7 +102,7 @@ namespace TrayScanStandard.Mediator.Handlers
                 var aa = s.Exps.Map(e =>
                         s.Camera
                         // 每路按曝光循环
-                        .SetControl(new AcquisitionControl { ExposureTime = e })
+                        .SetControl(CreateExposureControl(s.Camera, e))
                         // 拍照并获取图像数据
                         .Bind(DetectUtil.CaptureOne)
                     )
@@ -110,6 +110,11 @@ namespace TrayScanStandard.Mediator.Handlers
                 .Map(s => s.ToArray());
                 return aa;
             }
+
+            object CreateExposureControl(MugenCamera.MugenCamera camera, int exposureTime) =>
+                camera is BaslerCam
+                    ? new Basler.Fs.NET.Controls.AcquisitionControl { ExposureTime = exposureTime }
+                    : new AcquisitionControl { ExposureTime = exposureTime };
         }
     }
 

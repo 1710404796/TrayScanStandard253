@@ -84,6 +84,7 @@ namespace TrayScanStandard.View.User
                     MainStorage.Saves.PowerTable[keyValuePair.Key][aa[i]] = keyValuePair.Value[i].IsChecked ?? false;
                 }
             }
+            MainStorage.SaveManager.Save();
             Close();
         }
     }
